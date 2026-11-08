@@ -458,14 +458,12 @@ async function init() {
     loadSavedLibrary();
     if (libraryModal) {
       libraryModal.classList.remove('hidden');
-      libraryModal.style.display = 'flex';
     }
   });
 
   const closeLibModal = () => {
     if (libraryModal) {
       libraryModal.classList.add('hidden');
-      libraryModal.style.display = 'none';
     }
   };
 
@@ -489,7 +487,54 @@ async function init() {
   });
 
   // Update library count from real database
-  updateLibraryCount();
+  await updateLibraryCount();
+
+  // Handle "New Project" button to start a fresh workspace
+  const newProjBtn = document.getElementById('pg-btn-new-project');
+  newProjBtn?.addEventListener('click', () => {
+    currentLoadedProjectId = null;
+    currentLoadedProjectTitle = null;
+    const badge = document.getElementById('pg-active-project-badge');
+    if (badge) {
+      badge.textContent = '';
+      badge.classList.add('hidden');
+    }
+    const topbarTitle = document.getElementById('topbar-title');
+    if (currentLang === 'python') {
+      if (topbarTitle) topbarTitle.textContent = 'Python Code Playground';
+      pythonCode = `# Write your Python code here\nprint("Hello from Python Playground!")\n`;
+      if (editor) editor.setValue(pythonCode);
+    } else {
+      if (topbarTitle) topbarTitle.textContent = 'Web Application Playground (HTML / CSS / JS)';
+      const def = WEB_TEMPLATES.counter;
+      webFiles = { html: def.html, css: def.css, js: def.js };
+      activeWebFile = 'html';
+      if (editor) editor.setValue(webFiles.html);
+      runPlaygroundCode();
+    }
+    showToast('Started new workspace project.', 'info');
+  });
+
+  // Check URL parameters for explicit project to open: ?project=X or ?id=X
+  const urlParams = new URLSearchParams(window.location.search);
+  const targetId = parseInt(urlParams.get('project') || urlParams.get('id') || '', 10);
+
+  if (targetId) {
+    const found = savedPrograms.find(p => p.id === targetId);
+    if (found) {
+      loadProjectIntoWorkspace(found);
+    } else {
+      try {
+        const fetched = await workspaceApi.getProgram(targetId);
+        loadProjectIntoWorkspace(fetched);
+      } catch (err) {
+        console.warn('Could not load project from URL param:', err);
+      }
+    }
+  } else if (savedPrograms && savedPrograms.length > 0) {
+    // Automatically open the student's saved workspace project!
+    loadProjectIntoWorkspace(savedPrograms[0]);
+  }
 }
 
 function saveCurrentEditorCode() {
@@ -915,57 +960,7 @@ async function loadSavedLibrary() {
         const id = parseInt(btn.getAttribute('data-id'), 10);
         const prog = savedPrograms.find(p => p.id === id);
         if (!prog) return;
-
-        currentLoadedProjectId = prog.id;
-        currentLoadedProjectTitle = prog.title;
-
-        // Parse extra_data safely whether JSON string or object
-        let extra = prog.extra_data;
-        if (typeof extra === 'string') {
-          try { extra = JSON.parse(extra); } catch { extra = {}; }
-        }
-        if (!extra || typeof extra !== 'object') extra = {};
-
-        if (prog.language === 'web') {
-          if (currentLang !== 'web') {
-            switchLanguage('web');
-          }
-          webFiles = {
-            html: prog.code || '',
-            css: extra.css || '',
-            js: extra.js || '',
-          };
-          activeWebFile = 'html';
-          document.querySelectorAll('#pg-web-file-tabs .file-tab').forEach(t => {
-            t.classList.toggle('active', t.dataset.file === 'html');
-          });
-          if (editor) {
-            editor.setOption('mode', 'htmlmixed');
-            editor.setValue(webFiles.html);
-          }
-          runPlaygroundCode();
-        } else {
-          if (currentLang !== 'python') {
-            switchLanguage('python');
-          }
-          pythonCode = prog.code || '';
-          if (editor) {
-            editor.setOption('mode', 'python');
-            editor.setValue(pythonCode);
-          }
-        }
-
-        if (editor && editor.refresh) {
-          editor.refresh();
-          setTimeout(() => editor.refresh(), 80);
-        }
-
-        const libModal = document.getElementById('pg-library-modal');
-        if (libModal) {
-          libModal.classList.add('hidden');
-          libModal.style.display = 'none';
-        }
-        showToast(`Opened project "${prog.title}" into workspace!`, 'success');
+        await loadProjectIntoWorkspace(prog);
       });
     });
 
@@ -995,6 +990,119 @@ async function loadSavedLibrary() {
   } catch (err) {
     container.innerHTML = `<div class="alert alert-error">Failed to load saved projects: ${err.message}</div>`;
   }
+}
+
+export async function loadProjectIntoWorkspace(prog) {
+  if (!prog) return;
+
+  currentLoadedProjectId = prog.id;
+  currentLoadedProjectTitle = prog.title;
+
+  // Update visual active project badge in toolbar
+  const badge = document.getElementById('pg-active-project-badge');
+  if (badge) {
+    badge.textContent = `📁 ${prog.title}`;
+    badge.title = `Currently editing: ${prog.title} (ID #${prog.id})`;
+    badge.classList.remove('hidden');
+  }
+
+  // Parse extra_data safely whether JSON string or object
+  let extra = prog.extra_data;
+  if (typeof extra === 'string') {
+    try { extra = JSON.parse(extra); } catch { extra = {}; }
+  }
+  if (!extra || typeof extra !== 'object') extra = {};
+
+  const isWeb = prog.language === 'web';
+
+  if (isWeb) {
+    currentLang = 'web';
+    webFiles = {
+      html: prog.code || '',
+      css: extra.css || '',
+      js: extra.js || '',
+    };
+    activeWebFile = 'html';
+
+    // Update Language Tabs UI
+    document.querySelectorAll('#pg-lang-tabs .lang-tab-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.lang === 'web');
+    });
+
+    const webFileTabs = document.getElementById('pg-web-file-tabs');
+    const templateSelect = document.getElementById('pg-template-select');
+    const stdinDrawer = document.getElementById('pg-stdin-drawer');
+    const pythonHeader = document.getElementById('pg-python-console-header');
+    const webHeader = document.getElementById('pg-web-console-header');
+    const pythonOutput = document.getElementById('pg-console-output');
+    const topbarTitle = document.getElementById('topbar-title');
+
+    if (topbarTitle) topbarTitle.textContent = `Web Application Playground — ${prog.title}`;
+    webFileTabs?.classList.remove('hidden');
+    templateSelect?.classList.remove('hidden');
+    stdinDrawer?.classList.add('hidden');
+    pythonHeader?.classList.add('hidden');
+    webHeader?.classList.remove('hidden');
+    pythonOutput?.classList.add('hidden');
+
+    switchWebSubtab('preview');
+
+    document.querySelectorAll('#pg-web-file-tabs .file-tab').forEach(t => {
+      t.classList.toggle('active', t.dataset.file === 'html');
+    });
+
+    if (editor) {
+      editor.setOption('mode', 'htmlmixed');
+      editor.setValue(webFiles.html);
+    }
+
+    runPlaygroundCode();
+  } else {
+    currentLang = 'python';
+    pythonCode = prog.code || '';
+
+    // Update Language Tabs UI
+    document.querySelectorAll('#pg-lang-tabs .lang-tab-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.lang === 'python');
+    });
+
+    const webFileTabs = document.getElementById('pg-web-file-tabs');
+    const templateSelect = document.getElementById('pg-template-select');
+    const stdinDrawer = document.getElementById('pg-stdin-drawer');
+    const pythonHeader = document.getElementById('pg-python-console-header');
+    const webHeader = document.getElementById('pg-web-console-header');
+    const pythonOutput = document.getElementById('pg-console-output');
+    const webPreview = document.getElementById('pg-web-preview-container');
+    const browserConsole = document.getElementById('pg-browser-console-list');
+    const topbarTitle = document.getElementById('topbar-title');
+
+    if (topbarTitle) topbarTitle.textContent = `Python Code Playground — ${prog.title}`;
+    webFileTabs?.classList.add('hidden');
+    templateSelect?.classList.add('hidden');
+    stdinDrawer?.classList.remove('hidden');
+    pythonHeader?.classList.remove('hidden');
+    webHeader?.classList.add('hidden');
+    pythonOutput?.classList.remove('hidden');
+    webPreview?.classList.add('hidden');
+    browserConsole?.classList.add('hidden');
+
+    if (editor) {
+      editor.setOption('mode', 'python');
+      editor.setValue(pythonCode);
+    }
+  }
+
+  if (editor && editor.refresh) {
+    editor.refresh();
+    setTimeout(() => editor.refresh(), 80);
+  }
+
+  const libModal = document.getElementById('pg-library-modal');
+  if (libModal) {
+    libModal.classList.add('hidden');
+  }
+
+  showToast(`Opened project "${prog.title}" into workspace!`, 'success');
 }
 
 init();

@@ -277,6 +277,7 @@ def get_student_sessions(
         results.append({
             "id": s.id,
             "title": s.title,
+            "topic": s.title,
             "created_at": s.created_at,
             "message_count": len(msgs),
             "messages": [

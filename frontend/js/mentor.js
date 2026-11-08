@@ -696,6 +696,7 @@ async function handleSendMessage(action = 'chat') {
     const newSess = await mentorApi.newSession('New Chat');
     sessions.unshift(newSess);
     activeSessionId = newSess.id;
+    await loadSessions(newSess.id);
   }
 
   isSending = true;
@@ -747,6 +748,16 @@ async function handleSendMessage(action = 'chat') {
     // Send content with student's active language
     const aiResp = await sendFn.call(mentorApi, activeSessionId, content, action, currentLang);
     typingRow.remove();
+
+    // Update active session title if modified by AI auto-titling
+    if (aiResp.session_title) {
+      const sessObj = sessions.find(s => s.id === activeSessionId);
+      if (sessObj) sessObj.title = aiResp.session_title;
+      const sessionTitle = document.getElementById('chat-session-title');
+      if (sessionTitle) sessionTitle.textContent = aiResp.session_title;
+      const activeEl = document.querySelector(`.session-item[data-session-id="${activeSessionId}"] .session-title`);
+      if (activeEl) activeEl.textContent = aiResp.session_title;
+    }
 
     const responseLang = aiResp.language || detectScriptLanguage(aiResp.content) || currentLang;
 

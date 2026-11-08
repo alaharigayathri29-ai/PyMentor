@@ -128,8 +128,8 @@ async def send_message(
 
     # Auto-title session from first meaningful user query
     clean_prompt = data.content.strip()
-    generic_greetings = {"hello! i'm ready to learn python.", "hello", "hi", "hey"}
-    if session.title in ("New Session", "Python Inquiry", "Python Learning", "Hello! I'm ready to learn Python.") or session.title.startswith("Hello!") or session.title.startswith("Python"):
+    generic_greetings = {"hello! i'm ready to learn python.", "hello", "hi", "hey", "hey there", "namaste", "vanakkam"}
+    if session.title in ("New Session", "New Chat", "Python Inquiry", "Python Learning", "Hello! I'm ready to learn Python.") or session.title.startswith("Hello!"):
         if clean_prompt.lower() not in generic_greetings:
             session.title = clean_prompt[:45] + ("…" if len(clean_prompt) > 45 else "")
 
@@ -143,6 +143,7 @@ async def send_message(
         "created_at": ai_msg.created_at,
         "provider": settings.AI_PROVIDER,
         "is_mock": settings.AI_PROVIDER == "mock",
+        "session_title": session.title,
     }
 
 

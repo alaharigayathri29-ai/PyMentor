@@ -8,6 +8,7 @@ import { requireAuth, initLayout, escapeHtml } from '../common.js?v=20261108_v17
 import { adminApi } from '../api.js?v=20261108_v17';
 import { showToast } from '../components/toast.js?v=20261108_v17';
 import { capitalize, formatDate, formatRelative } from '../utils/formatters.js?v=20261108_v17';
+import { renderMarkdown } from '../utils/markdown.js?v=20261108_v17';
 
 let currentStudentId = null;
 let currentDossier = null;
@@ -411,21 +412,53 @@ function renderDossier(data, subs, sessions) {
 
       <!-- AI Mentor Inquiries -->
       <div class="enrolled-courses-card">
-        <div style="font-size:16px;font-weight:700;margin-bottom:16px;color:var(--text-primary);">AI Mentor Sessions (${sessions.length})</div>
+        <div style="font-size:16px;font-weight:700;margin-bottom:16px;color:var(--text-primary);display:flex;justify-content:space-between;align-items:center;">
+          <span>AI Mentor Sessions (${sessions.length})</span>
+          ${sessions.length > 0 ? `<button class="btn btn-ghost btn-sm" id="btn-view-all-chats" style="font-size:12px;">Inspect All →</button>` : ''}
+        </div>
         <div style="max-height:360px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;">
-          ${sessions.length > 0 ? sessions.slice(0, 10).map(s => `
-            <div style="padding:10px 14px;border:1px solid #F1F5F9;border-radius:10px;display:flex;justify-content:space-between;align-items:center;">
-              <div>
-                <div style="font-size:13px;font-weight:700;color:var(--text-primary);">${escapeHtml(s.topic || 'Python Inquiry')}</div>
-                <div style="font-size:11px;color:var(--text-muted);">${formatRelative(s.created_at)} • ${s.message_count || 1} messages</div>
+          ${sessions.length > 0 ? sessions.slice(0, 10).map((s, idx) => `
+            <div class="admin-session-item" data-session-idx="${idx}" style="padding:10px 14px;border:1px solid #F1F5F9;border-radius:10px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.borderColor='var(--primary)';this.style.background='#FFFDF8';" onmouseout="this.style.borderColor='#F1F5F9';this.style.background='white';">
+              <div style="min-width:0;flex:1;">
+                <div style="font-size:13px;font-weight:700;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(s.title || s.topic || 'Python Inquiry')}</div>
+                <div style="font-size:11px;color:var(--text-muted);">${formatRelative(s.created_at)} • ${(s.messages ? s.messages.length : (s.message_count || 1))} messages</div>
               </div>
-              <span class="badge badge-blue" style="font-size:11px;">Completed</span>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span class="badge badge-blue" style="font-size:11px;">Completed</span>
+                <span style="font-size:12px;color:var(--primary);font-weight:600;">View 💬</span>
+              </div>
             </div>
           `).join('') : '<div style="color:var(--text-muted);font-size:13px;padding:12px;">No AI mentor sessions yet.</div>'}
         </div>
       </div>
     </div>
   `;
+
+  // Attach Chat Inspection Events
+  const openChatForIdx = (idx = 0) => {
+    if (!sessions || sessions.length === 0) {
+      showToast('This student has not started any AI mentor chats yet.', 'info');
+      return;
+    }
+    openStudentChatModal(idx, sessions, profile.username);
+  };
+
+  const inspectChatsBtn = document.getElementById('btn-admin-inspect-chats');
+  if (inspectChatsBtn) {
+    inspectChatsBtn.addEventListener('click', () => openChatForIdx(0));
+  }
+
+  const viewAllBtn = document.getElementById('btn-view-all-chats');
+  if (viewAllBtn) {
+    viewAllBtn.addEventListener('click', () => openChatForIdx(0));
+  }
+
+  document.querySelectorAll('.admin-session-item').forEach(el => {
+    el.addEventListener('click', () => {
+      const idx = parseInt(el.getAttribute('data-session-idx'), 10);
+      openChatForIdx(idx);
+    });
+  });
 
   // Attach Toggle Status Event
   const toggleBtn = document.getElementById('btn-toggle-active-status');
@@ -518,6 +551,137 @@ function renderModulesRows(modules) {
       </div>
     `;
   }).join('');
+}
+
+function openStudentChatModal(activeIdx, sessions, username) {
+  // Remove existing modal if any
+  document.getElementById('admin-chat-inspect-modal')?.remove();
+
+  let currentIdx = Math.max(0, Math.min(activeIdx, sessions.length - 1));
+
+  const modalOverlay = document.createElement('div');
+  modalOverlay.id = 'admin-chat-inspect-modal';
+  modalOverlay.className = 'modal-overlay';
+  modalOverlay.style.cssText = `
+    position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    z-index: 99999; display: flex; align-items: center; justify-content: center;
+    padding: 20px; animation: modalFadeIn 0.2s ease-out;
+  `;
+
+  const renderModalContent = () => {
+    const sess = sessions[currentIdx] || { title: 'No Conversation', messages: [] };
+    const msgs = sess.messages || [];
+
+    modalOverlay.innerHTML = `
+      <div class="modal-content-card" style="
+        background: #FFFFFF;
+        border: 1.5px solid rgba(200, 160, 100, 0.3);
+        border-radius: 16px;
+        width: 100%;
+        max-width: 760px;
+        max-height: 85vh;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 24px 64px rgba(15, 23, 42, 0.25);
+        overflow: hidden;
+      ">
+        <!-- Header -->
+        <div style="padding: 16px 22px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: #FFFDF9;">
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 18px;">🤖</span>
+              <h3 style="font-size: 16px; font-weight: 800; color: #1C0E04; margin: 0;">AI Mentor Chat: ${escapeHtml(username)}</h3>
+              <span class="badge badge-purple" style="font-size: 11px;">Session ${currentIdx + 1} of ${sessions.length}</span>
+            </div>
+            <div style="font-size: 12px; color: var(--text-muted); margin-top: 3px;">
+              ${escapeHtml(sess.title || 'Untitled Session')} • Created ${formatDate(sess.created_at)} • ${msgs.length} messages
+            </div>
+          </div>
+          <button id="btn-close-chat-modal" style="background: transparent; border: none; font-size: 20px; color: var(--text-secondary); cursor: pointer; padding: 4px 8px; border-radius: 6px;">✕</button>
+        </div>
+
+        <!-- Session Selector Tabs if multiple sessions -->
+        ${sessions.length > 1 ? `
+          <div style="display: flex; gap: 6px; padding: 10px 18px; background: #F8FAFC; border-bottom: 1px solid var(--border); overflow-x: auto;">
+            ${sessions.map((s, idx) => `
+              <button class="chat-tab-btn" data-idx="${idx}" style="
+                padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap;
+                border: 1px solid ${idx === currentIdx ? 'var(--primary)' : 'var(--border)'};
+                background: ${idx === currentIdx ? 'var(--primary-light)' : '#FFFFFF'};
+                color: ${idx === currentIdx ? 'var(--primary)' : 'var(--text-secondary)'};
+              ">
+                💬 ${escapeHtml(s.title || `Chat ${idx + 1}`)} (${s.messages ? s.messages.length : (s.message_count || 0)})
+              </button>
+            `).join('')}
+          </div>
+        ` : ''}
+
+        <!-- Messages Container -->
+        <div style="flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 14px; background: #FAFAFA;">
+          ${msgs.length === 0 ? `
+            <div style="text-align: center; padding: 40px; color: var(--text-muted); font-size: 13px;">
+              No messages found in this session.
+            </div>
+          ` : msgs.map(m => {
+            const isUser = m.role === 'user';
+            return `
+              <div style="display: flex; gap: 10px; align-items: flex-start; ${isUser ? 'flex-direction: row-reverse;' : ''}">
+                <div style="width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; background: ${isUser ? '#3B82F6' : '#10B981'}; color: white; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+                  ${isUser ? '👤' : '🤖'}
+                </div>
+                <div style="
+                  max-width: 80%; padding: 12px 16px; border-radius: 12px; font-size: 13px; line-height: 1.6;
+                  background: ${isUser ? '#EFF6FF' : '#FFFFFF'};
+                  border: 1px solid ${isUser ? '#BFDBFE' : '#E2E8F0'};
+                  color: #0F172A;
+                  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+                ">
+                  <div style="font-size: 11px; font-weight: 700; color: ${isUser ? '#2563EB' : '#059669'}; margin-bottom: 4px;">
+                    ${isUser ? escapeHtml(username) : 'PyMentor AI'}
+                  </div>
+                  <div class="markdown-body" style="font-size: 13px;">
+                    ${isUser ? escapeHtml(m.content) : renderMarkdown(m.content)}
+                  </div>
+                  <div style="font-size: 10px; color: var(--text-muted); margin-top: 6px; text-align: right;">
+                    ${m.created_at ? formatRelative(m.created_at) : ''}
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+
+        <!-- Footer -->
+        <div style="padding: 12px 22px; border-top: 1px solid var(--border); background: #FFFFFF; display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 12px; color: var(--text-muted);">
+            Student User ID: <strong>#${currentStudentId}</strong>
+          </span>
+          <button id="btn-close-chat-bottom" class="btn btn-secondary btn-sm">Close</button>
+        </div>
+      </div>
+    `;
+
+    // Bind Close Buttons
+    modalOverlay.querySelector('#btn-close-chat-modal')?.addEventListener('click', () => modalOverlay.remove());
+    modalOverlay.querySelector('#btn-close-chat-bottom')?.addEventListener('click', () => modalOverlay.remove());
+
+    // Bind Session Tab Switchers
+    modalOverlay.querySelectorAll('.chat-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentIdx = parseInt(btn.getAttribute('data-idx'), 10);
+        renderModalContent();
+      });
+    });
+  };
+
+  renderModalContent();
+
+  modalOverlay.addEventListener('click', (e) => {
+    if (e.target === modalOverlay) modalOverlay.remove();
+  });
+
+  document.body.appendChild(modalOverlay);
 }
 
 init();

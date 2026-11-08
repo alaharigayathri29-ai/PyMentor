@@ -113,8 +113,8 @@
             border-radius: var(--r-full); padding: 4px 14px 4px 4px;
             cursor: pointer; transition: all 0.2s var(--ease);
           " onclick="window.location.href='/profile.html'" title="View Student Profile">
-            <div class="user-avatar" id="topbar-avatar" style="width:32px;height:32px;font-size:12.5px;">A</div>
-            <span id="topbar-username" style="font-size:13px;font-weight:700;color:#1C0E04;">A.sri Lakshmi Gayatri</span>
+            <div class="user-avatar" id="topbar-avatar" style="width:32px;height:32px;font-size:12.5px;">S</div>
+            <span id="topbar-username" style="font-size:13px;font-weight:700;color:#1C0E04;">Student</span>
           </div>
         </div>
       </header>
@@ -147,9 +147,13 @@
                 <button class="btn btn-secondary btn-sm" id="pg-btn-save">
                   <span>💾 Save Project</span>
                 </button>
+                <button class="btn btn-ghost btn-sm" id="pg-btn-new-project" title="Start a fresh workspace">
+                  <span>📄 New</span>
+                </button>
                 <button class="btn btn-ghost btn-sm" id="pg-btn-reset">
                   <span>↺ Clear</span>
                 </button>
+                <span id="pg-active-project-badge" class="badge badge-purple hidden" style="font-size:11.5px;max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="Currently editing saved project"></span>
               </div>
 
               <!-- Right: Secondary Tools & Templates -->
@@ -255,7 +259,7 @@
   </div>
 
   <!-- Modal: Saved Projects Library -->
-  <div id="pg-library-modal" class="modal-overlay hidden" style="display:none;">
+  <div id="pg-library-modal" class="modal-overlay hidden">
     <div class="modal-content-card" style="max-width:560px;">
       <div style="padding:18px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
         <h3 style="font-size:16px;font-weight:700;color:var(--text-primary);margin:0;">My Saved Projects & Scripts</h3>

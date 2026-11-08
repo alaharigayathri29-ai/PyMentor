@@ -114,11 +114,11 @@ async function loadStudentsTable(params = {}) {
       `;
     }).join('');
 
-    // Inspect dossier handler
+    // Inspect dossier handler -> navigate to full student details page
     tbody.querySelectorAll('.btn-inspect-student').forEach(btn => {
       btn.addEventListener('click', () => {
         const id = parseInt(btn.getAttribute('data-id'), 10);
-        openStudentDossier(id);
+        window.location.href = `/admin/student-details.html?id=${id}`;
       });
     });
 

@@ -566,3 +566,42 @@ tbody tr:hover { background: rgba(217,119,6,0.04); }
     background-position: 0% 0%;
   }
 }
+
+/* ── Standard In-Page Modal Dialogs ──────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+.modal-content-card {
+  background: var(--bg-card, #FFFFFF);
+  border: 1.5px solid rgba(200, 160, 100, 0.3);
+  border-radius: var(--r-xl, 16px);
+  box-shadow: 0 24px 64px rgba(15, 23, 42, 0.25);
+  width: 100%;
+  max-width: 580px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: modalScaleUp 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalScaleUp {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
