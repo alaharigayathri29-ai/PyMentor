@@ -4,10 +4,18 @@
  * on the backend from the verified token.
  */
 
-const API_BASE = window.API_BASE || (
-  window.location.port === '8000'
-    ? ''
-    : `${window.location.protocol || 'http:'}//${window.location.hostname || 'localhost'}:8000`
+const isLocalhost = Boolean(
+  typeof window !== 'undefined' && (
+    window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1' ||
+    window.location.hostname === '[::1]'
+  )
+);
+
+const API_BASE = (typeof window !== 'undefined' && window.API_BASE) || (
+  isLocalhost && window.location.port !== '8000'
+    ? `${window.location.protocol}//${window.location.hostname}:8000`
+    : ''
 );
 
 export function getToken() {
