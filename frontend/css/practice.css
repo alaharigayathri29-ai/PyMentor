@@ -1,0 +1,600 @@
+/* ══════════════════════════════════════════════════════════════════════════════
+   CODE PRACTICE LAB — TOPIC-WISE 50 PROBLEMS & DUAL WORKSPACE
+   Topic Selector Strip · Topic Labs Catalog (Image 2) · ByteXL IDE Workspace (Image 3)
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Distraction-Free Module Canvas (Auto-close Main Sidebar in Modules) ─── */
+.app-shell .sidebar {
+  display: none !important;
+}
+.app-shell .main-area {
+  width: 100vw !important;
+  max-width: 100vw !important;
+  margin-left: 0 !important;
+}
+
+.practice-page-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 1540px;
+  margin: 0 auto;
+}
+
+/* ── 1. Top Topic Navigation Strip ────────────────────────────────────────── */
+.topic-nav-strip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 6px 4px 10px 4px;
+  scrollbar-width: thin;
+}
+
+.topic-nav-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: var(--r-full);
+  background: #FFFFFF;
+  border: 1.5px solid rgba(200, 160, 100, 0.22);
+  color: #6B4226;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(100, 50, 0, 0.04);
+  transition: all 0.2s var(--ease);
+}
+.topic-nav-pill:hover {
+  background: #FFFDF9;
+  border-color: #F59E0B;
+  color: #1C0E04;
+  transform: translateY(-1px);
+}
+.topic-nav-pill.active {
+  background: #2C1A0E;
+  color: #FFF8F0;
+  border-color: #F59E0B;
+  box-shadow: 0 4px 14px rgba(44, 26, 14, 0.35);
+}
+.topic-nav-pill .pill-count {
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: var(--r-full);
+  background: rgba(245, 158, 11, 0.18);
+  color: #D97706;
+  font-weight: 800;
+}
+.topic-nav-pill.active .pill-count {
+  background: #F59E0B;
+  color: #FFFFFF;
+}
+
+/* ── 2. View Mode Switcher Toolbar ────────────────────────────────────────── */
+.view-mode-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #FFFFFF;
+  border: 1px solid rgba(200, 160, 100, 0.22);
+  border-radius: 14px;
+  padding: 12px 20px;
+  box-shadow: 0 2px 10px rgba(100, 50, 0, 0.04);
+}
+
+.view-mode-toggles {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #F1F5F9;
+  padding: 4px;
+  border-radius: 10px;
+}
+.view-toggle-btn {
+  border: none;
+  background: transparent;
+  padding: 7px 16px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #64748B;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s var(--ease);
+}
+.view-toggle-btn.active {
+  background: #FFFFFF;
+  color: #1C0E04;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* ── 3. VIEW 1: Topic Labs Catalog (Matching Reference Image 2) ───────────── */
+.catalog-card {
+  background: #FFFFFF;
+  border: 1px solid rgba(200, 160, 100, 0.22);
+  border-radius: 16px;
+  padding: 26px 32px;
+  box-shadow: 0 4px 18px rgba(100, 50, 0, 0.06);
+}
+
+.catalog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.catalog-title-box h1 {
+  font-size: 24px;
+  font-weight: 800;
+  color: #1C0E04;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+.catalog-title-box p {
+  font-size: 13.5px;
+  color: #A07050;
+  margin: 4px 0 0 0;
+}
+
+.catalog-filters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.catalog-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #FFFDF9;
+  border: 1.5px solid rgba(200, 160, 100, 0.28);
+  border-radius: 10px;
+  padding: 8px 16px;
+  width: 240px;
+}
+.catalog-search-wrap input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 13px;
+  color: #1C0E04;
+  width: 100%;
+}
+
+.catalog-select {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(200, 160, 100, 0.28);
+  background: #FFFDF9;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6B4226;
+  outline: none;
+  cursor: pointer;
+}
+
+/* Labs Table (Exact Match of User Image 2) */
+.labs-table-wrap {
+  overflow-x: auto;
+  border: 1px solid rgba(200, 160, 100, 0.18);
+  border-radius: 12px;
+}
+
+.labs-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+.labs-table th {
+  padding: 14px 20px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #64748B;
+  background: #F8FAFC;
+  border-bottom: 1.5px solid rgba(200, 160, 100, 0.18);
+}
+.labs-table td {
+  padding: 16px 20px;
+  font-size: 14px;
+  color: #1E293B;
+  border-bottom: 1px solid rgba(200, 160, 100, 0.12);
+  vertical-align: middle;
+}
+.labs-table tr:last-child td {
+  border-bottom: none;
+}
+.labs-table tr:hover {
+  background: rgba(245, 158, 11, 0.03);
+}
+
+.lab-title-cell {
+  font-weight: 700;
+  color: #1C0E04;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lab-desc-cell {
+  color: #475569;
+  font-size: 13.5px;
+  line-height: 1.5;
+  max-width: 520px;
+}
+
+/* Open Button matching Reference Image 2 */
+.btn-open-lab {
+  border: 1.5px solid #38BDF8;
+  background: #FFFFFF;
+  color: #0284C7;
+  padding: 6px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+  display: inline-block;
+  text-decoration: none;
+}
+.btn-open-lab:hover {
+  background: #0284C7;
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+  transform: translateY(-1px);
+}
+
+/* ── 10 Per Page Catalog Pagination ──────────────────────────────────────── */
+.catalog-pagination-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: #FFFDF9;
+  border-top: 1px solid rgba(200, 160, 100, 0.22);
+}
+
+.pagination-info {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #6B4226;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.page-numbers-list {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.page-num-btn {
+  min-width: 34px;
+  height: 34px;
+  padding: 0 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(200, 160, 100, 0.3);
+  background: #FFFFFF;
+  color: #1C0E04;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-num-btn:hover {
+  background: #FFF3E0;
+  border-color: #F59E0B;
+  color: #B45309;
+}
+
+.page-num-btn.active {
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+  border-color: #B45309;
+  color: #FFFFFF !important;
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.35);
+}
+
+.page-nav-btn {
+  padding: 7px 16px;
+  font-weight: 700;
+  font-size: 13px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.page-nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ── 4. VIEW 2: ByteXL Interactive Workspace (Matching Reference Image 3) ─── */
+.workspace-card {
+  display: flex;
+  height: calc(100vh - var(--topbar-h) - 130px);
+  min-height: 600px;
+  background: #FFFDF9;
+  border: 1px solid rgba(200, 160, 100, 0.25);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 16px 48px rgba(100, 50, 0, 0.12);
+}
+
+/* Left Sidebar: Problems list (Image 3) */
+.problems-sidebar {
+  width: 250px;
+  min-width: 250px;
+  background: #FFFFFF;
+  border-right: 1px solid rgba(200, 160, 100, 0.22);
+  display: flex;
+  flex-direction: column;
+}
+
+.problems-sidebar-header {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(200, 160, 100, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #FFFDF9;
+}
+.problems-sidebar-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #1C0E04;
+}
+
+.sidebar-search-box {
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(200, 160, 100, 0.15);
+}
+.sidebar-search-box input {
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(200, 160, 100, 0.25);
+  background: #FFFDF9;
+  font-size: 12px;
+  color: #1C0E04;
+  outline: none;
+}
+
+.problems-sidebar-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.problem-list-item {
+  padding: 11px 14px;
+  border-bottom: 1px solid rgba(200, 160, 100, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #334155;
+  transition: all 0.15s ease;
+}
+.problem-list-item:hover {
+  background: rgba(245, 158, 11, 0.06);
+}
+/* Active problem purple highlight (Matching Image 3) */
+.problem-list-item.active {
+  background: #EDE9FE;
+  color: #4C1D95;
+  font-weight: 700;
+  border-left: 3.5px solid #7C3AED;
+}
+
+.status-badge-icon {
+  font-size: 13px;
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.status-badge-icon.passed { color: #10B981; }
+.status-badge-icon.failed { color: #EF4444; }
+.status-badge-icon.unsolved { color: #94A3B8; }
+
+/* Middle: Code Editor Pane */
+.workspace-center-pane {
+  flex: 1.3;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: #2C1A0E;
+}
+
+.workspace-editor-header {
+  height: 44px;
+  background: #231508;
+  border-bottom: 1px solid rgba(200, 150, 80, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  flex-shrink: 0;
+}
+.editor-file-tab {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #FFF8F0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #2C1A0E;
+  padding: 8px 14px;
+  border-radius: 6px 6px 0 0;
+  border-top: 2px solid #2563EB;
+}
+
+.editor-mount-box {
+  flex: 1.4;
+  position: relative;
+  min-height: 220px;
+}
+.editor-mount-box .CodeMirror {
+  height: 100%;
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  background-color: #2C1A0E !important;
+}
+
+/* Bottom Bar: time spent, run & submit */
+.workspace-editor-bottom {
+  height: 52px;
+  background: #231508;
+  border-top: 1px solid rgba(200, 150, 80, 0.18);
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.time-spent-badge {
+  font-size: 12px;
+  color: #C4A882;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.editor-results-console {
+  flex: 0.9;
+  background: #170E05;
+  color: #F5E6D3;
+  border-top: 1px solid rgba(200, 150, 80, 0.2);
+  padding: 14px 18px;
+  overflow-y: auto;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+}
+
+/* Right Pane: Problem Details & Tabs (Image 3) */
+.workspace-right-pane {
+  flex: 1;
+  background: #FFFFFF;
+  border-left: 1px solid rgba(200, 160, 100, 0.22);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.right-pane-tabs {
+  height: 44px;
+  background: #FFF8F0;
+  border-bottom: 1px solid rgba(200, 160, 100, 0.2);
+  display: flex;
+  padding: 0 16px;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.right-tab-btn {
+  padding: 0 14px;
+  height: 100%;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 700;
+  color: #A07050;
+  cursor: pointer;
+  border-bottom: 2.5px solid transparent;
+  transition: all 0.2s var(--ease);
+}
+.right-tab-btn.active {
+  color: #2563EB;
+  border-bottom-color: #2563EB;
+  background: #FFFFFF;
+}
+
+.right-pane-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+.problem-header-box {
+  margin-bottom: 18px;
+}
+.problem-headline {
+  font-size: 20px;
+  font-weight: 800;
+  color: #1C0E04;
+  margin-bottom: 6px;
+}
+.problem-tags-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #64748B;
+  font-weight: 600;
+}
+
+.problem-section-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: #1C0E04;
+  margin: 18px 0 8px 0;
+}
+.problem-body-text {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: #334155;
+}
+
+.constraints-card {
+  background: #FFFDF9;
+  border: 1px solid rgba(200, 160, 100, 0.25);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin: 16px 0;
+  font-size: 12.5px;
+  color: #6B4226;
+}
+
+.sample-case-box {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 10px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #1E293B;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .workspace-card {
+    flex-direction: column;
+    height: auto;
+  }
+  .problems-sidebar {
+    width: 100%;
+    height: 180px;
+  }
+}

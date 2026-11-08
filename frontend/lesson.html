@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Lesson — PyMentor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/marked@9.1.6/marked.min.js"></script>
+  <link rel="stylesheet" href="/css/global.css?v=20261108_v19">
+  <link rel="stylesheet" href="/css/sidebar.css?v=20261108_v19">
+  <link rel="stylesheet" href="/css/lesson.css?v=20261108_v19">
+</head>
+<body>
+
+  <div class="app-shell">
+
+    <!-- ── Left Sidebar Navigation (Modern Light System) ────────────────────── -->
+    <aside class="sidebar" id="sidebar">
+      <a href="/dashboard.html" class="sidebar-logo">
+        <div class="logo-icon">🐍</div>
+        <div>
+          <div class="logo-text">PyMentor</div>
+          <div class="logo-sub">Learn Python Better</div>
+        </div>
+      </a>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">HOME</div>
+        <a href="/dashboard.html" class="nav-item" data-page="dashboard">
+          <span class="nav-icon">🏠</span> <span>Dashboard</span>
+        </a>
+
+        <div class="nav-section-label">LEARNING</div>
+        <a href="/learning-path.html" class="nav-item" data-page="learning-path">
+          <span class="nav-icon">🗺️</span> <span>Learn Python</span>
+        </a>
+        <a href="/assessment.html" class="nav-item" data-page="assessment">
+          <span class="nav-icon">🎯</span> <span>Assessment</span>
+        </a>
+        <a href="/practice.html" class="nav-item" data-page="practice">
+          <span class="nav-icon">💻</span> <span>Practice</span>
+        </a>
+        <a href="/lesson.html" class="nav-item active" data-page="lesson">
+          <span class="nav-icon">📖</span> <span>Interactive Lesson</span>
+        </a>
+
+        <div class="nav-section-label">TOOLS</div>
+        <a href="/playground.html" class="nav-item" data-page="playground">
+          <span class="nav-icon">⚡</span> <span>Playground</span>
+        </a>
+        <a href="/mentor.html" class="nav-item" data-page="mentor">
+          <span class="nav-icon">🤖</span> <span>AI Mentor</span>
+        </a>
+
+        <div class="nav-section-label">INSIGHTS</div>
+        <a href="/progress.html" class="nav-item" data-page="progress">
+          <span class="nav-icon">📊</span> <span>My Progress</span>
+        </a>
+
+        <div id="nav-admin-section" class="hidden">
+          <div class="nav-section-label">ADMIN</div>
+          <a href="/admin/dashboard.html" class="nav-item" data-page="admin-dashboard">
+            <span class="nav-icon">🛡️</span> <span>Admin Overview</span>
+          </a>
+          <a href="/admin/students.html" class="nav-item" data-page="admin-students">
+            <span class="nav-icon">👥</span> <span>Students</span>
+          </a>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-card" id="sidebar-user-card">
+          <div class="user-avatar" id="sidebar-avatar">?</div>
+          <div style="min-width:0;flex:1;">
+            <div class="user-name" id="sidebar-username">Student</div>
+            <div class="user-role" id="sidebar-role">student</div>
+          </div>
+        </div>
+        <button class="btn btn-secondary btn-full btn-sm" id="logout-btn">
+          <span>🚪</span> Sign Out
+        </button>
+      </div>
+    </aside>
+
+    <!-- ── Main View Area ────────────────────────────────────────────────────── -->
+    <div class="main-area">
+      <header class="topbar">
+        <div class="topbar-left">
+          <a href="/learning-path.html" class="btn btn-ghost btn-sm" style="color:var(--text-secondary);">← Curriculum</a>
+          <span style="color:var(--border);">/</span>
+          <span id="lesson-module-tag" class="badge badge-blue">Module 1</span>
+        </div>
+        <div class="topbar-right">
+          <a href="/playground.html" class="btn btn-secondary btn-sm"><span>⚡ Open Playground</span></a>
+          <div class="user-avatar" id="topbar-avatar" style="width:34px;height:34px;font-size:13px;">?</div>
+        </div>
+      </header>
+
+      <div class="main-scroll-content">
+        <div class="page-content animate-in">
+
+          <div class="lesson-layout">
+            
+            <!-- Main Reading & Demonstration Article -->
+            <div class="lesson-article-card">
+              <div class="lesson-header">
+                <div class="lesson-meta-bar">
+                  <span id="lesson-diff-tag" class="badge badge-teal">Beginner</span>
+                  <span style="font-size:13px;color:var(--text-muted);" id="lesson-subtopics">Variables • Types • Output</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:14px;">
+                  <span id="lesson-icon" style="font-size:32px;">📚</span>
+                  <h1 class="lesson-title" id="lesson-title">Loading Topic Lesson…</h1>
+                </div>
+              </div>
+
+              <!-- Lesson Introduction -->
+              <div id="lesson-intro" class="lesson-prose"></div>
+
+              <!-- Learning Objectives Checklist -->
+              <div class="objectives-card">
+                <div class="objectives-title">🎯 Learning Objectives</div>
+                <div id="lesson-objectives-list"></div>
+              </div>
+
+              <!-- Core Explanation Section -->
+              <div id="lesson-explanation" class="lesson-prose"></div>
+
+              <!-- Practical Code Walkthroughs -->
+              <div style="margin:28px 0;">
+                <h2 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:14px;">💻 Code Demonstrations</h2>
+                <div id="lesson-examples-list"></div>
+              </div>
+
+              <!-- Interactive Topic Check Quiz -->
+              <div style="margin-top:36px;border-top:1px solid var(--border);padding-top:24px;">
+                <h2 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:14px;">🧠 Quick Knowledge Check</h2>
+                <div id="lesson-quiz-list"></div>
+              </div>
+            </div>
+
+            <!-- Sticky Side Card / Actions -->
+            <div class="lesson-side-card">
+              <span class="card-title" style="font-size:15px;display:block;margin-bottom:12px;">Lesson Progress</span>
+              <p style="font-size:13px;color:var(--text-secondary);line-height:1.5;margin-bottom:20px;">
+                Review the code demonstrations, test out snippets in the playground, and mark the lesson complete to unlock practice problems.
+              </p>
+
+              <button class="btn btn-success btn-full" id="btn-complete-lesson" style="margin-bottom:12px;">
+                <span>✓ Mark Lesson Complete</span>
+              </button>
+              
+              <a href="/practice.html" class="btn btn-secondary btn-full" id="btn-practice-topic" style="margin-bottom:12px;">
+                <span>💻 Practice Coding Challenges</span>
+              </a>
+
+              <a href="/mentor.html" class="btn btn-ghost btn-full" style="font-size:13px;">
+                <span>🤖 Ask Mentor a Question</span>
+              </a>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script type="module" src="/js/lesson.js?v=20261108_v17"></script>
+</body>
+</html>

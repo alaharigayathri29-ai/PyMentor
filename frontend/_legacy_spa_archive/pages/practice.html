@@ -1,0 +1,142 @@
+<div class="page-content animate-in" style="padding:12px 20px;">
+  
+  <div class="practice-lab-container">
+    
+    <!-- Top Bar with Problem Switcher & Action buttons -->
+    <div class="practice-top-bar">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span style="font-size:20px;">💻</span>
+        <div>
+          <span style="font-size:15px;font-weight:700;color:#fff;" id="prac-header-title">Code Practice Lab</span>
+          <span class="badge badge-purple" style="font-size:10px;margin-left:8px;">ByteXL Evaluator</span>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:12px;">
+        <label style="font-size:12px;color:var(--text-muted);">Switch Problem:</label>
+        <select id="prac-problem-select" class="input-field" style="width:260px;padding:5px 10px;font-size:12px;border-radius:var(--r-sm);">
+          <option value="" disabled selected>Loading problems...</option>
+        </select>
+        
+        <button class="btn btn-secondary btn-sm" id="btn-run-sample" style="padding:5px 14px;font-size:12.5px;">
+          <span>▶ Run Sample Tests</span>
+        </button>
+
+        <button class="btn btn-success btn-sm" id="btn-submit-solution" style="padding:5px 16px;font-size:12.5px;background:var(--green);border-color:var(--green);">
+          <span>🏆 Submit Solution</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Split View -->
+    <div class="practice-split-view">
+      
+      <!-- Left Column: Problem Specs, Constraints & Submissions -->
+      <div class="practice-left-col">
+        <div class="practice-tab-nav">
+          <button class="practice-tab-btn active" id="tab-prob-desc">Problem Specs</button>
+          <button class="practice-tab-btn" id="tab-prob-subs">My Submissions</button>
+          <button class="practice-tab-btn" id="tab-prob-hints">Hints (<span id="prac-hints-count">0</span>)</button>
+        </div>
+
+        <!-- Description View -->
+        <div class="practice-problem-pane custom-scroll" id="pane-prob-desc">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px;">
+            <h2 style="font-size:18px;font-weight:800;color:#fff;margin:0;" id="prac-prob-title">Loading...</h2>
+            <div style="display:flex;gap:6px;align-items:center;">
+              <span class="badge badge-green" id="prac-prob-diff">Easy</span>
+              <span class="badge badge-blue" id="prac-prob-topic">Topic</span>
+            </div>
+          </div>
+
+          <div style="font-size:13.5px;color:var(--text-secondary);line-height:1.7;margin-bottom:16px;" id="prac-prob-body">
+            Problem description will load here...
+          </div>
+
+          <!-- Constraints -->
+          <div class="constraints-box">
+            <div style="font-size:11.5px;font-weight:700;color:var(--text-accent);text-transform:uppercase;margin-bottom:6px;">Constraints & Guarantees</div>
+            <div id="prac-prob-constraints" style="font-family:'JetBrains Mono',monospace;color:#cbd5e1;white-space:pre-wrap;">
+              Time Limit: 5.0 seconds
+              Memory Limit: 128 MB
+            </div>
+          </div>
+        </div>
+
+        <!-- Submissions History View (Hidden by default) -->
+        <div class="practice-problem-pane custom-scroll hidden" id="pane-prob-subs">
+          <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:12px;">Recent Submissions for this Problem</div>
+          <div id="prac-subs-list" style="display:flex;flex-direction:column;gap:8px;">
+            <div style="font-size:12px;color:var(--text-muted);padding:12px 0;">No submissions yet. Submit your code to see history here!</div>
+          </div>
+        </div>
+
+        <!-- Progressive Hints View (Hidden by default) -->
+        <div class="practice-problem-pane custom-scroll hidden" id="pane-prob-hints">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+            <span style="font-size:13px;font-weight:700;color:#fff;">Progressive Hints</span>
+            <button class="btn btn-secondary btn-sm" id="btn-reveal-hint" style="font-size:11px;padding:3px 8px;">
+              + Reveal Next Hint
+            </button>
+          </div>
+          <div id="prac-revealed-hints" style="display:flex;flex-direction:column;gap:10px;">
+            <div style="font-size:12px;color:var(--text-muted);">Click "Reveal Next Hint" if you get stuck.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Code Editor & Test Case Console -->
+      <div class="practice-right-col">
+        
+        <!-- Editor Box -->
+        <div class="practice-editor-box">
+          <div class="practice-editor-header">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span class="badge badge-purple" style="font-size:10px;font-family:'JetBrains Mono',monospace;">Python 3.10+</span>
+              <span style="font-size:11.5px;color:var(--text-muted);">solution.py</span>
+            </div>
+            <div style="display:flex;gap:6px;">
+              <button class="btn btn-ghost btn-sm" id="btn-reset-starter" style="font-size:11px;padding:3px 8px;">
+                ↺ Reset Starter Code
+              </button>
+            </div>
+          </div>
+
+          <div class="practice-editor-mount" id="practice-editor-mount">
+            <!-- CodeMirror mounts here -->
+          </div>
+        </div>
+
+        <!-- Bottom Test Case Runner Console -->
+        <div class="practice-test-box">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 14px;background:rgba(255,255,255,0.02);border-bottom:1px solid var(--border);">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="font-size:12px;font-weight:700;color:#fff;">Test Results</span>
+              <span id="prac-run-badge" class="badge badge-gray">Not Run</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span style="font-size:11px;color:var(--text-muted);" id="prac-score-summary"></span>
+            </div>
+          </div>
+
+          <!-- Test Case Selector Pills -->
+          <div class="test-cases-list custom-scroll" id="prac-test-pills">
+            <div class="test-pill active">Sample Case 1</div>
+            <div class="test-pill">Sample Case 2</div>
+          </div>
+
+          <!-- Test Case Diff Details -->
+          <div class="test-details-pane custom-scroll" id="prac-test-diff-view">
+            <div style="color:var(--text-muted);padding:8px 0;">Click "Run Sample Tests" or "Submit Solution" to inspect test cases and execution time.</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+

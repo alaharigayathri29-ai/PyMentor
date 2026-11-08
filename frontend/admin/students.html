@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Directory — PyMentor Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/global.css?v=20261108_v17">
+  <link rel="stylesheet" href="/css/sidebar.css?v=20261108_v17">
+  <link rel="stylesheet" href="/css/admin.css?v=20261108_v17">
+</head>
+<body>
+
+  <div class="app-shell">
+
+    <!-- ── Left Sidebar Navigation (Admin Mode) ──────────────────────────────── -->
+    <aside class="sidebar" id="sidebar">
+      <a href="/admin/dashboard.html" class="sidebar-logo">
+        <div class="logo-icon" style="background-color:var(--primary-light);color:var(--primary);border-color:var(--primary-border);">🛡️</div>
+        <div>
+          <div class="logo-text">PyMentor</div>
+          <div class="logo-sub">Administration Suite</div>
+        </div>
+      </a>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Admin Management</div>
+        <a href="/admin/dashboard.html" class="nav-item" data-page="admin-dashboard">
+          <span class="nav-icon">📊</span> <span>Overview</span>
+          <span class="nav-badge">Admin</span>
+        </a>
+        <a href="/admin/students.html" class="nav-item active" data-page="admin-students">
+          <span class="nav-icon">👥</span> <span>Students</span>
+        </a>
+        <a href="/admin/topics.html" class="nav-item" data-page="admin-topics">
+          <span class="nav-icon">✏️</span> <span>Topics & Curriculum</span>
+        </a>
+        <a href="/admin/problems.html" class="nav-item" data-page="admin-problems">
+          <span class="nav-icon">🧩</span> <span>Coding Problems</span>
+        </a>
+        <a href="/admin/analytics.html" class="nav-item" data-page="admin-analytics">
+          <span class="nav-icon">📈</span> <span>Analytics</span>
+        </a>
+
+        <div class="nav-section-label" style="margin-top:16px;">Student View</div>
+        <a href="/dashboard.html" class="nav-item">
+          <span class="nav-icon">🏠</span> <span>Switch to Student Portal</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-card" id="sidebar-user-card">
+          <div class="user-avatar" id="sidebar-avatar">A</div>
+          <div style="min-width:0;flex:1;">
+            <div class="user-name" id="sidebar-username">Administrator</div>
+            <div class="user-role" id="sidebar-role">ADMIN</div>
+          </div>
+        </div>
+        <button class="btn btn-secondary btn-full btn-sm" id="logout-btn">
+          <span>🚪</span> Sign Out
+        </button>
+      </div>
+    </aside>
+
+    <!-- ── Main View Area ────────────────────────────────────────────────────── -->
+    <div class="main-area">
+      <header class="topbar">
+        <div class="topbar-left">
+          <h2 id="topbar-title" class="topbar-title">Student Directory & Inspection</h2>
+          <span id="role-mode-badge" class="badge badge-purple">Administrator</span>
+        </div>
+        <div class="topbar-right">
+          <div class="user-avatar" id="topbar-avatar" style="width:34px;height:34px;font-size:13px;">A</div>
+        </div>
+      </header>
+
+      <div class="main-scroll-content">
+        <div class="page-content animate-in">
+          
+          <div class="admin-header">
+            <div>
+              <h1 class="page-title" style="font-size:24px;margin-bottom:4px;">Registered Students Directory</h1>
+              <p class="page-sub" style="margin:0;">Inspect individual student progress, submissions, and assessments directly without impersonation.</p>
+            </div>
+            <button class="btn btn-primary btn-sm" id="btn-refresh-students">
+              <span>↺ Refresh List</span>
+            </button>
+          </div>
+
+          <!-- Admin Sub-Navigation Pills -->
+          <div class="admin-tab-nav">
+            <a href="/admin/dashboard.html" class="admin-tab-pill">Overview</a>
+            <a href="/admin/students.html" class="admin-tab-pill active">Student Management</a>
+            <a href="/admin/topics.html" class="admin-tab-pill">Topics & Curriculum</a>
+            <a href="/admin/problems.html" class="admin-tab-pill">Coding Problems</a>
+            <a href="/admin/analytics.html" class="admin-tab-pill">Platform Analytics</a>
+          </div>
+
+          <!-- Filter / Search Toolbar -->
+          <div class="card" style="margin-bottom:20px;padding:16px 20px;">
+            <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;">
+              <div style="flex:1;min-width:260px;">
+                <input type="text" id="adm-student-search" class="form-input" placeholder="Search students by username or email…">
+              </div>
+              <div style="width:180px;">
+                <select id="adm-student-level-filter" class="form-input">
+                  <option value="">All Skill Levels</option>
+                  <option value="beginner">Beginner</option>
+                  <option value="intermediate">Intermediate</option>
+                  <option value="advanced">Advanced</option>
+                </select>
+              </div>
+              <div style="width:160px;">
+                <select id="adm-student-status-filter" class="form-input">
+                  <option value="">All Statuses</option>
+                  <option value="true">Active Only</option>
+                  <option value="false">Disabled Only</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Students Table Card -->
+          <div class="admin-table-card">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Skill Tier</th>
+                  <th>Submissions</th>
+                  <th>AI Inquiries</th>
+                  <th>Last Active</th>
+                  <th>Account Status</th>
+                  <th style="text-align:right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adm-students-tbody">
+                <tr><td colspan="7" style="text-align:center;padding:32px;"><div class="spinner"></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script type="module" src="/js/admin/students.js?v=20261108_v17"></script>
+</body>
+</html>

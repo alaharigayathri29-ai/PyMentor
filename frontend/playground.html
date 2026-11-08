@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Playground — PyMentor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- CodeMirror Editor Assets: Python, XML/HTML, CSS, JS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/codemirror.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/mode/python/python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/mode/xml/xml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/mode/javascript/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/mode/css/css.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/mode/htmlmixed/htmlmixed.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/addon/edit/matchbrackets.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/addon/edit/closebrackets.min.js"></script>
+
+  <link rel="stylesheet" href="/css/global.css?v=20261108_v19">
+  <link rel="stylesheet" href="/css/sidebar.css?v=20261108_v19">
+  <link rel="stylesheet" href="/css/playground.css?v=20261108_v19">
+</head>
+<body>
+
+  <div class="app-shell">
+
+    <!-- ── Left Sidebar Navigation (Modern Light System) ────────────────────── -->
+    <aside class="sidebar" id="sidebar">
+      <a href="/dashboard.html" class="sidebar-logo">
+        <div class="logo-icon">🐍</div>
+        <div>
+          <div class="logo-text">PyMentor</div>
+          <div class="logo-sub">Learn Python Better</div>
+        </div>
+      </a>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">HOME</div>
+        <a href="/dashboard.html" class="nav-item" data-page="dashboard">
+          <span class="nav-icon">🏠</span> <span>Dashboard</span>
+        </a>
+
+        <div class="nav-section-label">LEARNING</div>
+        <a href="/learning-path.html" class="nav-item" data-page="learning-path">
+          <span class="nav-icon">🗺️</span> <span>Learn Python</span>
+        </a>
+        <a href="/assessment.html" class="nav-item" data-page="assessment">
+          <span class="nav-icon">🎯</span> <span>Assessment</span>
+        </a>
+        <a href="/practice.html" class="nav-item" data-page="practice">
+          <span class="nav-icon">💻</span> <span>Practice</span>
+        </a>
+        <a href="/lesson.html" class="nav-item" data-page="lesson">
+          <span class="nav-icon">📖</span> <span>Interactive Lesson</span>
+        </a>
+
+        <div class="nav-section-label">TOOLS</div>
+        <a href="/playground.html" class="nav-item active" data-page="playground">
+          <span class="nav-icon">⚡</span> <span>Playground</span>
+        </a>
+        <a href="/mentor.html" class="nav-item" data-page="mentor">
+          <span class="nav-icon">🤖</span> <span>AI Mentor</span>
+        </a>
+
+        <div class="nav-section-label">INSIGHTS</div>
+        <a href="/progress.html" class="nav-item" data-page="progress">
+          <span class="nav-icon">📊</span> <span>My Progress</span>
+        </a>
+
+        <div id="nav-admin-section" class="hidden">
+          <div class="nav-section-label">ADMIN</div>
+          <a href="/admin/dashboard.html" class="nav-item" data-page="admin-dashboard">
+            <span class="nav-icon">🛡️</span> <span>Admin Overview</span>
+          </a>
+          <a href="/admin/students.html" class="nav-item" data-page="admin-students">
+            <span class="nav-icon">👥</span> <span>Students</span>
+          </a>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-card" id="sidebar-user-card">
+          <div class="user-avatar" id="sidebar-avatar">?</div>
+          <div style="min-width:0;flex:1;">
+            <div class="user-name" id="sidebar-username">Student</div>
+            <div class="user-role" id="sidebar-role">student</div>
+          </div>
+        </div>
+        <button class="btn btn-secondary btn-full btn-sm" id="logout-btn">
+          <span>🚪</span> Sign Out
+        </button>
+      </div>
+    </aside>
+
+    <!-- ── Main View Area ────────────────────────────────────────────────────── -->
+    <div class="main-area">
+      <header class="topbar">
+        <div class="topbar-left">
+          <h2 id="topbar-title" class="topbar-title">Multi-Language Code Playground</h2>
+          <span id="role-mode-badge" class="badge badge-blue">Student Portal</span>
+        </div>
+        <div class="topbar-right">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:12px;color:var(--text-secondary);">Execution Status:</span>
+            <span id="pg-status-badge" class="badge badge-gray">Idle</span>
+          </div>
+          <div id="topbar-user-pill" style="
+            display: flex; align-items: center; gap: 8px;
+            background: #FFFDF9; border: 1.5px solid rgba(200, 160, 100, 0.28);
+            border-radius: var(--r-full); padding: 4px 14px 4px 4px;
+            cursor: pointer; transition: all 0.2s var(--ease);
+          " onclick="window.location.href='/profile.html'" title="View Student Profile">
+            <div class="user-avatar" id="topbar-avatar" style="width:32px;height:32px;font-size:12.5px;">A</div>
+            <span id="topbar-username" style="font-size:13px;font-weight:700;color:#1C0E04;">A.sri Lakshmi Gayatri</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="main-scroll-content">
+        <div class="page-content animate-in">
+
+          <!-- Playground IDE Workspace -->
+          <div class="playground-container">
+            
+            <!-- Toolbar -->
+            <div class="playground-toolbar">
+              
+              <!-- Left: Actions & Language Selector -->
+              <div class="toolbar-group">
+                <button class="btn btn-primary btn-sm" id="pg-btn-run">
+                  <span>▶ Run Code</span>
+                </button>
+
+                <!-- Language Mode Tabs -->
+                <div class="lang-selector-group" id="pg-lang-tabs">
+                  <button class="lang-tab-btn active" data-lang="python">
+                    <span>🐍 Python</span>
+                  </button>
+                  <button class="lang-tab-btn" data-lang="web">
+                    <span>🌐 Web App (HTML/CSS/JS)</span>
+                  </button>
+                </div>
+
+                <button class="btn btn-secondary btn-sm" id="pg-btn-save">
+                  <span>💾 Save Project</span>
+                </button>
+                <button class="btn btn-ghost btn-sm" id="pg-btn-reset">
+                  <span>↺ Clear</span>
+                </button>
+              </div>
+
+              <!-- Right: Secondary Tools & Templates -->
+              <div class="toolbar-group">
+                <!-- Web Template Selector (visible in Web App mode) -->
+                <select id="pg-template-select" class="form-select hidden" style="font-size:12px;padding:4px 8px;height:32px;">
+                  <option value="counter">Template: Interactive Counter</option>
+                  <option value="todo">Template: Todo Task App</option>
+                  <option value="card">Template: Responsive Card</option>
+                  <option value="blank">Template: Blank Slate</option>
+                </select>
+
+                <button class="btn btn-secondary btn-sm" id="pg-btn-saved-list">
+                  <span>📁 My Saved Projects (<span id="pg-saved-count">0</span>)</span>
+                </button>
+                <button class="btn btn-ghost btn-sm" id="pg-btn-clear" title="Clear console/terminal">
+                  <span>🧹 Clear</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Web App Multi-File Tabs Bar (Visible in Web Mode) -->
+            <div class="file-tabs-bar hidden" id="pg-web-file-tabs">
+              <div class="file-tabs-list">
+                <button class="file-tab active" data-file="html">
+                  <span>📄 index.html</span>
+                </button>
+                <button class="file-tab" data-file="css">
+                  <span>🎨 style.css</span>
+                </button>
+                <button class="file-tab" data-file="js">
+                  <span>⚡ script.js</span>
+                </button>
+              </div>
+              <div style="font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:6px;">
+                <span>Live Browser Execution</span>
+                <span class="badge badge-green" style="font-size:10px;padding:2px 6px;">HTML5</span>
+              </div>
+            </div>
+
+            <!-- Split Work Area -->
+            <div class="playground-split">
+              
+              <!-- Left: Code Editor -->
+              <div class="editor-section">
+                <div class="editor-mount" id="pg-editor-mount"></div>
+
+                <!-- Collapsible Stdin Input Tray (Python Only) -->
+                <div class="stdin-drawer" id="pg-stdin-drawer">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                    <label for="pg-stdin-input" style="font-size:11.5px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em;">Standard Input (stdin for input() calls)</label>
+                    <span style="font-size:11px;color:var(--text-muted);">One line per input() prompt</span>
+                  </div>
+                  <textarea id="pg-stdin-input" class="stdin-textarea" placeholder="Enter input values here if your code calls input()…"></textarea>
+                </div>
+              </div>
+
+              <!-- Right: Execution Output / Live Web Preview -->
+              <div class="console-section" id="pg-output-section">
+                
+                <!-- Python Console Header -->
+                <div class="console-header" id="pg-python-console-header">
+                  <span>Output Terminal</span>
+                  <span id="pg-exec-time" style="font-family:var(--font-mono);font-size:11px;">0 ms</span>
+                </div>
+
+                <!-- Web App Header with Subtabs -->
+                <div class="console-header hidden" id="pg-web-console-header">
+                  <div class="preview-subtabs">
+                    <button class="preview-subtab-btn active" id="btn-subtab-preview">👁️ Live Preview</button>
+                    <button class="preview-subtab-btn" id="btn-subtab-console">💻 Browser Console (<span id="pg-console-count">0</span>)</button>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <button class="btn btn-ghost btn-sm" id="btn-popout-preview" title="Open live preview in new window" style="padding:2px 8px;font-size:11px;">
+                      <span>↗ Open Tab</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Python Terminal Output Body -->
+                <div class="console-body" id="pg-console-output">Ready. Write Python code in the editor and click "Run Code".</div>
+
+                <!-- Web App Live Preview Iframe Container -->
+                <div class="web-preview-container hidden" id="pg-web-preview-container">
+                  <iframe class="web-preview-iframe" id="pg-web-preview-iframe" sandbox="allow-scripts allow-modals"></iframe>
+                </div>
+
+                <!-- Web App Browser Console List -->
+                <div class="browser-console-list hidden" id="pg-browser-console-list">
+                  <div style="padding:16px;text-align:center;color:var(--text-muted);font-size:12px;" id="pg-console-empty-msg">No console logs yet. Interactive output from console.log() will appear here.</div>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Modal: Saved Projects Library -->
+  <div id="pg-library-modal" class="modal-overlay hidden" style="display:none;">
+    <div class="modal-content-card" style="max-width:560px;">
+      <div style="padding:18px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+        <h3 style="font-size:16px;font-weight:700;color:var(--text-primary);margin:0;">My Saved Projects & Scripts</h3>
+        <button id="pg-modal-close" class="btn btn-ghost btn-sm" style="font-size:16px;padding:4px 8px;">✕</button>
+      </div>
+      <div style="padding:20px;max-height:60vh;overflow-y:auto;" id="pg-saved-list-items">
+        <div style="text-align:center;padding:24px;"><div class="spinner"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/js/playground.js?v=20261108_v17"></script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Programming Mentor</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #090d16;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: system-ui, -apple-system, sans-serif;
+      color: #94a3b8;
+    }
+    .loader {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid rgba(124, 58, 237, 0.2);
+      border-top-color: #8b5cf6;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="loader">
+    <div style="font-size: 40px;">🐍</div>
+    <div class="spinner"></div>
+    <div style="font-size: 14px; font-weight: 500;">Loading PyMentor…</div>
+  </div>
+
+  <script type="module">
+    import { getToken, clearToken, setUser, authApi } from '/js/api.js';
+
+    async function checkAndRedirect() {
+      const token = getToken();
+      if (!token) {
+        window.location.replace('/login.html');
+        return;
+      }
+
+      try {
+        const user = await authApi.me();
+        setUser(user);
+        if (user.role === 'admin') {
+          window.location.replace('/admin/dashboard.html');
+        } else {
+          window.location.replace('/dashboard.html');
+        }
+      } catch {
+        clearToken();
+        window.location.replace('/login.html');
+      }
+    }
+
+    checkAndRedirect();
+  </script>
+</body>
+</html>

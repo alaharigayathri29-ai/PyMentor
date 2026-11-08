@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Curriculum Roadmap — PyMentor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/global.css?v=20261108_v19">
+  <link rel="stylesheet" href="/css/sidebar.css?v=20261108_v19">
+  <link rel="stylesheet" href="/css/learning-path.css?v=20261108_v19">
+</head>
+<body>
+
+  <div class="app-shell">
+
+    <!-- ── Left Sidebar Navigation (Modern Light System) ────────────────────── -->
+    <aside class="sidebar" id="sidebar">
+      <a href="/dashboard.html" class="sidebar-logo">
+        <div class="logo-icon">🐍</div>
+        <div>
+          <div class="logo-text">PyMentor</div>
+          <div class="logo-sub">Learn Python Better</div>
+        </div>
+      </a>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">HOME</div>
+        <a href="/dashboard.html" class="nav-item" data-page="dashboard">
+          <span class="nav-icon">🏠</span> <span>Dashboard</span>
+        </a>
+
+        <div class="nav-section-label">LEARNING</div>
+        <a href="/learning-path.html" class="nav-item active" data-page="learning-path">
+          <span class="nav-icon">🗺️</span> <span>Learn Python</span>
+        </a>
+        <a href="/assessment.html" class="nav-item" data-page="assessment">
+          <span class="nav-icon">🎯</span> <span>Assessment</span>
+        </a>
+        <a href="/practice.html" class="nav-item" data-page="practice">
+          <span class="nav-icon">💻</span> <span>Practice</span>
+        </a>
+        <a href="/lesson.html" class="nav-item" data-page="lesson">
+          <span class="nav-icon">📖</span> <span>Interactive Lesson</span>
+        </a>
+
+        <div class="nav-section-label">TOOLS</div>
+        <a href="/playground.html" class="nav-item" data-page="playground">
+          <span class="nav-icon">⚡</span> <span>Playground</span>
+        </a>
+        <a href="/mentor.html" class="nav-item" data-page="mentor">
+          <span class="nav-icon">🤖</span> <span>AI Mentor</span>
+        </a>
+
+        <div class="nav-section-label">INSIGHTS</div>
+        <a href="/progress.html" class="nav-item" data-page="progress">
+          <span class="nav-icon">📊</span> <span>My Progress</span>
+        </a>
+
+        <div id="nav-admin-section" class="hidden">
+          <div class="nav-section-label">ADMIN</div>
+          <a href="/admin/dashboard.html" class="nav-item" data-page="admin-dashboard">
+            <span class="nav-icon">🛡️</span> <span>Admin Overview</span>
+          </a>
+          <a href="/admin/students.html" class="nav-item" data-page="admin-students">
+            <span class="nav-icon">👥</span> <span>Students</span>
+          </a>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-card" id="sidebar-user-card">
+          <div class="user-avatar" id="sidebar-avatar">?</div>
+          <div style="min-width:0;flex:1;">
+            <div class="user-name" id="sidebar-username">Student</div>
+            <div class="user-role" id="sidebar-role">student</div>
+          </div>
+        </div>
+        <button class="btn btn-secondary btn-full btn-sm" id="logout-btn">
+          <span>🚪</span> Sign Out
+        </button>
+      </div>
+    </aside>
+
+    <!-- ── Main View Area ────────────────────────────────────────────────────── -->
+    <div class="main-area">
+      <header class="topbar">
+        <div class="topbar-left">
+          <h2 id="topbar-title" class="topbar-title">Curriculum Roadmap</h2>
+          <span id="role-mode-badge" class="badge badge-blue">Student Portal</span>
+        </div>
+        <div class="topbar-right">
+          <a href="/assessment.html" class="btn btn-secondary btn-sm"><span>🎯 Calibrate Level</span></a>
+          <div id="topbar-user-pill" style="
+            display: flex; align-items: center; gap: 8px;
+            background: #FFFDF9; border: 1.5px solid rgba(200, 160, 100, 0.28);
+            border-radius: var(--r-full); padding: 4px 14px 4px 4px;
+            cursor: pointer; transition: all 0.2s var(--ease);
+          " onclick="window.location.href='/profile.html'" title="View Student Profile">
+            <div class="user-avatar" id="topbar-avatar" style="width:32px;height:32px;font-size:12.5px;">A</div>
+            <span id="topbar-username" style="font-size:13px;font-weight:700;color:#1C0E04;">A.sri Lakshmi Gayatri</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="main-scroll-content">
+        <div class="page-content animate-in">
+
+          <!-- Hero Overview -->
+          <div class="curriculum-hero">
+            <div>
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+                <h1 style="font-size:24px;font-weight:800;color:#FFFFFF !important;letter-spacing:-0.02em;margin:0;">Python Learning Curriculum</h1>
+                <span class="badge" id="path-level-badge" style="background:rgba(245, 158, 11, 0.25);color:#FEF3C7;border:1px solid rgba(245, 158, 11, 0.5);font-weight:700;">Standard Path</span>
+              </div>
+              <p style="font-size:14px;color:#FDE68A !important;margin:0;max-width:620px;line-height:1.6;">Structured 7-module Python path. Complete interactive lessons and practice problems to earn mastery stars.</p>
+            </div>
+            <div style="text-align:right;flex-shrink:0;">
+              <div style="font-size:32px;font-weight:800;color:#F59E0B;" id="curriculum-completion-pct">0%</div>
+              <div style="font-size:11.5px;color:#FEF3C7 !important;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">Overall Completed</div>
+            </div>
+          </div>
+
+          <!-- 7-Module Curriculum Accordions Container -->
+          <div class="curriculum-modules-wrap" id="curriculum-modules-container">
+            <div style="padding:48px;text-align:center;"><div class="spinner"></div></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script type="module" src="/js/learning-path.js?v=20261108_v17"></script>
+</body>
+</html>

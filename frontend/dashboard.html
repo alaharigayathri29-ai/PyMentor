@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Learning Dashboard — PyMentor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:ital,opsz,wght@0,14..32,300..900;1,14..32,300..900&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/css/global.css?v=20261108_v19">
+  <link rel="stylesheet" href="/css/sidebar.css?v=20261108_v19">
+  <link rel="stylesheet" href="/css/dashboard.css?v=20261108_v19">
+</head>
+
+<body>
+
+  <div class="app-shell">
+
+    <!-- ── Sidebar ─────────────────────────────────────────────────────────── -->
+    <aside class="sidebar" id="sidebar">
+      <a href="/dashboard.html" class="sidebar-logo">
+        <div class="logo-icon">🐍</div>
+        <div>
+          <div class="logo-text">PyMentor</div>
+          <div class="logo-sub">Learn Python Better</div>
+        </div>
+      </a>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">HOME</div>
+        <a href="/dashboard.html" class="nav-item active" data-page="dashboard">
+          <span class="nav-icon">🏠</span> <span>Dashboard</span>
+        </a>
+
+        <div class="nav-section-label">LEARNING</div>
+        <a href="/learning-path.html" class="nav-item" data-page="learning-path">
+          <span class="nav-icon">🗺️</span> <span>Learn Python</span>
+        </a>
+        <a href="/assessment.html" class="nav-item" data-page="assessment">
+          <span class="nav-icon">🎯</span> <span>Assessment</span>
+        </a>
+        <a href="/practice.html" class="nav-item" data-page="practice">
+          <span class="nav-icon">💻</span> <span>Practice</span>
+        </a>
+        <a href="/lesson.html" class="nav-item" data-page="lesson">
+          <span class="nav-icon">📖</span> <span>Interactive Lesson</span>
+        </a>
+
+        <div class="nav-section-label">TOOLS</div>
+        <a href="/playground.html" class="nav-item" data-page="playground">
+          <span class="nav-icon">⚡</span> <span>Playground</span>
+        </a>
+        <a href="/mentor.html" class="nav-item" data-page="mentor">
+          <span class="nav-icon">🤖</span> <span>AI Mentor</span>
+        </a>
+
+        <div class="nav-section-label">INSIGHTS</div>
+        <a href="/profile.html" class="nav-item" data-page="profile">
+          <span class="nav-icon">👤</span> <span>Student Profile</span>
+        </a>
+        <a href="/progress.html" class="nav-item" data-page="progress">
+          <span class="nav-icon">📊</span> <span>My Progress</span>
+        </a>
+
+        <div id="nav-admin-section" class="hidden">
+          <div class="nav-section-label">ADMIN</div>
+          <a href="/admin/dashboard.html" class="nav-item" data-page="admin-dashboard">
+            <span class="nav-icon">🛡️</span> <span>Admin Overview</span>
+            <span class="nav-badge">Admin</span>
+          </a>
+          <a href="/admin/students.html" class="nav-item" data-page="admin-students">
+            <span class="nav-icon">👥</span> <span>Students</span>
+          </a>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-card" id="sidebar-user-card" onclick="window.location.href='/profile.html'" title="View Full Student Profile">
+          <div class="user-avatar" id="sidebar-avatar">H</div>
+          <div style="min-width:0;flex:1;">
+            <div class="user-name" id="sidebar-username">Honey_qis</div>
+            <div class="user-role" id="sidebar-role">STUDENT · QISCET</div>
+          </div>
+        </div>
+        <button class="btn btn-secondary btn-full btn-sm" id="logout-btn">
+          <span>🚪</span> Sign Out
+        </button>
+      </div>
+    </aside>
+
+    <!-- ── Main Area ───────────────────────────────────────────────────────── -->
+    <div class="main-area">
+      <header class="topbar">
+        <div class="topbar-left">
+          <div>
+            <h2 class="topbar-title">Student Learning Dashboard</h2>
+            <div style="font-size:12px;color:var(--text-300);margin-top:1px;" id="dash-date-display">Sunday, November 8, 2026</div>
+          </div>
+          <span id="role-mode-badge" class="badge badge-blue" style="margin-left:4px;">Student Portal</span>
+        </div>
+        <div class="topbar-right">
+          <div class="dash-search-box" style="padding:6px 14px;">
+            <span style="color:var(--text-400);font-size:13px;">🔍</span>
+            <input type="text" class="dash-search-input" placeholder="Search topics, lessons...">
+          </div>
+          <button class="topbar-icon-btn" title="Coding Problems" onclick="window.location.href='/practice.html'">🐞</button>
+          <button class="topbar-icon-btn" title="Curriculum Matrix" onclick="window.location.href='/learning-path.html'">⊞</button>
+          <button class="topbar-icon-btn" title="Notifications">🔔</button>
+          <a href="/mentor.html" class="btn btn-primary btn-sm"
+            style="padding:7px 16px;font-size:12.5px;border-radius:var(--r-full);">
+            🤖 Ask AI Mentor
+          </a>
+          <!-- Student Profile Pill (links to profile dossier) -->
+          <div id="topbar-user-pill" style="
+            display: flex; align-items: center; gap: 8px;
+            background: #FFFDF9; border: 1.5px solid rgba(200, 160, 100, 0.28);
+            border-radius: var(--r-full); padding: 4px 14px 4px 4px;
+            cursor: pointer; transition: all 0.2s var(--ease);
+          " onclick="window.location.href='/profile.html'" title="Open Complete Student Profile Dossier">
+            <div class="user-avatar" id="topbar-avatar" style="width:32px;height:32px;font-size:12.5px;">H</div>
+            <span id="topbar-username" style="font-size:13px;font-weight:700;color:#1C0E04;">Honey_qis</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="main-scroll-content">
+        <div class="page-content" style="max-width:1400px;margin:0 auto;display:flex;flex-direction:column;gap:24px;">
+
+          <!-- 1. Daily Action Welcome Strip -->
+          <div class="welcome-strip">
+            <div class="welcome-text">
+              <div class="welcome-greeting" id="dash-greeting-time">Good afternoon</div>
+              <div class="welcome-heading">
+                Welcome back, <span id="dash-student-name">Honey_qis</span>! 👋
+              </div>
+              <div class="welcome-subtext" id="dash-welcome-sub">
+                You're currently on the Intermediate track. Continue your next lesson to maintain your momentum.
+              </div>
+            </div>
+            <div class="welcome-actions">
+              <a href="/lesson.html" class="btn-resume" id="dash-btn-resume">
+                📖 Resume Lesson
+              </a>
+              <a href="/practice.html" class="btn btn-secondary" id="dash-btn-practice"
+                style="background:rgba(217,119,6,0.08);border:1.5px solid rgba(217,119,6,0.3);color:#D97706;padding:10px 20px;border-radius:12px;font-weight:700;">
+                💻 Practice Lab
+              </a>
+            </div>
+          </div>
+
+          <!-- 2. Real Current Vitals (4 Quick Action Chips — Zero Mock Data) -->
+          <div class="today-kpi-row">
+            <div class="kpi-chip">
+              <div class="kpi-icon violet">🔥</div>
+              <div>
+                <div class="kpi-value" id="kpi-streak">0 Days</div>
+                <div class="kpi-label">Current Streak</div>
+              </div>
+            </div>
+            <div class="kpi-chip">
+              <div class="kpi-icon cyan">⚡</div>
+              <div>
+                <div class="kpi-value" id="kpi-xp">0 XP</div>
+                <div class="kpi-label">Earned XP</div>
+              </div>
+            </div>
+            <div class="kpi-chip">
+              <div class="kpi-icon gold">🎯</div>
+              <div>
+                <div class="kpi-value" id="kpi-solved">0</div>
+                <div class="kpi-label">Problems Solved</div>
+              </div>
+            </div>
+            <div class="kpi-chip">
+              <div class="kpi-icon mint">📚</div>
+              <div>
+                <div class="kpi-value" id="kpi-topics">0 / 8</div>
+                <div class="kpi-label">Topics Mastered</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Smart Daily Learning Grid: Today's Focus (Left) + Weekly Activity Velocity (Right) -->
+          <div class="smart-grid">
+
+            <!-- LEFT: Learning Radar — Today's Focus -->
+            <div class="learning-radar">
+              <div class="radar-header">
+                <div class="radar-title">🎯 Today's Focus</div>
+                <span class="radar-badge" id="radar-skill-badge">Intermediate Track</span>
+              </div>
+
+              <!-- Current Topic -->
+              <div class="current-topic-block">
+                <div class="topic-label">ACTIVE TOPIC</div>
+                <div class="topic-name" id="dash-topic-name">Loops & Iteration Controls</div>
+                <div class="topic-description" id="dash-topic-desc">
+                  Master for/while loops, nested iteration, break/continue statements, and algorithmic logic.
+                </div>
+
+                <div class="mastery-row">
+                  <span class="mastery-label">Topic Mastery</span>
+                  <span class="mastery-pct" id="dash-mastery-pct">40%</span>
+                </div>
+                <div class="mastery-bar">
+                  <div class="mastery-bar-fill" id="dash-mastery-fill" style="width:40%;"></div>
+                </div>
+              </div>
+
+              <!-- Streak & Momentum Box -->
+              <div class="streak-display">
+                <span class="streak-flame">🔥</span>
+                <div class="streak-info">
+                  <div class="streak-val" id="streak-display-val">0 Days Streak</div>
+                  <div class="streak-label">Complete today's coding exercise to extend your daily streak!</div>
+                </div>
+              </div>
+
+              <!-- Quick Action Hub Buttons -->
+              <div class="radar-actions">
+                <a href="/lesson.html" class="radar-action-btn primary" id="btn-study-lesson">
+                  <span class="radar-action-icon">📖</span>
+                  <span>Study Lesson</span>
+                </a>
+                <a href="/practice.html" class="radar-action-btn secondary" id="btn-practice-topic">
+                  <span class="radar-action-icon">💻</span>
+                  <span>Practice Lab</span>
+                </a>
+                <a href="/mentor.html" class="radar-action-btn mentor">
+                  <span class="radar-action-icon">🤖</span>
+                  <span>Ask AI Mentor</span>
+                </a>
+                <a href="/playground.html" class="radar-action-btn playground">
+                  <span class="radar-action-icon">⚡</span>
+                  <span>Playground</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- RIGHT: Weekly Learning Activity Velocity -->
+            <div class="activity-pulse" style="display:flex;flex-direction:column;justify-content:space-between;">
+              <div>
+                <div class="pulse-header">
+                  <div class="pulse-title">Weekly Learning Activity</div>
+                  <span style="font-size:11px;color:var(--text-400);font-weight:600;">Mon – Sun</span>
+                </div>
+
+                <div class="pulse-time" style="margin-bottom:16px;">
+                  <span id="pulse-hours">9</span><span>h</span>
+                  <span id="pulse-mins" style="margin-left:4px;">50</span><span>m</span>
+                  <span style="font-size:12px;color:var(--text-300);margin-left:8px;font-weight:500;">recorded study time</span>
+                </div>
+
+                <!-- Mini stacked bars Mon–Sun -->
+                <div class="mini-bars-row" id="mini-bars-row" style="height:90px;align-items:flex-end;">
+                  <!-- dynamically filled with real weekly activity from API -->
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:0 4px;margin-top:6px;"
+                  id="mini-day-labels">
+                  <!-- dynamically filled -->
+                </div>
+
+                <div class="bars-legend" style="margin-top:14px;">
+                  <span class="legend-dot pink">Practice Submissions</span>
+                  <span class="legend-dot gold">Lesson Readings</span>
+                  <span class="legend-dot cyan">AI Mentor Chats</span>
+                </div>
+              </div>
+
+              <!-- Profile Link Card -->
+              <div style="background:#FFFDF9;border:1px solid rgba(200,160,100,0.18);border-radius:12px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;margin-top:20px;">
+                <div>
+                  <div style="font-size:13px;font-weight:700;color:#1C0E04;">Looking for Analytics & Rankings?</div>
+                  <div style="font-size:11.5px;color:#A07050;margin-top:2px;">View your Speedometer score, problem breakdowns, and heatmap</div>
+                </div>
+                <a href="/profile.html" class="btn btn-secondary btn-sm" style="font-weight:700;border-radius:8px;">
+                  Student Profile →
+                </a>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- 4. Enrolled Curriculum Tracks (7 Modules Progression) -->
+          <div class="courses-panel">
+            <div class="courses-panel-header">
+              <div>
+                <div class="courses-panel-title">Python Learning Curriculum Tracks</div>
+                <div style="font-size:12px;color:#A07050;margin-top:2px;">Progress through structured modules with interactive challenges</div>
+              </div>
+              <div class="courses-controls">
+                <div class="course-search-wrap">
+                  <span style="color:var(--text-400);font-size:12px;">🔍</span>
+                  <input type="text" id="course-search" placeholder="Search module...">
+                </div>
+                <select class="course-status-select" id="course-status">
+                  <option value="all">All Status</option>
+                  <option value="ongoing">Ongoing</option>
+                  <option value="completed">Completed</option>
+                  <option value="available">Available</option>
+                </select>
+                <a href="/learning-path.html" class="btn btn-primary btn-sm" style="border-radius:var(--r-full);">
+                  View Full Matrix →
+                </a>
+              </div>
+            </div>
+            <div class="module-list" id="dash-modules-container">
+              <div style="padding:40px;text-align:center;">
+                <div class="spinner"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/js/dashboard.js?v=20261108_v17"></script>
+</body>
+
+</html>

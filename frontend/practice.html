@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Topic-Wise Code Practice Lab — PyMentor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:ital,opsz,wght@0,14..32,300..900;1,14..32,300..900&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/css/global.css?v=20261108_v19">
+  <link rel="stylesheet" href="/css/sidebar.css?v=20261108_v19">
+  <link rel="stylesheet" href="/css/practice.css?v=20261108_v19">
+  <!-- CodeMirror for Python syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
+</head>
+
+<body>
+
+  <div class="app-shell">
+
+    <!-- ── Sidebar ─────────────────────────────────────────────────────────── -->
+    <aside class="sidebar" id="sidebar">
+      <a href="/dashboard.html" class="sidebar-logo">
+        <div class="logo-icon">🐍</div>
+        <div>
+          <div class="logo-text">PyMentor</div>
+          <div class="logo-sub">Learn Python Better</div>
+        </div>
+      </a>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">HOME</div>
+        <a href="/dashboard.html" class="nav-item" data-page="dashboard">
+          <span class="nav-icon">🏠</span> <span>Dashboard</span>
+        </a>
+
+        <div class="nav-section-label">LEARNING</div>
+        <a href="/learning-path.html" class="nav-item" data-page="learning-path">
+          <span class="nav-icon">🗺️</span> <span>Learn Python</span>
+        </a>
+        <a href="/assessment.html" class="nav-item" data-page="assessment">
+          <span class="nav-icon">🎯</span> <span>Assessment</span>
+        </a>
+        <a href="/practice.html" class="nav-item active" data-page="practice">
+          <span class="nav-icon">💻</span> <span>Practice</span>
+        </a>
+        <a href="/lesson.html" class="nav-item" data-page="lesson">
+          <span class="nav-icon">📖</span> <span>Interactive Lesson</span>
+        </a>
+
+        <div class="nav-section-label">TOOLS</div>
+        <a href="/playground.html" class="nav-item" data-page="playground">
+          <span class="nav-icon">⚡</span> <span>Playground</span>
+        </a>
+        <a href="/mentor.html" class="nav-item" data-page="mentor">
+          <span class="nav-icon">🤖</span> <span>AI Mentor</span>
+        </a>
+
+        <div class="nav-section-label">INSIGHTS</div>
+        <a href="/profile.html" class="nav-item" data-page="profile">
+          <span class="nav-icon">👤</span> <span>Student Profile</span>
+        </a>
+        <a href="/progress.html" class="nav-item" data-page="progress">
+          <span class="nav-icon">📊</span> <span>My Progress</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-card" id="sidebar-user-card" onclick="window.location.href='/profile.html'" title="View Profile">
+          <div class="user-avatar" id="sidebar-avatar">H</div>
+          <div style="min-width:0;flex:1;">
+            <div class="user-name" id="sidebar-username">Honey_qis</div>
+            <div class="user-role" id="sidebar-role">STUDENT · QISCET</div>
+          </div>
+        </div>
+        <button class="btn btn-secondary btn-full btn-sm" id="logout-btn">
+          <span>🚪</span> Sign Out
+        </button>
+      </div>
+    </aside>
+
+    <!-- ── Main View Area ────────────────────────────────────────────────────── -->
+    <div class="main-area">
+      <header class="topbar">
+        <div class="topbar-left">
+          <a href="/dashboard.html" class="btn btn-secondary btn-sm" id="btn-topbar-dashboard" style="font-weight:700;display:flex;align-items:center;gap:6px;border-radius:var(--r-full);padding:6px 14px;background:#FFFDF9;border:1.5px solid rgba(200,160,100,0.35);margin-right:12px;color:#1C0E04;" title="Exit module and return to Dashboard">
+            <span>🏠</span> <span>Back to Dashboard</span>
+          </a>
+          <h2 id="topbar-title" class="topbar-title">Code Practice Lab</h2>
+          <span id="role-mode-badge" class="badge badge-blue">Student Portal</span>
+        </div>
+        <div class="topbar-right">
+          <a href="/mentor.html" class="btn btn-ghost btn-sm"><span>🤖 Need Help? Ask Mentor</span></a>
+          <div id="topbar-user-pill" style="
+            display: flex; align-items: center; gap: 8px;
+            background: #FFFDF9; border: 1.5px solid rgba(200, 160, 100, 0.28);
+            border-radius: var(--r-full); padding: 4px 14px 4px 4px;
+            cursor: pointer; transition: all 0.2s var(--ease);
+          " onclick="window.location.href='/profile.html'" title="View Student Profile">
+            <div class="user-avatar" id="topbar-avatar" style="width:32px;height:32px;font-size:12.5px;">H</div>
+            <span id="topbar-username" style="font-size:13px;font-weight:700;color:#1C0E04;">Honey_qis</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="main-scroll-content">
+        <div class="page-content animate-in" style="padding:18px 24px;">
+
+          <div class="practice-page-wrap">
+
+            <!-- 1. Top Topic Selector Navigation Strip (50 Problems per Topic) -->
+            <div class="topic-nav-strip" id="topic-pills-strip">
+              <!-- Dynamically populated with all 14 curriculum topics -->
+            </div>
+
+            <!-- 2. View Mode Switcher Bar -->
+            <div class="view-mode-bar">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <span style="font-size:13.5px;font-weight:800;color:#1C0E04;" id="current-topic-label">Loading topic…</span>
+                <span class="badge badge-amber" id="topic-problem-counter">50 Problems</span>
+                <span class="badge badge-teal" id="topic-solved-counter">0 Solved</span>
+              </div>
+              <div class="view-mode-toggles">
+                <button class="view-toggle-btn active" id="toggle-catalog-view">
+                  <span>📋</span> Topic Labs Catalog
+                </button>
+                <button class="view-toggle-btn" id="toggle-workspace-view">
+                  <span>💻</span> IDE Workspace
+                </button>
+              </div>
+            </div>
+
+            <!-- 3. VIEW 1: Topic Labs Catalog (Exact Match of User Image 2) -->
+            <div class="catalog-card" id="catalog-view-section">
+              <div class="catalog-header">
+                <div class="catalog-title-box">
+                  <h1 id="catalog-heading">Data Structures Labs</h1>
+                  <p id="catalog-subheading">Choose a challenge to test run and submit in the interactive Python IDE.</p>
+                </div>
+                <div class="catalog-filters">
+                  <div class="catalog-search-wrap">
+                    <span>🔍</span>
+                    <input type="text" id="catalog-search-input" placeholder="Search labs...">
+                  </div>
+                  <select class="catalog-select" id="catalog-diff-filter">
+                    <option value="all">All Difficulties</option>
+                    <option value="easy">Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                  </select>
+                  <select class="catalog-select" id="catalog-status-filter">
+                    <option value="all">All Status</option>
+                    <option value="solved">✓ Solved</option>
+                    <option value="attempted">✗ Attempted</option>
+                    <option value="unsolved">○ Unsolved</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Labs Table (Exact Match of User Image 2) -->
+              <div class="labs-table-wrap">
+                <table class="labs-table">
+                  <thead>
+                    <tr>
+                      <th style="width:50px;">Status</th>
+                      <th style="width:260px;">Title</th>
+                      <th style="width:110px;">Difficulty</th>
+                      <th>Description</th>
+                      <th style="width:120px;text-align:right;">Go to Lab</th>
+                    </tr>
+                  </thead>
+                  <tbody id="catalog-table-body">
+                    <tr>
+                      <td colspan="5" style="text-align:center;padding:40px;"><div class="spinner"></div></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- 10 Per Page Pagination Bar -->
+              <div class="catalog-pagination-wrap" id="catalog-pagination">
+                <div class="pagination-info" id="pagination-info-text">Showing 1–10 of 50 problems</div>
+                <div class="pagination-controls">
+                  <button class="btn btn-secondary btn-sm page-nav-btn" id="btn-page-prev">◀ Prev</button>
+                  <div class="page-numbers-list" id="page-numbers-container">
+                    <!-- Populated by practice.js: 1 2 3 4 5 -->
+                  </div>
+                  <button class="btn btn-secondary btn-sm page-nav-btn" id="btn-page-next">Next ▶</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 4. VIEW 2: Focused Single-Problem IDE Workspace (No other problems list) -->
+            <div class="workspace-card hidden" id="workspace-view-section">
+
+              <!-- Middle Pane: Code Editor -->
+              <div class="workspace-center-pane">
+                <div class="workspace-editor-header">
+                  <div style="display:flex;align-items:center;gap:12px;">
+                    <button class="btn btn-secondary btn-sm" id="btn-back-to-catalog" style="font-weight:700;padding:5px 14px;font-size:12px;border-radius:var(--r-md);background:#FFF8F0;color:#2C1A0E;border:1.5px solid rgba(200,160,100,0.4);" title="Return to 10-per-page labs catalog">
+                      ← Back to Labs Catalog
+                    </button>
+                    <div class="editor-file-tab">
+                      <span>📄</span> <span>main.py</span>
+                    </div>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <span class="badge badge-blue" style="font-size:11px;">PYTHON 3.10+</span>
+                    <button class="btn btn-ghost btn-sm" id="btn-reset-code" title="Reset starter code" style="color:#FFF8F0;font-size:12px;">
+                      ↺ Reset
+                    </button>
+                  </div>
+                </div>
+
+                <!-- CodeMirror Editor Mount -->
+                <div class="editor-mount-box" id="workspace-editor-mount"></div>
+
+                <!-- Bottom Status Bar (Image 3) -->
+                <div class="workspace-editor-bottom">
+                  <div class="time-spent-badge">
+                    <span>⏱️</span> <span id="workspace-timer">0m spent</span>
+                  </div>
+                  <div style="display:flex;gap:10px;">
+                    <button class="btn btn-secondary btn-sm" id="btn-workspace-run">
+                      ▶ Run Sample Tests
+                    </button>
+                    <button class="btn btn-primary btn-sm" id="btn-workspace-submit">
+                      ⚡ Submit Solution
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Execution Output Console Drawer -->
+                <div class="editor-results-console" id="workspace-eval-console">
+                  <div style="font-size:11.5px;font-weight:700;color:#F59E0B;margin-bottom:6px;">TEST RESULTS CONSOLE</div>
+                  <div id="eval-console-output" style="color:#CBD5E1;line-height:1.5;">
+                    Click "Run Sample Tests" or "Submit Solution" to verify your Python code against test suites.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right Pane: Problem Details & Tabs (Image 3) -->
+              <div class="workspace-right-pane">
+                <div class="right-pane-tabs">
+                  <button class="right-tab-btn active" id="tab-ws-problem">Problem</button>
+                  <button class="right-tab-btn" id="tab-ws-tests">Test Cases</button>
+                  <button class="right-tab-btn" id="tab-ws-subs">Submissions</button>
+                  <button class="right-tab-btn" id="tab-ws-hints">Hints (<span id="ws-hint-count">0</span>)</button>
+                </div>
+
+                <div class="right-pane-scroll" id="ws-pane-problem">
+                  <div class="problem-header-box">
+                    <h2 class="problem-headline" id="ws-problem-title">Loading problem…</h2>
+                    <div class="problem-tags-row">
+                      <span class="badge badge-blue" id="ws-problem-diff">Easy</span>
+                      <span class="badge badge-teal" id="ws-problem-topic">Topic</span>
+                      <span id="ws-problem-score">Max Score: 100</span>
+                    </div>
+                  </div>
+
+                  <div class="problem-section-title">Description</div>
+                  <div class="problem-body-text" id="ws-problem-desc"></div>
+
+                  <div class="constraints-card">
+                    <div style="font-weight:700;margin-bottom:4px;color:#B45309;">Constraints</div>
+                    <div id="ws-problem-constraints">Time limit: 5.0 seconds · Memory limit: 128 MB</div>
+                  </div>
+
+                  <div class="problem-section-title">Sample Test Cases</div>
+                  <div id="ws-sample-cases-container"></div>
+                </div>
+
+                <div class="right-pane-scroll hidden" id="ws-pane-tests">
+                  <div class="problem-section-title">Automated Test Suites</div>
+                  <div id="ws-all-tests-container"></div>
+                </div>
+
+                <div class="right-pane-scroll hidden" id="ws-pane-subs">
+                  <div class="problem-section-title">My Past Submissions</div>
+                  <div id="ws-submissions-container">
+                    <div style="color:#64748B;font-size:13px;">No submissions recorded for this problem yet.</div>
+                  </div>
+                </div>
+
+                <div class="right-pane-scroll hidden" id="ws-pane-hints">
+                  <div class="problem-section-title">Hints & Guidance</div>
+                  <div id="ws-hints-container"></div>
+                  <div style="margin-top:20px;text-align:center;">
+                    <button class="btn btn-secondary btn-sm" id="btn-ws-reveal-hint">💡 Reveal Next Hint</button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dependencies -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+  <script type="module" src="/js/practice.js?v=20261108_v19"></script>
+</body>
+
+</html>

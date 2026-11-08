@@ -1,0 +1,168 @@
+/* ══════════════════════════════════════════════════════════════════════════════
+   INTERACTIVE LESSON — WARM CHAMPAGNE LUXURY
+   Rich Cream Canvas · Crisp Ivory Reading Cards · Espresso Code Demos
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.lesson-layout {
+  display: grid;
+  grid-template-columns: 2.4fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+/* ── Main Article Card ────────────────────────────────────────────────────── */
+.lesson-article-card {
+  background-color: #FFFFFF;
+  border: 1px solid rgba(200, 160, 100, 0.22);
+  border-radius: var(--r-xl);
+  padding: 32px 36px;
+  box-shadow: 0 4px 18px rgba(100, 50, 0, 0.07);
+}
+
+.lesson-header {
+  border-bottom: 1px solid rgba(200, 160, 100, 0.18);
+  padding-bottom: 20px;
+  margin-bottom: 24px;
+}
+
+.lesson-meta-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.lesson-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: #1C0E04;
+  letter-spacing: -0.02em;
+}
+
+.lesson-subtopics {
+  font-size: 13px;
+  color: #A07050;
+  margin-top: 6px;
+}
+
+/* ── Content Typography ───────────────────────────────────────────────────── */
+.lesson-prose {
+  font-size: 15px;
+  line-height: 1.75;
+  color: #3D2110;
+}
+
+.lesson-prose h2 {
+  font-size: 19px;
+  font-weight: 700;
+  color: #1C0E04;
+  margin: 28px 0 12px;
+  border-bottom: 1px solid rgba(200, 160, 100, 0.18);
+  padding-bottom: 6px;
+}
+
+.lesson-prose h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1C0E04;
+  margin: 20px 0 8px;
+}
+
+.lesson-prose p {
+  margin-bottom: 16px;
+}
+
+.lesson-prose code {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background-color: #FFF3E0;
+  color: #B45309;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* ── Objectives Box ───────────────────────────────────────────────────────── */
+.objectives-card {
+  background-color: #FFF8F0;
+  border: 1px solid rgba(217, 119, 6, 0.25);
+  border-radius: var(--r-lg);
+  padding: 20px 24px;
+  margin: 20px 0 28px;
+}
+
+.objectives-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #B45309;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 10px;
+}
+
+.objective-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #1C0E04;
+  padding: 4px 0;
+}
+
+/* ── Runnable Code Demo Card (Warm Espresso IDE) ────────────────────────── */
+.code-demo-card {
+  border: 1px solid rgba(200, 150, 80, 0.2);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  margin: 24px 0;
+  background-color: #2A1A0C;
+  box-shadow: 0 4px 18px rgba(100, 50, 0, 0.12);
+}
+
+.code-demo-header {
+  padding: 10px 18px;
+  background-color: #231508;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(200, 150, 80, 0.15);
+  color: #F5E6D3;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.code-demo-card pre {
+  margin: 0;
+  padding: 16px;
+  background-color: #2A1A0C;
+  color: #F5E6D3;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-x: auto;
+}
+
+.demo-output-box {
+  background-color: #160D04;
+  border-top: 1px solid rgba(200, 150, 80, 0.15);
+  padding: 12px 18px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: #6EE7B7;
+}
+
+/* ── Lesson Sidebar / Quick Actions ───────────────────────────────────────── */
+.lesson-side-card {
+  background-color: #FFFFFF;
+  border: 1px solid rgba(200, 160, 100, 0.22);
+  border-radius: var(--r-xl);
+  padding: 24px;
+  box-shadow: 0 4px 18px rgba(100, 50, 0, 0.07);
+  position: sticky;
+  top: 24px;
+}
+
+@media (max-width: 960px) {
+  .lesson-layout {
+    grid-template-columns: 1fr;
+  }
+}

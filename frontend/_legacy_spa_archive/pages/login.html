@@ -1,0 +1,63 @@
+<div class="auth-page">
+  <div class="auth-brand">
+    <div class="brand-content">
+      <div class="brand-logo-big">🐍</div>
+      <h1 class="brand-title">AI <span>Programming</span><br>Mentor</h1>
+      <p class="brand-desc">Master Python through structured 7-module curriculum, diagnostic assessments, hands-on practice, and intelligent AI tutoring.</p>
+      
+      <div class="brand-features">
+        <div class="brand-feature">
+          <div class="brand-feature-icon">🎯</div>
+          <span>Personalised 7-module adaptive learning path</span>
+        </div>
+        <div class="brand-feature">
+          <div class="brand-feature-icon">🤖</div>
+          <span>AI mentor that guides concepts without spoiling answers</span>
+        </div>
+        <div class="brand-feature">
+          <div class="brand-feature-icon">💻</div>
+          <span>Isolated Python coding playground and practice lab</span>
+        </div>
+        <div class="brand-feature">
+          <div class="brand-feature-icon">📊</div>
+          <span>Authentic progress calculation and mastery analytics</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-form-area">
+    <div class="auth-box animate-in">
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login">Sign In</button>
+        <button class="auth-tab" id="tab-register" onclick="window.location.hash='#register'">Sign Up</button>
+      </div>
+
+      <h2 class="auth-heading">Welcome Back</h2>
+      <p class="auth-sub">Enter your student or administrator credentials</p>
+
+      <div id="auth-alert"></div>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label class="form-label" for="login-username">Username</label>
+          <input id="login-username" class="form-input" type="text" placeholder="e.g. priya_beginner" autocomplete="username" required autofocus>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="login-password">Password</label>
+          <input id="login-password" class="form-input" type="password" placeholder="••••••••" autocomplete="current-password" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full btn-lg" id="login-btn">
+          <span>Sign In to Account →</span>
+        </button>
+      </form>
+
+      <div style="margin-top:24px;text-align:center;font-size:13px;color:var(--text-muted);">
+        Don't have an account? <a href="#register" style="color:var(--text-accent);font-weight:600;text-decoration:none;">Create a Student Account</a>
+      </div>
+    </div>
+  </div>
+</div>
+

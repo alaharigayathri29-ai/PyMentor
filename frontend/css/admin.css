@@ -1,0 +1,134 @@
+/* ══════════════════════════════════════════════════════════════════════════════
+   ADMIN MANAGEMENT SUITE — WARM CHAMPAGNE LUXURY
+   Rich Cream Canvas · Crisp Ivory Data Cards · Warm Amber Navigation
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.hidden { display: none !important; }
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+/* ── Admin Tab Pills Navigation ───────────────────────────────────────────── */
+.admin-tab-nav {
+  display: flex;
+  gap: 8px;
+  padding: 6px;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(200, 160, 100, 0.22);
+  border-radius: var(--r-md);
+  margin-bottom: 24px;
+  overflow-x: auto;
+  box-shadow: 0 2px 8px rgba(100, 50, 0, 0.05);
+}
+
+.admin-tab-pill {
+  padding: 8px 18px;
+  border-radius: var(--r-sm);
+  font-size: 13px;
+  font-weight: 600;
+  color: #6B4226;
+  text-decoration: none;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.admin-tab-pill:hover {
+  color: #1C0E04;
+  background-color: #FFF8F0;
+}
+
+.admin-tab-pill.active {
+  background-color: #F59E0B;
+  color: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.35);
+}
+
+/* ── Admin Stat Cards Grid ────────────────────────────────────────────────── */
+.admin-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+/* ── Admin Tables & Containers ────────────────────────────────────────────── */
+.admin-table-card {
+  background-color: #FFFFFF;
+  border: 1px solid rgba(200, 160, 100, 0.22);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(100, 50, 0, 0.07);
+  margin-bottom: 24px;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.admin-table th {
+  padding: 14px 18px;
+  background-color: #FDF8F0;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6B4226;
+  border-bottom: 1px solid rgba(200, 160, 100, 0.2);
+}
+
+.admin-table td {
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(200, 160, 100, 0.1);
+  font-size: 13.5px;
+  color: #1C0E04;
+}
+
+.admin-table tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-table tr:hover td {
+  background-color: rgba(217, 119, 6, 0.04);
+}
+
+/* ── Modal Overlay & Dossier ──────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(44, 26, 14, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-content-card {
+  background-color: #FFFFFF;
+  border: 1px solid rgba(200, 160, 100, 0.25);
+  border-radius: var(--r-xl);
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(44, 26, 14, 0.2);
+  overflow: hidden;
+}
+
+@media (max-width: 1024px) {
+  .admin-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-stats-grid {
+    grid-template-columns: 1fr;
+  }
+}

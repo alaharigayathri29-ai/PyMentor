@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coding Problems — PyMentor Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/global.css?v=20261108_v17">
+  <link rel="stylesheet" href="/css/sidebar.css?v=20261108_v17">
+  <link rel="stylesheet" href="/css/admin.css?v=20261108_v17">
+</head>
+<body>
+
+  <div class="app-shell">
+
+    <!-- ── Left Sidebar Navigation (Admin Mode) ──────────────────────────────── -->
+    <aside class="sidebar" id="sidebar">
+      <a href="/admin/dashboard.html" class="sidebar-logo">
+        <div class="logo-icon" style="background-color:var(--primary-light);color:var(--primary);border-color:var(--primary-border);">🛡️</div>
+        <div>
+          <div class="logo-text">PyMentor</div>
+          <div class="logo-sub">Administration Suite</div>
+        </div>
+      </a>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Admin Management</div>
+        <a href="/admin/dashboard.html" class="nav-item" data-page="admin-dashboard">
+          <span class="nav-icon">📊</span> <span>Overview</span>
+          <span class="nav-badge">Admin</span>
+        </a>
+        <a href="/admin/students.html" class="nav-item" data-page="admin-students">
+          <span class="nav-icon">👥</span> <span>Students</span>
+        </a>
+        <a href="/admin/topics.html" class="nav-item" data-page="admin-topics">
+          <span class="nav-icon">✏️</span> <span>Topics & Curriculum</span>
+        </a>
+        <a href="/admin/problems.html" class="nav-item active" data-page="admin-problems">
+          <span class="nav-icon">🧩</span> <span>Coding Problems</span>
+        </a>
+        <a href="/admin/analytics.html" class="nav-item" data-page="admin-analytics">
+          <span class="nav-icon">📈</span> <span>Analytics</span>
+        </a>
+
+        <div class="nav-section-label" style="margin-top:16px;">Student View</div>
+        <a href="/dashboard.html" class="nav-item">
+          <span class="nav-icon">🏠</span> <span>Switch to Student Portal</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-card" id="sidebar-user-card">
+          <div class="user-avatar" id="sidebar-avatar">A</div>
+          <div style="min-width:0;flex:1;">
+            <div class="user-name" id="sidebar-username">Administrator</div>
+            <div class="user-role" id="sidebar-role">ADMIN</div>
+          </div>
+        </div>
+        <button class="btn btn-secondary btn-full btn-sm" id="logout-btn">
+          <span>🚪</span> Sign Out
+        </button>
+      </div>
+    </aside>
+
+    <!-- ── Main View Area ────────────────────────────────────────────────────── -->
+    <div class="main-area">
+      <header class="topbar">
+        <div class="topbar-left">
+          <h2 id="topbar-title" class="topbar-title">Coding Practice Repository</h2>
+          <span id="role-mode-badge" class="badge badge-purple">Administrator</span>
+        </div>
+        <div class="topbar-right">
+          <div class="user-avatar" id="topbar-avatar" style="width:34px;height:34px;font-size:13px;">A</div>
+        </div>
+      </header>
+
+      <div class="main-scroll-content">
+        <div class="page-content animate-in">
+          
+          <div class="admin-header">
+            <div>
+              <h1 class="page-title" style="font-size:24px;margin-bottom:4px;">Practice Coding Challenges</h1>
+              <p class="page-sub" style="margin:0;">Create, inspect, and manage coding problems, automated test cases, and starter templates.</p>
+            </div>
+            <button class="btn btn-primary btn-sm" id="btn-show-add-problem">
+              <span>+ New Coding Challenge</span>
+            </button>
+          </div>
+
+          <!-- Admin Sub-Navigation Pills -->
+          <div class="admin-tab-nav">
+            <a href="/admin/dashboard.html" class="admin-tab-pill">Overview</a>
+            <a href="/admin/students.html" class="admin-tab-pill">Student Management</a>
+            <a href="/admin/topics.html" class="admin-tab-pill">Topics & Curriculum</a>
+            <a href="/admin/problems.html" class="admin-tab-pill active">Coding Problems</a>
+            <a href="/admin/analytics.html" class="admin-tab-pill">Platform Analytics</a>
+          </div>
+
+          <!-- Filter / Search Toolbar -->
+          <div class="card" style="margin-bottom:18px;padding:16px 20px;">
+            <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between;">
+              <div style="display:flex;gap:12px;flex:1;max-width:600px;">
+                <input type="text" id="prob-search" class="form-input" placeholder="Search challenges by title or topic…">
+                <select id="prob-diff-filter" class="form-input" style="width:160px;">
+                  <option value="">All Difficulties</option>
+                  <option value="easy">Beginner</option>
+                  <option value="medium">Intermediate</option>
+                  <option value="hard">Advanced</option>
+                </select>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="font-size:13px;color:var(--text-secondary);">Total Challenges:</span>
+                <span class="badge badge-purple" id="adm-problems-count">0</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Problems Table Card -->
+          <div class="admin-table-card">
+            <div id="problems-list-container">
+              <div style="text-align:center;padding:40px;"><div class="spinner"></div></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Modal: Create Coding Problem -->
+  <div id="modal-create-problem" class="modal-overlay hidden">
+    <div class="modal-content-card" style="max-width:640px;max-height:90vh;overflow-y:auto;">
+      <div style="padding:18px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#FFFFFF;z-index:10;">
+        <h3 style="font-size:17px;font-weight:700;color:var(--text-primary);margin:0;">Create Coding Challenge</h3>
+        <button id="btn-close-prob-modal" class="btn btn-ghost btn-sm" style="font-size:16px;padding:4px 8px;">✕</button>
+      </div>
+
+      <form id="form-create-problem" style="padding:24px;display:flex;flex-direction:column;gap:16px;">
+        <div class="form-group">
+          <label class="form-label" for="new-prob-title">Challenge Title</label>
+          <input type="text" id="new-prob-title" class="form-input" placeholder="e.g. Invert a Binary Tree or Palindrome Checker" required>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div class="form-group">
+            <label class="form-label" for="new-prob-topic">Curriculum Topic</label>
+            <select id="new-prob-topic" class="form-input" required></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="new-prob-diff">Difficulty Level</label>
+            <select id="new-prob-diff" class="form-input" required>
+              <option value="easy">Beginner</option>
+              <option value="medium">Intermediate</option>
+              <option value="hard">Advanced</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="new-prob-desc">Problem Description</label>
+          <textarea id="new-prob-desc" class="form-input" rows="3" placeholder="Provide problem statement, inputs, outputs, and edge cases…" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="new-prob-starter">Starter Code Template</label>
+          <textarea id="new-prob-starter" class="form-input" rows="4" style="font-family:var(--font-mono);font-size:12.5px;" required>def solution(arg):
+    # Write your solution here
+    return arg
+</textarea>
+        </div>
+
+        <div style="border-top:1px solid var(--border);padding-top:14px;">
+          <label class="form-label" style="margin-bottom:8px;">Automated Verification Test Case</label>
+          <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:12px;">
+            <div>
+              <label style="font-size:11.5px;color:var(--text-secondary);display:block;margin-bottom:4px;">Function Call</label>
+              <input type="text" id="new-prob-test-call" class="form-input" placeholder="e.g. solution('racecar')" style="font-family:var(--font-mono);font-size:12.5px;" required>
+            </div>
+            <div>
+              <label style="font-size:11.5px;color:var(--text-secondary);display:block;margin-bottom:4px;">Expected Output</label>
+              <input type="text" id="new-prob-test-exp" class="form-input" placeholder="e.g. True" style="font-family:var(--font-mono);font-size:12.5px;" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="new-prob-hints">Hints (One per line)</label>
+          <textarea id="new-prob-hints" class="form-input" rows="2" placeholder="e.g. Consider using two pointers or slicing..."></textarea>
+        </div>
+
+        <div style="display:flex;justify-content:flex-end;gap:12px;margin-top:8px;">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-prob">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-problem">Create Practice Challenge</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="/js/admin/problems.js?v=20261108_v17"></script>
+</body>
+</html>

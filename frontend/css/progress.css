@@ -1,0 +1,132 @@
+/* ══════════════════════════════════════════════════════════════════════════════
+   PROGRESS & ANALYTICS — WARM CHAMPAGNE LUXURY
+   Rich Cream Canvas · Espresso Progress Hero · Warm Amber Mastery Trackers
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.progress-hero {
+  background: linear-gradient(135deg, #2C1A0E 0%, #3D2512 60%, #4C2D15 100%);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: var(--r-xl);
+  padding: 26px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  box-shadow: 0 10px 32px rgba(44, 26, 14, 0.35);
+  color: #FFF8F0;
+}
+
+.progress-hero h1, .progress-hero h2 {
+  color: #FFF8F0;
+}
+.progress-hero p {
+  color: #C4A882;
+}
+
+.progress-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 26px;
+}
+
+/* ── Topic Mastery Breakdown ──────────────────────────────────────────────── */
+.mastery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.mastery-card {
+  background-color: #FFFFFF;
+  border: 1px solid rgba(200, 160, 100, 0.22);
+  border-radius: var(--r-lg);
+  padding: 18px 22px;
+  box-shadow: 0 4px 18px rgba(100, 50, 0, 0.07);
+  transition: all 0.2s var(--ease);
+}
+.mastery-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 26px rgba(100, 50, 0, 0.12);
+  border-color: rgba(200, 160, 100, 0.4);
+}
+
+.mastery-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.mastery-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #1C0E04;
+}
+
+.mastery-bar {
+  width: 100%;
+  height: 8px;
+  background-color: #F5EAD8;
+  border-radius: var(--r-full);
+  overflow: hidden;
+}
+
+.mastery-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #F59E0B, #D97706);
+  border-radius: var(--r-full);
+  box-shadow: 0 0 8px rgba(217, 119, 6, 0.35);
+  transition: width 0.6s var(--ease-spring);
+}
+
+/* ── Submissions Table ────────────────────────────────────────────────────── */
+.progress-table-card {
+  background-color: #FFFFFF;
+  border: 1px solid rgba(200, 160, 100, 0.22);
+  border-radius: var(--r-xl);
+  box-shadow: 0 4px 18px rgba(100, 50, 0, 0.07);
+  overflow: hidden;
+  margin-top: 26px;
+}
+
+.light-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.light-table th {
+  padding: 14px 20px;
+  background-color: #FDF8F0;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6B4226;
+  border-bottom: 1px solid rgba(200, 160, 100, 0.2);
+}
+
+.light-table td {
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(200, 160, 100, 0.1);
+  font-size: 13.5px;
+  color: #1C0E04;
+}
+
+.light-table tr:last-child td {
+  border-bottom: none;
+}
+
+.light-table tr:hover td {
+  background-color: rgba(217, 119, 6, 0.04);
+}
+
+@media (max-width: 900px) {
+  .progress-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .mastery-grid {
+    grid-template-columns: 1fr;
+  }
+}

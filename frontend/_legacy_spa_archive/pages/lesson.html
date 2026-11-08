@@ -1,0 +1,88 @@
+<div class="page-content animate-in lesson-container">
+  
+  <!-- Lesson Top Navigation -->
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+    <button class="btn btn-secondary btn-sm" onclick="window.location.hash='#learning-path'">
+      <span>← Back to Curriculum Map</span>
+    </button>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <span class="badge badge-purple" id="lesson-module-tag">Module 1</span>
+      <span class="badge badge-blue" id="lesson-diff-tag">Beginner</span>
+    </div>
+  </div>
+
+  <!-- Lesson Content Card -->
+  <div class="lesson-card-section">
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
+      <span style="font-size:36px;" id="lesson-icon">📦</span>
+      <div>
+        <h1 style="font-size:24px;font-weight:800;color:#fff;margin:0;" id="lesson-title">Topic Title</h1>
+        <div style="font-size:13px;color:var(--text-muted);margin-top:2px;" id="lesson-subtopics">Subtopics</div>
+      </div>
+    </div>
+
+    <!-- Introduction -->
+    <div style="margin:20px 0;font-size:14.5px;color:var(--text-secondary);line-height:1.7;" id="lesson-intro">
+      Loading topic introduction...
+    </div>
+
+    <!-- Learning Objectives -->
+    <div style="margin:24px 0;">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:12px;color:#fff;display:flex;align-items:center;gap:8px;">
+        <span>🎯</span> Learning Objectives
+      </h3>
+      <div id="lesson-objectives-list">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- Deep Dive Explanation -->
+    <div style="margin:28px 0;padding-top:20px;border-top:1px solid var(--border);">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:14px;color:#fff;display:flex;align-items:center;gap:8px;">
+        <span>📖</span> In-Depth Conceptual Explanation
+      </h3>
+      <div id="lesson-explanation" style="font-size:14px;color:#cbd5e1;line-height:1.7;">
+        <!-- Rendered markdown explanation -->
+      </div>
+    </div>
+
+    <!-- Code Examples with Output Demonstrations -->
+    <div style="margin:28px 0;padding-top:20px;border-top:1px solid var(--border);">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:14px;color:#fff;display:flex;align-items:center;gap:8px;">
+        <span>💻</span> Practical Code Examples & Outputs
+      </h3>
+      <div id="lesson-examples-list">
+        <!-- Rendered code examples -->
+      </div>
+    </div>
+
+    <!-- Interactive Practice Questions -->
+    <div style="margin:28px 0;padding-top:20px;border-top:1px solid var(--border);">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:14px;color:#fff;display:flex;align-items:center;gap:8px;">
+        <span>📝</span> Check Your Understanding
+      </h3>
+      <div id="lesson-quiz-list">
+        <!-- Rendered mini quiz -->
+      </div>
+    </div>
+
+    <!-- Completion & Next Action Bar -->
+    <div style="margin-top:32px;padding-top:20px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;">
+      <button class="btn btn-secondary" onclick="window.location.hash='#mentor'">
+        <span>🤖 Ask AI Mentor About This Topic</span>
+      </button>
+
+      <div style="display:flex;gap:12px;">
+        <button class="btn btn-primary" id="btn-complete-lesson">
+          <span>✓ Mark Lesson Completed (+50 XP)</span>
+        </button>
+        <button class="btn btn-success" id="btn-practice-topic">
+          <span>Practice Code Exercises →</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+

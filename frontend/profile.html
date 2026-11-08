@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Profile & Academic Dossier — PyMentor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:ital,opsz,wght@0,14..32,300..900;1,14..32,300..900&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/css/global.css?v=20261108_v19">
+  <link rel="stylesheet" href="/css/sidebar.css?v=20261108_v19">
+  <link rel="stylesheet" href="/css/dashboard.css?v=20261108_v19">
+  <style>
+    /* ── Student Profile & Analytics Styles ───────────────────────────────── */
+    .profile-dossier-wrap {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* 1. Student Identity Card */
+    .student-dossier-card {
+      background: #FFFFFF;
+      border: 1px solid rgba(200, 160, 100, 0.22);
+      border-radius: 16px;
+      padding: 26px 32px;
+      box-shadow: 0 4px 18px rgba(100, 50, 0, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+    .dossier-left {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+    .dossier-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #F59E0B, #D97706);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 34px;
+      font-weight: 800;
+      color: #FFFFFF;
+      flex-shrink: 0;
+      box-shadow: 0 6px 20px rgba(217, 119, 6, 0.35);
+      border: 3.5px solid #FFFDF9;
+    }
+    .dossier-name-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .dossier-name {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1C0E04;
+      letter-spacing: -0.02em;
+    }
+    .dossier-meta {
+      font-size: 13.5px;
+      color: #6B4226;
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .dossier-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* 2. Achievements Row: 4 Metric Circles */
+    .achievements-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+    .achievement-metric-card {
+      background: #FFFFFF;
+      border: 1px solid rgba(200, 160, 100, 0.22);
+      border-radius: 16px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 4px 18px rgba(100, 50, 0, 0.06);
+      transition: all 0.2s var(--ease);
+    }
+    .achievement-metric-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(100, 50, 0, 0.1);
+    }
+    .metric-circle-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 800;
+      flex-shrink: 0;
+      border: 2.5px solid;
+    }
+    .metric-circle-icon.gold   { color: #D97706; border-color: #F59E0B; background: #FEF3C7; }
+    .metric-circle-icon.cyan   { color: #0284C7; border-color: #38BDF8; background: #E0F2FE; }
+    .metric-circle-icon.green  { color: #059669; border-color: #34D399; background: #D1FAE5; }
+    .metric-circle-icon.purple { color: #7C3AED; border-color: #A78BFA; background: #EDE9FE; }
+
+    .metric-title {
+      font-size: 12px;
+      color: #A07050;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .metric-val {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1C0E04;
+      letter-spacing: -0.02em;
+      margin-top: 2px;
+    }
+
+    /* 3. Dual Row: Speedometer Gauge + Interactive Solved Problems Chart */
+    .profile-dual-row {
+      display: grid;
+      grid-template-columns: 1fr 1.35fr;
+      gap: 20px;
+    }
+
+    /* Speedometer Card */
+    .speedo-card {
+      background: #FFFFFF;
+      border: 1px solid rgba(200, 160, 100, 0.22);
+      border-radius: 16px;
+      padding: 24px 28px;
+      box-shadow: 0 4px 18px rgba(100, 50, 0, 0.06);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Interactive Solved Problems & Languages Bar Chart */
+    .problems-chart-card {
+      background: #FFFFFF;
+      border: 1px solid rgba(200, 160, 100, 0.22);
+      border-radius: 16px;
+      padding: 24px 28px;
+      box-shadow: 0 4px 18px rgba(100, 50, 0, 0.06);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .problems-chart-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .problems-chart-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #1C0E04;
+    }
+    .problems-chart-sub {
+      font-size: 12px;
+      color: #A07050;
+      font-weight: 600;
+    }
+
+    /* Stacked master bar */
+    .interactive-master-bar {
+      height: 28px;
+      border-radius: 10px;
+      display: flex;
+      overflow: hidden;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+      border: 1px solid rgba(200, 160, 100, 0.2);
+      background: #F1F5F9;
+    }
+    .master-bar-seg {
+      height: 100%;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+    .master-bar-seg:hover, .master-bar-seg.active {
+      filter: brightness(1.15);
+      transform: scaleY(1.08);
+      z-index: 5;
+    }
+
+    /* Individual Topic Progress Bars with click handlers */
+    .topic-bars-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .topic-bar-item {
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1.5px solid transparent;
+      background: #FFFDF9;
+      cursor: pointer;
+      transition: all 0.2s var(--ease);
+    }
+    .topic-bar-item:hover {
+      background: rgba(245, 158, 11, 0.06);
+      border-color: rgba(245, 158, 11, 0.3);
+      transform: translateX(3px);
+    }
+    .topic-bar-item.active {
+      background: rgba(37, 99, 235, 0.06);
+      border-color: #2563EB;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.12);
+    }
+    .topic-bar-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .topic-bar-name {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #1C0E04;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .topic-bar-val {
+      font-size: 13px;
+      font-weight: 800;
+      color: #2563EB;
+    }
+    .topic-track-bar {
+      height: 8px;
+      background: #E2E8F0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .topic-track-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.4s var(--ease);
+    }
+
+    /* Interactive Details Card on Click */
+    .topic-interactive-inspector {
+      background: linear-gradient(135deg, #FFFDF9 0%, #FDFBF7 100%);
+      border: 1.5px solid rgba(200, 160, 100, 0.3);
+      border-radius: 12px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      animation: fadeIn 0.25s var(--ease);
+    }
+
+    /* 4. Score Over Time 52-Week Calendar Heatmap */
+    .heatmap-panel {
+      background: #FFFFFF;
+      border: 1px solid rgba(200, 160, 100, 0.22);
+      border-radius: 16px;
+      padding: 24px 28px;
+      box-shadow: 0 4px 18px rgba(100, 50, 0, 0.06);
+      position: relative;
+    }
+    .heatmap-header {
+      text-align: center;
+      margin-bottom: 14px;
+    }
+    .heatmap-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #2563EB;
+      letter-spacing: -0.01em;
+    }
+    .heatmap-scale-legend {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      font-size: 11px;
+      color: #6B4226;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .scale-box {
+      width: 15px;
+      height: 15px;
+      border-radius: 3px;
+      display: inline-block;
+      margin-right: 4px;
+    }
+
+    .heatmap-calendar-wrap {
+      overflow-x: auto;
+      padding-bottom: 8px;
+      position: relative;
+    }
+    .heatmap-calendar {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 900px;
+    }
+    .heatmap-months-row {
+      display: flex;
+      justify-content: space-between;
+      padding-left: 56px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #6B4226;
+      margin-bottom: 4px;
+    }
+    .heatmap-days-grid {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+    .heatmap-year-label {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font-size: 12px;
+      font-weight: 800;
+      color: #94A3B8;
+      letter-spacing: 0.05em;
+      padding: 4px 6px;
+    }
+    .heatmap-labels-col {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #A07050;
+      width: 20px;
+      text-align: right;
+      padding-right: 6px;
+    }
+    .heatmap-day-label {
+      height: 13px;
+      line-height: 13px;
+    }
+    .heatmap-cols-container {
+      display: flex;
+      gap: 3px;
+      flex: 1;
+    }
+    .heatmap-week-col {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .heatmap-cell {
+      width: 13px;
+      height: 13px;
+      border-radius: 2px;
+      background: #F8FAFC;
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      transition: all 0.15s;
+      cursor: pointer;
+    }
+    .heatmap-cell:hover {
+      outline: 2px solid #2563EB;
+      transform: scale(1.3);
+      z-index: 10;
+    }
+
+    /* Floating Interactive Tooltip for Heatmap movement */
+    #heatmap-tooltip {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      background: #2C1A0E;
+      color: #FFF8F0;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid #F59E0B;
+      box-shadow: 0 8px 24px rgba(44, 26, 14, 0.4);
+      display: none;
+      white-space: nowrap;
+      transition: opacity 0.15s ease, transform 0.1s ease;
+      transform: translate(-50%, -120%);
+    }
+
+    /* 5. Real Leaderboard Table */
+    .rankings-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    .rankings-table th {
+      padding: 12px 18px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #A07050;
+      letter-spacing: 0.04em;
+      border-bottom: 1.5px solid rgba(200, 160, 100, 0.2);
+      background: #FFFDF9;
+    }
+    .rankings-table td {
+      padding: 14px 18px;
+      font-size: 13.5px;
+      color: #1C0E04;
+      border-bottom: 1px solid rgba(200, 160, 100, 0.1);
+    }
+    .rankings-table tr:hover {
+      background: rgba(217, 119, 6, 0.04);
+    }
+
+    @media (max-width: 1024px) {
+      .achievements-row { grid-template-columns: 1fr 1fr; }
+      .profile-dual-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .achievements-row { grid-template-columns: 1fr; }
+      .dossier-left { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="app-shell">
+
+    <!-- ── Sidebar ─────────────────────────────────────────────────────────── -->
+    <aside class="sidebar" id="sidebar">
+      <a href="/dashboard.html" class="sidebar-logo">
+        <div class="logo-icon">🐍</div>
+        <div>
+          <div class="logo-text">PyMentor</div>
+          <div class="logo-sub">Learn Python Better</div>
+        </div>
+      </a>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">HOME</div>
+        <a href="/dashboard.html" class="nav-item" data-page="dashboard">
+          <span class="nav-icon">🏠</span> <span>Dashboard</span>
+        </a>
+
+        <div class="nav-section-label">LEARNING</div>
+        <a href="/learning-path.html" class="nav-item" data-page="learning-path">
+          <span class="nav-icon">🗺️</span> <span>Learn Python</span>
+        </a>
+        <a href="/assessment.html" class="nav-item" data-page="assessment">
+          <span class="nav-icon">🎯</span> <span>Assessment</span>
+        </a>
+        <a href="/practice.html" class="nav-item" data-page="practice">
+          <span class="nav-icon">💻</span> <span>Practice</span>
+        </a>
+        <a href="/lesson.html" class="nav-item" data-page="lesson">
+          <span class="nav-icon">📖</span> <span>Interactive Lesson</span>
+        </a>
+
+        <div class="nav-section-label">TOOLS</div>
+        <a href="/playground.html" class="nav-item" data-page="playground">
+          <span class="nav-icon">⚡</span> <span>Playground</span>
+        </a>
+        <a href="/mentor.html" class="nav-item" data-page="mentor">
+          <span class="nav-icon">🤖</span> <span>AI Mentor</span>
+        </a>
+
+        <div class="nav-section-label">INSIGHTS</div>
+        <a href="/profile.html" class="nav-item active" data-page="profile">
+          <span class="nav-icon">👤</span> <span>Student Profile</span>
+        </a>
+        <a href="/progress.html" class="nav-item" data-page="progress">
+          <span class="nav-icon">📊</span> <span>My Progress</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-card" id="sidebar-user-card" onclick="window.location.href='/profile.html'" title="View Profile">
+          <div class="user-avatar" id="sidebar-avatar">H</div>
+          <div style="min-width:0;flex:1;">
+            <div class="user-name" id="sidebar-username">Honey_qis</div>
+            <div class="user-role" id="sidebar-role">STUDENT · QISCET</div>
+          </div>
+        </div>
+        <button class="btn btn-secondary btn-full btn-sm" id="logout-btn">
+          <span>🚪</span> Sign Out
+        </button>
+      </div>
+    </aside>
+
+    <!-- ── Main Area ───────────────────────────────────────────────────────── -->
+    <div class="main-area">
+      <header class="topbar">
+        <div class="topbar-left">
+          <div>
+            <h2 class="topbar-title">Student Profile & Academic Dossier</h2>
+            <div style="font-size:12px;color:var(--text-300);margin-top:1px;">Official Python Competency Record</div>
+          </div>
+          <span class="badge badge-purple" style="margin-left:4px;">Academic Record</span>
+        </div>
+        <div class="topbar-right">
+          <button class="topbar-icon-btn" title="Coding Problems" onclick="window.location.href='/practice.html'">🐞</button>
+          <button class="topbar-icon-btn" title="Curriculum Matrix" onclick="window.location.href='/learning-path.html'">⊞</button>
+          <a href="/dashboard.html" class="btn btn-secondary btn-sm">
+            <span>🏠 Return to Dashboard</span>
+          </a>
+          <div id="topbar-user-pill" style="
+            display: flex; align-items: center; gap: 8px;
+            background: #FFFDF9; border: 1.5px solid rgba(200, 160, 100, 0.28);
+            border-radius: var(--r-full); padding: 4px 14px 4px 4px;
+          ">
+            <div class="user-avatar" id="topbar-avatar" style="width:32px;height:32px;font-size:12.5px;">H</div>
+            <span id="topbar-username" style="font-size:13px;font-weight:700;color:#1C0E04;">Honey_qis</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="main-scroll-content">
+        <div class="page-content" style="max-width:1400px;margin:0 auto;">
+          <div class="profile-dossier-wrap">
+
+            <!-- 1. Real Student Identity Card -->
+            <div class="student-dossier-card">
+              <div class="dossier-left">
+                <div class="dossier-avatar" id="dossier-avatar-big">H</div>
+                <div>
+                  <div class="dossier-name-row">
+                    <div class="dossier-name" id="dossier-name">Honey_qis</div>
+                    <span class="badge badge-blue" id="dossier-skill-tier">Intermediate Track</span>
+                    <span class="badge badge-teal">Verified Student</span>
+                  </div>
+                  <div class="dossier-meta">
+                    <span>🆔 <strong id="dossier-student-id">STU-007</strong></span>
+                    <span>✉️ <span id="dossier-email">gayathrilucky13@gmail.com</span></span>
+                    <span>🏫 <span>QIS College of Engineering & Technology</span></span>
+                    <span>📅 Enrolled: <span id="dossier-enrolled">Nov 05, 2026</span></span>
+                  </div>
+                </div>
+              </div>
+              <div style="display:flex;gap:10px;">
+                <a href="/assessment.html" class="btn btn-secondary btn-sm" style="font-weight:700;">
+                  <span>🎯 Retake Assessment</span>
+                </a>
+                <a href="/practice.html" class="btn btn-primary btn-sm" style="font-weight:700;">
+                  <span>💻 Practice Now</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- 2. Real Achievements Vitals (4 Metric Cards — Real DB Telemetry) -->
+            <div class="achievements-row">
+              <div class="achievement-metric-card">
+                <div class="metric-circle-icon gold">🏆</div>
+                <div>
+                  <div class="metric-title">Batch Leaderboard Rank</div>
+                  <div class="metric-val" id="achieve-batch-rank">#2</div>
+                  <div style="font-size:11px;color:#A07050;margin-top:2px;">Out of registered cohort</div>
+                </div>
+              </div>
+
+              <div class="achievement-metric-card">
+                <div class="metric-circle-icon cyan">⚡</div>
+                <div>
+                  <div class="metric-title">PyMentor Experience (XP)</div>
+                  <div class="metric-val" id="achieve-xp">700 XP</div>
+                  <div style="font-size:11px;color:#0284C7;margin-top:2px;">Earned from labs & quiz</div>
+                </div>
+              </div>
+
+              <div class="achievement-metric-card">
+                <div class="metric-circle-icon green">🎯</div>
+                <div>
+                  <div class="metric-title">Problems Solved</div>
+                  <div class="metric-val" id="achieve-solved">3</div>
+                  <div style="font-size:11px;color:#059669;margin-top:2px;" id="achieve-accuracy">60.0% Pass Rate</div>
+                </div>
+              </div>
+
+              <div class="achievement-metric-card">
+                <div class="metric-circle-icon purple">📊</div>
+                <div>
+                  <div class="metric-title">Diagnostic Test Score</div>
+                  <div class="metric-val" id="achieve-assess-score">66.7%</div>
+                  <div style="font-size:11px;color:#7C3AED;margin-top:2px;">Intermediate Calibration</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. Dual Row: Calibrated Speedometer + Interactive Solved Problems Bar Chart -->
+            <div class="profile-dual-row">
+
+              <!-- Left: Real Speedometer Gauge -->
+              <div class="speedo-card">
+                <div>
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+                    <div>
+                      <div style="font-size:16px;font-weight:800;color:#1C0E04;">Calibrated Skill Competency</div>
+                      <div style="font-size:12px;color:#A07050;font-weight:600;">PyMentor Performance Gauge</div>
+                    </div>
+                    <span class="badge badge-amber" id="speedo-tier-badge">Intermediate</span>
+                  </div>
+
+                  <div style="display:flex;flex-direction:column;align-items:center;position:relative;margin:12px 0;">
+                    <svg width="240" height="150" viewBox="0 0 240 150">
+                      <!-- 4 color bands: Beginner (Red), Intermediate (Orange), Advanced (Yellow), Expert (Green) -->
+                      <path d="M 26 135 A 94 94 0 0 1 50 68" fill="none" stroke="#EF4444" stroke-width="16" stroke-linecap="round"/>
+                      <path d="M 56 60 A 94 94 0 0 1 116 41" fill="none" stroke="#F97316" stroke-width="16"/>
+                      <path d="M 124 41 A 94 94 0 0 1 184 60" fill="none" stroke="#EAB308" stroke-width="16"/>
+                      <path d="M 190 68 A 94 94 0 0 1 214 135" fill="none" stroke="#10B981" stroke-width="16" stroke-linecap="round"/>
+
+                      <!-- Scale Labels -->
+                      <text x="20" y="148" font-size="10" fill="#6B4226" font-weight="700">0%</text>
+                      <text x="36" y="50" font-size="10" fill="#6B4226" font-weight="700">25%</text>
+                      <text x="110" y="24" font-size="10" fill="#6B4226" font-weight="700">50%</text>
+                      <text x="194" y="50" font-size="10" fill="#6B4226" font-weight="700">75%</text>
+                      <text x="206" y="148" font-size="10" fill="#6B4226" font-weight="700">100%</text>
+
+                      <!-- Dynamic Pointer Needle pointing to ~49-50% Intermediate tier -->
+                      <polygon id="speedo-needle" points="115,58 125,58 120,44" fill="#2563EB" style="transition: transform 0.5s ease;"/>
+                    </svg>
+
+                    <div style="position:absolute;top:54%;left:50%;transform:translate(-50%, -20%);text-align:center;">
+                      <div style="font-size:32px;font-weight:900;color:#1C0E04;" id="speedo-score-num">49%</div>
+                      <div style="font-size:12px;font-weight:800;color:#0284C7;text-transform:uppercase;" id="speedo-tier-label">Intermediate</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Sub-metrics -->
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:16px;">
+                  <div style="background:#FFFDF9;border:1px solid rgba(200,160,100,0.18);border-radius:10px;padding:8px;text-align:center;">
+                    <div style="font-size:11px;color:#A07050;font-weight:600;">Practice</div>
+                    <div style="font-size:15px;font-weight:800;color:#2563EB;margin-top:2px;" id="speedo-part-prac">60%</div>
+                  </div>
+                  <div style="background:#FFFDF9;border:1px solid rgba(200,160,100,0.18);border-radius:10px;padding:8px;text-align:center;">
+                    <div style="font-size:11px;color:#A07050;font-weight:600;">Quiz Test</div>
+                    <div style="font-size:15px;font-weight:800;color:#D97706;margin-top:2px;" id="speedo-part-quiz">67%</div>
+                  </div>
+                  <div style="background:#FFFDF9;border:1px solid rgba(200,160,100,0.18);border-radius:10px;padding:8px;text-align:center;">
+                    <div style="font-size:11px;color:#A07050;font-weight:600;">Participation</div>
+                    <div style="font-size:15px;font-weight:800;color:#059669;margin-top:2px;" id="speedo-part-part">7%</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right: Interactive Solved Coding Problems Bar Chart & Inspector -->
+              <div class="problems-chart-card">
+                <div class="problems-chart-header">
+                  <div>
+                    <div class="problems-chart-title">Solved Problems & Topics Breakdown</div>
+                    <div class="problems-chart-sub">Click any color bar to inspect language, problems solved, and mastery</div>
+                  </div>
+                  <span class="badge badge-blue" id="inspector-total-solved">3 Solved</span>
+                </div>
+
+                <!-- Interactive Segmented Bar Chart -->
+                <div class="interactive-master-bar" id="master-bar-container" title="Click any segment to inspect">
+                  <!-- dynamically filled with clickable segments -->
+                </div>
+
+                <!-- Topic Bars List (Clickable UX) -->
+                <div class="topic-bars-list" id="topic-bars-container">
+                  <!-- dynamically filled -->
+                </div>
+
+                <!-- Dynamic Inspector Panel (updates on click) -->
+                <div class="topic-interactive-inspector" id="topic-inspector-box">
+                  <div>
+                    <div style="font-size:11.5px;color:#A07050;font-weight:700;text-transform:uppercase;">SELECTED TOPIC / MODULE</div>
+                    <div style="font-size:16px;font-weight:800;color:#1C0E04;margin-top:2px;" id="inspect-topic-name">Variables & Data Types</div>
+                    <div style="font-size:12.5px;color:#6B4226;margin-top:2px;" id="inspect-topic-stat">2 Problems Solved · 100% Pass Rate · 33.3% Mastery</div>
+                  </div>
+                  <a href="/practice.html" class="btn btn-secondary btn-sm" id="inspect-practice-btn" style="font-weight:700;">
+                    Practice Topic →
+                  </a>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- 4. Score Over Time 52-Week Calendar Heatmap Matrix with Floating Movement Tooltip -->
+            <div class="heatmap-panel">
+              <div class="heatmap-header">
+                <div class="heatmap-title">Score Over Time</div>
+                <div style="font-size:12px;color:#A07050;margin-top:2px;">Hover or touch any box to view exact score and submissions on that date</div>
+              </div>
+
+              <!-- Heatmap 5-Level Scale Legend -->
+              <div class="heatmap-scale-legend">
+                <span><span class="scale-box" style="background:#F8FAFC;border:1px solid #E2E8F0;"></span>No Activity</span>
+                <span><span class="scale-box" style="background:#D1FAE5;border:1px solid #A7F3D0;"></span>1 – 2 Events</span>
+                <span><span class="scale-box" style="background:#6EE7B7;border:1px solid #34D399;"></span>3 – 5 Events</span>
+                <span><span class="scale-box" style="background:#10B981;border:1px solid #059669;"></span>6 – 10 Events</span>
+                <span><span class="scale-box" style="background:#065F46;border:1px solid #064E3B;"></span>10+ Events</span>
+              </div>
+
+              <!-- Heatmap Calendar Matrix -->
+              <div class="heatmap-calendar-wrap">
+                <div class="heatmap-calendar">
+                  <div class="heatmap-months-row">
+                    <span>Nov</span><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span>
+                    <span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span>
+                  </div>
+
+                  <div class="heatmap-days-grid">
+                    <div class="heatmap-year-label">2025-2026</div>
+                    <div class="heatmap-labels-col">
+                      <span class="heatmap-day-label">S</span>
+                      <span class="heatmap-day-label">M</span>
+                      <span class="heatmap-day-label">T</span>
+                      <span class="heatmap-day-label">W</span>
+                      <span class="heatmap-day-label">T</span>
+                      <span class="heatmap-day-label">F</span>
+                      <span class="heatmap-day-label">S</span>
+                    </div>
+                    <div class="heatmap-cols-container" id="profile-heatmap-weeks-box">
+                      <!-- Dynamically populated with real student activity -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Floating Tooltip following mouse movement -->
+              <div id="heatmap-tooltip"></div>
+            </div>
+
+            <!-- 5. Real Cohort Leaderboard (Loaded from API) -->
+            <div class="pbi-panel">
+              <div class="pbi-panel-header">
+                <div>
+                  <div class="pbi-panel-title">
+                    <span>👑 Platform Cohort Leaderboard</span>
+                  </div>
+                  <div class="pbi-panel-subtitle">Real Student Rankings from Live Database</div>
+                </div>
+                <span class="badge badge-blue">Live Rankings</span>
+              </div>
+
+              <div style="overflow-x:auto;">
+                <table class="rankings-table">
+                  <thead>
+                    <tr>
+                      <th style="width:60px;">Rank</th>
+                      <th>Student Username</th>
+                      <th>Skill Track</th>
+                      <th style="text-align:right;">Problems Solved</th>
+                      <th style="text-align:right;">Total XP</th>
+                    </tr>
+                  </thead>
+                  <tbody id="real-leaderboard-body">
+                    <tr>
+                      <td colspan="5" style="text-align:center;padding:24px;"><div class="spinner"></div></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- 6. Real Badges & Credentials -->
+            <div class="pbi-panel">
+              <div class="pbi-panel-header">
+                <div>
+                  <div class="pbi-panel-title">
+                    <span>🏅 Earned Badges & Milestones</span>
+                  </div>
+                  <div class="pbi-panel-subtitle">Verified achievements unlocked on PyMentor</div>
+                </div>
+              </div>
+
+              <div id="profile-badges-container" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));gap:14px;">
+                <!-- dynamically loaded -->
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/js/profile.js?v=20261108_v17"></script>
+</body>
+
+</html>

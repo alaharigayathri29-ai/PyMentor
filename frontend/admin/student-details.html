@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Details — PyMentor Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/global.css?v=20261108_v17">
+  <link rel="stylesheet" href="/css/sidebar.css?v=20261108_v17">
+  <link rel="stylesheet" href="/css/dashboard.css?v=20261108_v17">
+  <link rel="stylesheet" href="/css/admin.css?v=20261108_v17">
+</head>
+<body>
+
+  <div class="app-shell">
+
+    <!-- ── Left Sidebar Navigation (Admin Mode) ──────────────────────────────── -->
+    <aside class="sidebar" id="sidebar">
+      <a href="/admin/dashboard.html" class="sidebar-logo">
+        <div class="logo-icon" style="background-color:var(--primary-light);color:var(--primary);border-color:var(--primary-border);">🛡️</div>
+        <div>
+          <div class="logo-text">PyMentor</div>
+          <div class="logo-sub">Administration Suite</div>
+        </div>
+      </a>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">ADMIN MANAGEMENT</div>
+        <a href="/admin/dashboard.html" class="nav-item" data-page="admin-dashboard">
+          <span class="nav-icon">📊</span> <span>Overview</span>
+          <span class="nav-badge">Admin</span>
+        </a>
+        <a href="/admin/students.html" class="nav-item active" data-page="admin-students">
+          <span class="nav-icon">👥</span> <span>Students</span>
+        </a>
+        <a href="/admin/topics.html" class="nav-item" data-page="admin-topics">
+          <span class="nav-icon">✏️</span> <span>Topics & Curriculum</span>
+        </a>
+        <a href="/admin/problems.html" class="nav-item" data-page="admin-problems">
+          <span class="nav-icon">🧩</span> <span>Coding Problems</span>
+        </a>
+        <a href="/admin/analytics.html" class="nav-item" data-page="admin-analytics">
+          <span class="nav-icon">📈</span> <span>Analytics</span>
+        </a>
+
+        <div class="nav-section-label" style="margin-top:16px;">STUDENT VIEW</div>
+        <a href="/dashboard.html" class="nav-item">
+          <span class="nav-icon">🏠</span> <span>Switch to Student Portal</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-card" id="sidebar-user-card">
+          <div class="user-avatar" id="sidebar-avatar">A</div>
+          <div style="min-width:0;flex:1;">
+            <div class="user-name" id="sidebar-username">Administrator</div>
+            <div class="user-role" id="sidebar-role">ADMIN</div>
+          </div>
+        </div>
+        <button class="btn btn-secondary btn-full btn-sm" id="logout-btn">
+          <span>🚪</span> Sign Out
+        </button>
+      </div>
+    </aside>
+
+    <!-- ── Main View Area ────────────────────────────────────────────────────── -->
+    <div class="main-area">
+      <header class="topbar">
+        <div class="topbar-left" style="gap:14px;align-items:center;">
+          <a href="/admin/students.html" style="text-decoration:none;font-size:18px;color:var(--text-secondary);display:inline-flex;align-items:center;line-height:1;">←</a>
+          <div>
+            <h2 id="topbar-title" class="topbar-title" style="margin:0;font-size:18px;font-weight:800;color:var(--text-primary);">Student Details</h2>
+            <div class="dash-breadcrumbs" style="margin-top:2px;font-size:11.5px;color:var(--text-muted);">
+              <a href="/admin/dashboard.html">Dashboard</a>
+              <span>/</span>
+              <a href="/admin/students.html">Students</a>
+              <span>/</span>
+              <span class="crumb-current">Student Details</span>
+            </div>
+          </div>
+        </div>
+        <div class="topbar-right" style="gap:14px;align-items:center;">
+          <div class="dash-search-box" style="width:240px;">
+            <span style="color:var(--text-muted);font-size:13px;">🔍</span>
+            <input type="text" id="admin-search-input" class="dash-search-input" placeholder="Search anything...">
+          </div>
+          <div class="user-avatar" id="topbar-avatar" style="width:34px;height:34px;font-size:13px;background:var(--primary-light);color:var(--primary);font-weight:800;">A</div>
+        </div>
+      </header>
+
+      <div class="main-scroll-content">
+        <div class="page-content animate-in" style="max-width:1440px;margin:0 auto;padding:24px;">
+          <div id="student-details-container">
+            <div style="padding:60px;text-align:center;"><div class="spinner"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script type="module" src="/js/admin/student-details.js?v=20261108_v17"></script>
+</body>
+</html>

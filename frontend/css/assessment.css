@@ -1,0 +1,163 @@
+/* ══════════════════════════════════════════════════════════════════════════════
+   DIAGNOSTIC ASSESSMENT — WARM CHAMPAGNE LUXURY
+   Rich Ivory Assessment Card · Warm Amber Stepper & Interactive Options
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.hidden { display: none !important; }
+
+.assessment-container {
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+/* ── Test Stepper Card ────────────────────────────────────────────────────── */
+.assessment-card {
+  background-color: #FFFFFF;
+  border: 1px solid rgba(200, 160, 100, 0.25);
+  border-radius: var(--r-xl);
+  padding: 36px 40px;
+  box-shadow: 0 16px 48px rgba(100, 50, 0, 0.1);
+  margin-bottom: 24px;
+}
+
+.assess-progress-header {
+  margin-bottom: 24px;
+}
+
+.assess-step-tracker {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: #A07050;
+  margin-bottom: 8px;
+}
+
+.assess-progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: #F5EAD8;
+  border-radius: var(--r-full);
+  overflow: hidden;
+}
+
+.assess-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #F59E0B, #D97706);
+  border-radius: var(--r-full);
+  box-shadow: 0 0 8px rgba(217, 119, 6, 0.35);
+  transition: width 0.3s ease;
+}
+
+/* ── Question Card & Options ──────────────────────────────────────────────── */
+.question-prompt {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1C0E04;
+  line-height: 1.45;
+  margin: 16px 0 24px;
+}
+
+.options-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.option-item {
+  padding: 16px 20px;
+  background-color: #FFFDF9;
+  border: 1.5px solid #E8D5B8;
+  border-radius: var(--r-lg);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  transition: var(--transition);
+  user-select: none;
+}
+
+.option-item:hover {
+  border-color: #F59E0B;
+  background-color: #FFF8F0;
+  transform: translateY(-1px);
+}
+
+.option-item.selected {
+  background-color: #FFF3E0;
+  border-color: #F59E0B;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.25);
+}
+
+.option-radio {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #C4A882;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: var(--transition);
+}
+
+.option-item.selected .option-radio {
+  border-color: #D97706;
+  background-color: #F59E0B;
+}
+
+.option-item.selected .option-radio::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #FFFFFF;
+}
+
+.option-text {
+  font-size: 14.5px;
+  font-weight: 500;
+  color: #1C0E04;
+  flex: 1;
+}
+
+/* ── Bottom Nav Pill Dots ─────────────────────────────────────────────────── */
+.assess-pills-bar {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.pill-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  background-color: #FFF8F0;
+  color: #A07050;
+  border: 1px solid #E8D5B8;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.pill-dot.answered {
+  background-color: #FEF3C7;
+  color: #B45309;
+  border-color: #F59E0B;
+}
+
+.pill-dot.current {
+  background-color: #F59E0B;
+  color: #FFFFFF;
+  border-color: #D97706;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.35);
+}

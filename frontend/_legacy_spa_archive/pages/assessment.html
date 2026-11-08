@@ -1,0 +1,108 @@
+<div class="page-content animate-in">
+  <div style="max-width:760px;margin:0 auto;" id="assessment-content">
+    
+    <!-- Initial Intro State -->
+    <div id="assessment-intro-card" class="card" style="text-align:center;padding:48px 32px;">
+      <div style="font-size:56px;margin-bottom:16px;">🎯</div>
+      <div class="badge badge-purple" style="margin-bottom:12px;font-size:12px;">Diagnostic Evaluation</div>
+      <h1 style="font-size:26px;font-weight:800;margin-bottom:12px;">Python Skill Assessment</h1>
+      <p style="color:var(--text-secondary);font-size:14.5px;max-width:540px;margin:0 auto 28px;line-height:1.6;">
+        Answer diagnostic multiple-choice questions to establish your Python skill level (Beginner, Intermediate, or Advanced) and tailor your curriculum path.
+      </p>
+
+      <div style="display:flex;justify-content:center;gap:16px;margin-bottom:32px;flex-wrap:wrap;">
+        <div style="padding:14px 20px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:var(--r-md);min-width:130px;">
+          <div style="font-size:20px;font-weight:800;color:var(--text-accent);">1 by 1</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Step-by-step</div>
+        </div>
+        <div style="padding:14px 20px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:var(--r-md);min-width:130px;">
+          <div style="font-size:20px;font-weight:800;color:var(--green);">~3 mins</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Fast MCQs</div>
+        </div>
+        <div style="padding:14px 20px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:var(--r-md);min-width:130px;">
+          <div style="font-size:20px;font-weight:800;color:var(--blue);">Adaptive</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Calibrates Level</div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-lg" id="btn-start-assessment">
+        <span>Start Diagnostic Assessment →</span>
+      </button>
+    </div>
+
+    <!-- Active Question Card (Hidden initially) -->
+    <div id="assessment-quiz-card" class="card hidden" style="padding:28px;">
+      
+      <!-- Progress Indicator Header -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+        <div>
+          <span class="badge badge-purple" id="quiz-topic-tag" style="font-size:11px;margin-bottom:6px;display:inline-block;">Topic</span>
+          <div style="font-size:15px;font-weight:700;color:#fff;" id="quiz-question-counter">Question 1 of 6</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span style="font-size:12px;color:var(--text-muted);" id="quiz-progress-text">16%</span>
+          <div style="width:130px;height:6px;" class="progress-bar-wrap">
+            <div class="progress-bar-fill" id="quiz-progress-fill" style="width:16%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question Text -->
+      <div style="font-size:16px;font-weight:600;line-height:1.6;margin-bottom:24px;" id="quiz-question-text">
+        Loading question...
+      </div>
+
+      <!-- Options -->
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:28px;" id="quiz-options-container">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Navigation & Submit Bar -->
+      <div style="display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid var(--border);">
+        <button class="btn btn-secondary btn-sm" id="btn-quiz-prev" disabled>
+          <span>← Previous</span>
+        </button>
+        <span style="font-size:12px;color:var(--text-muted);" id="quiz-answered-count">0 of 6 answered</span>
+        <button class="btn btn-primary btn-sm" id="btn-quiz-next">
+          <span>Next →</span>
+        </button>
+        <button class="btn btn-success btn-sm hidden" id="btn-quiz-submit">
+          <span>Submit Assessment ✓</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Results Card (Hidden initially) -->
+    <div id="assessment-result-card" class="card hidden" style="text-align:center;padding:44px 32px;">
+      <div style="font-size:60px;margin-bottom:14px;" id="res-badge-icon">🌟</div>
+      <div style="font-size:42px;font-weight:800;color:#fff;margin-bottom:4px;" id="res-score-pct">80%</div>
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:12px;" id="res-score-sub">5 of 6 correct</div>
+      
+      <div style="display:inline-block;padding:6px 16px;border-radius:var(--r-full);background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.35);font-size:16px;font-weight:700;color:var(--text-accent);margin-bottom:16px;">
+        Skill Tier: <span id="res-tier-name">Intermediate</span>
+      </div>
+
+      <p style="font-size:14px;color:var(--text-secondary);max-width:500px;margin:0 auto 24px;line-height:1.6;" id="res-tier-desc">
+        Great performance! Your personalized learning path has been calibrated.
+      </p>
+
+      <!-- Topic Performance Breakdown -->
+      <div style="max-width:440px;margin:0 auto 28px;text-align:left;" id="res-topics-box">
+        <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;margin-bottom:10px;">Topic Mastery Breakdown</div>
+        <div id="res-topics-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+      </div>
+
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <button class="btn btn-primary btn-lg" onclick="window.location.hash='#learning-path'">
+          <span>Explore Your Learning Path →</span>
+        </button>
+        <button class="btn btn-secondary btn-lg" id="btn-retake-assessment">
+          <span>Retake Assessment</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+

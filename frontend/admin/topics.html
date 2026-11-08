@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Curriculum & Topics — PyMentor Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/global.css?v=20261108_v17">
+  <link rel="stylesheet" href="/css/sidebar.css?v=20261108_v17">
+  <link rel="stylesheet" href="/css/admin.css?v=20261108_v17">
+</head>
+<body>
+
+  <div class="app-shell">
+
+    <!-- ── Left Sidebar Navigation (Admin Mode) ──────────────────────────────── -->
+    <aside class="sidebar" id="sidebar">
+      <a href="/admin/dashboard.html" class="sidebar-logo">
+        <div class="logo-icon" style="background-color:var(--primary-light);color:var(--primary);border-color:var(--primary-border);">🛡️</div>
+        <div>
+          <div class="logo-text">PyMentor</div>
+          <div class="logo-sub">Administration Suite</div>
+        </div>
+      </a>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Admin Management</div>
+        <a href="/admin/dashboard.html" class="nav-item" data-page="admin-dashboard">
+          <span class="nav-icon">📊</span> <span>Overview</span>
+          <span class="nav-badge">Admin</span>
+        </a>
+        <a href="/admin/students.html" class="nav-item" data-page="admin-students">
+          <span class="nav-icon">👥</span> <span>Students</span>
+        </a>
+        <a href="/admin/topics.html" class="nav-item active" data-page="admin-topics">
+          <span class="nav-icon">✏️</span> <span>Topics & Curriculum</span>
+        </a>
+        <a href="/admin/problems.html" class="nav-item" data-page="admin-problems">
+          <span class="nav-icon">🧩</span> <span>Coding Problems</span>
+        </a>
+        <a href="/admin/analytics.html" class="nav-item" data-page="admin-analytics">
+          <span class="nav-icon">📈</span> <span>Analytics</span>
+        </a>
+
+        <div class="nav-section-label" style="margin-top:16px;">Student View</div>
+        <a href="/dashboard.html" class="nav-item">
+          <span class="nav-icon">🏠</span> <span>Switch to Student Portal</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-card" id="sidebar-user-card">
+          <div class="user-avatar" id="sidebar-avatar">A</div>
+          <div style="min-width:0;flex:1;">
+            <div class="user-name" id="sidebar-username">Administrator</div>
+            <div class="user-role" id="sidebar-role">ADMIN</div>
+          </div>
+        </div>
+        <button class="btn btn-secondary btn-full btn-sm" id="logout-btn">
+          <span>🚪</span> Sign Out
+        </button>
+      </div>
+    </aside>
+
+    <!-- ── Main View Area ────────────────────────────────────────────────────── -->
+    <div class="main-area">
+      <header class="topbar">
+        <div class="topbar-left">
+          <h2 id="topbar-title" class="topbar-title">Curriculum & Topics Management</h2>
+          <span id="role-mode-badge" class="badge badge-purple">Administrator</span>
+        </div>
+        <div class="topbar-right">
+          <div class="user-avatar" id="topbar-avatar" style="width:34px;height:34px;font-size:13px;">A</div>
+        </div>
+      </header>
+
+      <div class="main-scroll-content">
+        <div class="page-content animate-in">
+          
+          <div class="admin-header">
+            <div>
+              <h1 class="page-title" style="font-size:24px;margin-bottom:4px;">Python Learning Curriculum & Diagnostic Bank</h1>
+              <p class="page-sub" style="margin:0;">Manage Python learning modules, structured curriculum progression, and diagnostic assessment questions.</p>
+            </div>
+            <div style="display:flex;gap:10px;">
+              <button class="btn btn-primary btn-sm" id="btn-show-add-question">
+                <span>+ Add Diagnostic Question</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Admin Sub-Navigation Pills -->
+          <div class="admin-tab-nav">
+            <a href="/admin/dashboard.html" class="admin-tab-pill">Overview</a>
+            <a href="/admin/students.html" class="admin-tab-pill">Student Management</a>
+            <a href="/admin/topics.html" class="admin-tab-pill active">Topics & Curriculum</a>
+            <a href="/admin/problems.html" class="admin-tab-pill">Coding Problems</a>
+            <a href="/admin/analytics.html" class="admin-tab-pill">Platform Analytics</a>
+          </div>
+
+          <!-- Dual Column Grid -->
+          <div style="display:grid;grid-template-columns:1.2fr 1.8fr;gap:20px;align-items:start;">
+            
+            <!-- Left Column: 7 Curriculum Modules -->
+            <div class="admin-table-card">
+              <div class="card-header">
+                <span class="card-title">📚 Python Modules (7 Tiers)</span>
+                <span class="badge badge-teal">Standard Curriculum</span>
+              </div>
+              <div style="padding:16px;" id="adm-curriculum-list">
+                <div style="text-align:center;padding:24px;"><div class="spinner"></div></div>
+              </div>
+            </div>
+
+            <!-- Right Column: Diagnostic Assessment Bank -->
+            <div class="admin-table-card">
+              <div class="card-header">
+                <div style="display:flex;gap:8px;align-items:center;">
+                  <span class="card-title">📝 Diagnostic Questions</span>
+                  <span class="badge badge-purple" id="adm-questions-count">0</span>
+                </div>
+                <span style="font-size:12px;color:var(--text-secondary);">Calibrates Student Skill Levels</span>
+              </div>
+              <div style="padding:16px;" id="adm-questions-list">
+                <div style="text-align:center;padding:24px;"><div class="spinner"></div></div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Modal: Create Diagnostic Question -->
+  <div id="modal-create-question" class="modal-overlay hidden">
+    <div class="modal-content-card" style="max-width:560px;">
+      <div style="padding:18px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+        <h3 style="font-size:17px;font-weight:700;color:var(--text-primary);margin:0;">Create Diagnostic Question</h3>
+        <button id="btn-close-q-modal" class="btn btn-ghost btn-sm" style="font-size:16px;padding:4px 8px;">✕</button>
+      </div>
+
+      <form id="form-create-question" style="padding:24px;display:flex;flex-direction:column;gap:16px;">
+        <div class="form-group">
+          <label class="form-label" for="new-q-text">Question Prompt</label>
+          <textarea id="new-q-text" class="form-input" rows="3" placeholder="e.g. What is the output of bool([]) in Python?" required></textarea>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div class="form-group">
+            <label class="form-label" for="new-q-topic">Associated Topic</label>
+            <select id="new-q-topic" class="form-input" required></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="new-q-diff">Difficulty Level</label>
+            <select id="new-q-diff" class="form-input" required>
+              <option value="easy">Beginner (Easy)</option>
+              <option value="medium">Intermediate (Medium)</option>
+              <option value="hard">Advanced (Hard)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Multiple-Choice Options</label>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <input type="text" id="new-q-opt-0" class="form-input" placeholder="Option A" required>
+            <input type="text" id="new-q-opt-1" class="form-input" placeholder="Option B" required>
+            <input type="text" id="new-q-opt-2" class="form-input" placeholder="Option C" required>
+            <input type="text" id="new-q-opt-3" class="form-input" placeholder="Option D" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="new-q-correct">Correct Option</label>
+          <select id="new-q-correct" class="form-input" required>
+            <option value="0">Option A</option>
+            <option value="1">Option B</option>
+            <option value="2">Option C</option>
+            <option value="3">Option D</option>
+          </select>
+        </div>
+
+        <div style="display:flex;justify-content:flex-end;gap:12px;margin-top:8px;">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-q-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-question">Save Diagnostic Question</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="/js/admin/topics.js?v=20261108_v17"></script>
+</body>
+</html>

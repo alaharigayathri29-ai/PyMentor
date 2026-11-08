@@ -1,0 +1,99 @@
+<div class="page-content animate-in" style="max-width:1160px;margin:0 auto;">
+  
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:16px;">
+    <div>
+      <h1 class="page-title" style="font-size:24px;margin-bottom:4px;">Learning Progress & Mastery Analytics</h1>
+      <p class="page-sub" style="margin:0;">Detailed performance metrics calculated directly from your real activity records.</p>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-secondary btn-sm" onclick="window.location.hash='#assessment'">
+        <span>🎯 Retake Assessment</span>
+      </button>
+      <button class="btn btn-primary btn-sm" onclick="window.location.hash='#learning-path'">
+        <span>🗺️ Curriculum Road</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Summary KPI Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon stat-icon-purple">📈</div>
+      <div class="stat-value" id="prog-overall-pct">0%</div>
+      <div class="stat-label">Curriculum Completion</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon stat-icon-green">🎯</div>
+      <div class="stat-value" id="prog-accuracy-pct">0%</div>
+      <div class="stat-label">Code Submission Accuracy</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon stat-icon-blue">💻</div>
+      <div class="stat-value" id="prog-solved-count">0</div>
+      <div class="stat-label">Problems Solved</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon stat-icon-amber">🔥</div>
+      <div class="stat-value" id="prog-streak-val">0 Days</div>
+      <div class="stat-label">Consecutive Active Streak</div>
+    </div>
+  </div>
+
+  <!-- Strong vs Weak Topics Overview -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;">
+    
+    <!-- Strong Topics -->
+    <div class="card" style="padding:22px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <span style="font-size:22px;">💪</span>
+        <h3 style="font-size:16px;margin:0;color:#fff;">Mastered & Strong Areas</h3>
+      </div>
+      <div id="prog-strong-list" style="display:flex;flex-wrap:wrap;gap:8px;">
+        <span style="font-size:12px;color:var(--text-muted);">Master topics at 70%+ to add them to your strengths!</span>
+      </div>
+    </div>
+
+    <!-- Weak Topics -->
+    <div class="card" style="padding:22px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <span style="font-size:22px;">⚠️</span>
+        <h3 style="font-size:16px;margin:0;color:#fff;">Recommended Review Focus</h3>
+      </div>
+      <div id="prog-weak-list" style="display:flex;flex-wrap:wrap;gap:8px;">
+        <span style="font-size:12px;color:var(--text-muted);color:#6ee7b7;">No weak topics flagged right now. Excellent!</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Topic-Wise Mastery Grid -->
+  <div class="card" style="padding:24px;margin-bottom:24px;">
+    <h3 style="font-size:16px;margin-bottom:16px;color:#fff;">📊 Topic-Wise Mastery</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;" id="prog-topics-grid">
+      <!-- Rendered dynamically -->
+    </div>
+  </div>
+
+  <!-- Submissions & Assessment Attempts History Split -->
+  <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:20px;">
+    
+    <!-- Practice Submissions History -->
+    <div class="card" style="padding:22px;">
+      <h3 style="font-size:15px;margin-bottom:14px;color:#fff;">💻 Recent Code Submissions</h3>
+      <div id="prog-subs-table" style="display:flex;flex-direction:column;gap:8px;">
+        <div style="font-size:12px;color:var(--text-muted);padding:10px 0;">No code submissions recorded yet.</div>
+      </div>
+    </div>
+
+    <!-- Diagnostic Assessment Attempts -->
+    <div class="card" style="padding:22px;">
+      <h3 style="font-size:15px;margin-bottom:14px;color:#fff;">🎯 Assessment Attempt History</h3>
+      <div id="prog-assessment-table" style="display:flex;flex-direction:column;gap:8px;">
+        <div style="font-size:12px;color:var(--text-muted);padding:10px 0;">No assessment attempts recorded yet.</div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+

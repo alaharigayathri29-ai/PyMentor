@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Command Center — PyMentor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/global.css?v=20261108_v17">
+  <link rel="stylesheet" href="/css/sidebar.css?v=20261108_v17">
+  <link rel="stylesheet" href="/css/admin.css?v=20261108_v17">
+</head>
+<body>
+
+  <div class="app-shell">
+
+    <!-- ── Left Sidebar Navigation (Admin Mode) ──────────────────────────────── -->
+    <aside class="sidebar" id="sidebar">
+      <a href="/admin/dashboard.html" class="sidebar-logo">
+        <div class="logo-icon" style="background-color:var(--primary-light);color:var(--primary);border-color:var(--primary-border);">🛡️</div>
+        <div>
+          <div class="logo-text">PyMentor</div>
+          <div class="logo-sub">Administration Suite</div>
+        </div>
+      </a>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Admin Management</div>
+        <a href="/admin/dashboard.html" class="nav-item active" data-page="admin-dashboard">
+          <span class="nav-icon">📊</span> <span>Overview</span>
+          <span class="nav-badge">Admin</span>
+        </a>
+        <a href="/admin/students.html" class="nav-item" data-page="admin-students">
+          <span class="nav-icon">👥</span> <span>Students</span>
+        </a>
+        <a href="/admin/topics.html" class="nav-item" data-page="admin-topics">
+          <span class="nav-icon">✏️</span> <span>Topics & Curriculum</span>
+        </a>
+        <a href="/admin/problems.html" class="nav-item" data-page="admin-problems">
+          <span class="nav-icon">🧩</span> <span>Coding Problems</span>
+        </a>
+        <a href="/admin/analytics.html" class="nav-item" data-page="admin-analytics">
+          <span class="nav-icon">📈</span> <span>Analytics</span>
+        </a>
+
+        <div class="nav-section-label" style="margin-top:16px;">Student View</div>
+        <a href="/dashboard.html" class="nav-item">
+          <span class="nav-icon">🏠</span> <span>Switch to Student Portal</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-card" id="sidebar-user-card">
+          <div class="user-avatar" id="sidebar-avatar">A</div>
+          <div style="min-width:0;flex:1;">
+            <div class="user-name" id="sidebar-username">Administrator</div>
+            <div class="user-role" id="sidebar-role">ADMIN</div>
+          </div>
+        </div>
+        <button class="btn btn-secondary btn-full btn-sm" id="logout-btn">
+          <span>🚪</span> Sign Out
+        </button>
+      </div>
+    </aside>
+
+    <!-- ── Main View Area ────────────────────────────────────────────────────── -->
+    <div class="main-area">
+      <header class="topbar">
+        <div class="topbar-left">
+          <h2 id="topbar-title" class="topbar-title">Admin Command Center</h2>
+          <span id="role-mode-badge" class="badge badge-purple">Administrator</span>
+        </div>
+        <div class="topbar-right">
+          <div class="user-avatar" id="topbar-avatar" style="width:34px;height:34px;font-size:13px;">A</div>
+        </div>
+      </header>
+
+      <div class="main-scroll-content">
+        <div class="page-content animate-in">
+          
+          <div class="admin-header">
+            <div>
+              <h1 class="page-title" style="font-size:24px;margin-bottom:4px;">Platform Overview & Controls</h1>
+              <p class="page-sub" style="margin:0;">Real-time cohort statistics, student activity, and curriculum distribution.</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" id="btn-refresh-admin">
+              <span>↺ Refresh Data</span>
+            </button>
+          </div>
+
+          <!-- Admin Sub-Navigation Pills -->
+          <div class="admin-tab-nav">
+            <a href="/admin/dashboard.html" class="admin-tab-pill active">Overview</a>
+            <a href="/admin/students.html" class="admin-tab-pill">Student Management</a>
+            <a href="/admin/topics.html" class="admin-tab-pill">Topics & Curriculum</a>
+            <a href="/admin/problems.html" class="admin-tab-pill">Coding Problems</a>
+            <a href="/admin/analytics.html" class="admin-tab-pill">Platform Analytics</a>
+          </div>
+
+          <!-- 4 Platform Metric Cards -->
+          <div class="admin-stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon-wrap" style="background-color:var(--primary-light);color:var(--primary);">👥</div>
+              <div>
+                <div class="stat-value" id="adm-total-students">-</div>
+                <div class="stat-label">Total Registered Students</div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon-wrap" style="background-color:var(--success-light);color:var(--success);">🎯</div>
+              <div>
+                <div class="stat-value" id="adm-pass-rate">-</div>
+                <div class="stat-label">Code Submission Pass Rate</div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon-wrap" style="background-color:var(--secondary-light);color:var(--secondary);">📝</div>
+              <div>
+                <div class="stat-value" id="adm-avg-quiz">-</div>
+                <div class="stat-label">Avg Assessment Score</div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon-wrap" style="background-color:var(--purple-light);color:var(--purple);">💻</div>
+              <div>
+                <div class="stat-value" id="adm-total-subs">-</div>
+                <div class="stat-label">Code Submissions Evaluated</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dual Column Grid -->
+          <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:24px;margin-bottom:26px;">
+            
+            <!-- Recent Students Card -->
+            <div class="admin-table-card">
+              <div class="card-header">
+                <span class="card-title">Recent Registered Students</span>
+                <a href="/admin/students.html" class="btn btn-ghost btn-sm">View Directory →</a>
+              </div>
+              <div style="padding:16px;" id="adm-recent-students-list">
+                <div style="text-align:center;padding:24px;"><div class="spinner"></div></div>
+              </div>
+            </div>
+
+            <!-- Skill Level Distribution -->
+            <div class="admin-table-card">
+              <div class="card-header">
+                <span class="card-title">Skill Distribution</span>
+                <span class="badge badge-teal">Live Cohort</span>
+              </div>
+              <div style="padding:20px;" id="adm-tier-bars">
+                <div style="text-align:center;padding:24px;"><div class="spinner"></div></div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script type="module" src="/js/admin/dashboard.js?v=20261108_v17"></script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<div class="page-content animate-in">
+  
+  <div class="admin-header">
+    <div>
+      <h1 class="page-title" style="font-size:24px;margin-bottom:4px;">Curriculum & Content Management</h1>
+      <p class="page-sub" style="margin:0;">Create and manage practice coding problems and diagnostic assessment questions.</p>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-secondary btn-sm" id="btn-show-add-question">
+        <span>+ New MCQ Question</span>
+      </button>
+      <button class="btn btn-primary btn-sm" id="btn-show-add-problem">
+        <span>+ New Practice Problem</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Admin Sub-Navigation Pills -->
+  <div class="admin-tab-nav">
+    <button class="admin-tab-pill" onclick="window.location.hash='#admin-dashboard'">Overview</button>
+    <button class="admin-tab-pill" onclick="window.location.hash='#admin-students'">Student Management</button>
+    <button class="admin-tab-pill active" onclick="window.location.hash='#admin-topics'">Curriculum & Creator</button>
+    <button class="admin-tab-pill" onclick="window.location.hash='#admin-analytics'">Platform Analytics</button>
+  </div>
+
+  <!-- Split Grid: Problems vs Questions -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+    
+    <!-- Practice Problems List -->
+    <div class="card" style="padding:22px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <h3 style="font-size:15px;margin:0;color:#fff;">Practice Problems (<span id="adm-problems-count">0</span>)</h3>
+      </div>
+      <div id="adm-problems-list" style="display:flex;flex-direction:column;gap:8px;max-height:550px;overflow-y:auto;" class="custom-scroll">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- Assessment Questions List -->
+    <div class="card" style="padding:22px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <h3 style="font-size:15px;margin:0;color:#fff;">Diagnostic MCQs (<span id="adm-questions-count">0</span>)</h3>
+      </div>
+      <div id="adm-questions-list" style="display:flex;flex-direction:column;gap:8px;max-height:550px;overflow-y:auto;" class="custom-scroll">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Create Problem Modal -->
+  <div id="modal-create-problem" class="modal-overlay hidden">
+    <div class="modal-card" style="max-width:620px;">
+      <div style="padding:18px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+        <h3 style="font-size:16px;margin:0;color:#fff;">Create Practice Problem</h3>
+        <button class="btn btn-ghost btn-sm" id="btn-close-prob-modal">✕</button>
+      </div>
+      <form id="form-create-problem" style="padding:24px;">
+        <div class="form-group">
+          <label class="form-label">Problem Title</label>
+          <input type="text" id="new-prob-title" class="form-input" placeholder="e.g. Find Max Number" required>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div class="form-group">
+            <label class="form-label">Topic</label>
+            <select id="new-prob-topic" class="input-field"></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Difficulty</label>
+            <select id="new-prob-diff" class="input-field">
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description (Markdown)</label>
+          <textarea id="new-prob-desc" class="form-input" style="height:90px;resize:vertical;" placeholder="Write a function that..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Starter Code</label>
+          <textarea id="new-prob-starter" class="form-input" style="height:70px;font-family:'JetBrains Mono',monospace;" placeholder="def solution(n):&#10;    pass"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full" id="btn-save-problem">
+          <span>Save Practice Problem</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Create Question Modal -->
+  <div id="modal-create-question" class="modal-overlay hidden">
+    <div class="modal-card" style="max-width:600px;">
+      <div style="padding:18px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+        <h3 style="font-size:16px;margin:0;color:#fff;">Create Diagnostic Question</h3>
+        <button class="btn btn-ghost btn-sm" id="btn-close-q-modal">✕</button>
+      </div>
+      <form id="form-create-question" style="padding:24px;">
+        <div class="form-group">
+          <label class="form-label">Question Text</label>
+          <textarea id="new-q-text" class="form-input" style="height:70px;" placeholder="What does type(42) return?" required></textarea>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div class="form-group">
+            <label class="form-label">Topic</label>
+            <select id="new-q-topic" class="input-field"></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Difficulty</label>
+            <select id="new-q-diff" class="input-field">
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Options (A, B, C, D)</label>
+          <input type="text" id="new-q-opt-0" class="form-input" placeholder="Option A" style="margin-bottom:6px;" required>
+          <input type="text" id="new-q-opt-1" class="form-input" placeholder="Option B" style="margin-bottom:6px;" required>
+          <input type="text" id="new-q-opt-2" class="form-input" placeholder="Option C" style="margin-bottom:6px;" required>
+          <input type="text" id="new-q-opt-3" class="form-input" placeholder="Option D" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Correct Option</label>
+          <select id="new-q-correct" class="input-field">
+            <option value="0">Option A</option>
+            <option value="1">Option B</option>
+            <option value="2">Option C</option>
+            <option value="3">Option D</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full" id="btn-save-question">
+          <span>Save Assessment Question</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+</div>
+

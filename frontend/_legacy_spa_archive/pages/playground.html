@@ -1,0 +1,108 @@
+<div class="page-content animate-in" style="padding:14px 24px;">
+  
+  <div class="playground-container">
+    
+    <!-- Top Action Toolbar -->
+    <div class="playground-toolbar">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span style="font-size:22px;">🌐</span>
+        <div>
+          <div style="font-size:15px;font-weight:700;color:#fff;">Coding Playground</div>
+          <div style="font-size:11px;color:var(--text-muted);">Free Python experimentation (no test cases required)</div>
+        </div>
+      </div>
+
+      <!-- Quick Template Selector -->
+      <div style="display:flex;align-items:center;gap:10px;">
+        <label style="font-size:12px;color:var(--text-muted);">Sample Template:</label>
+        <select id="pg-template-select" class="input-field" style="width:190px;padding:5px 10px;font-size:12px;border-radius:var(--r-sm);">
+          <option value="hello">Hello, World!</option>
+          <option value="fibonacci">Fibonacci Sequence</option>
+          <option value="oop">OOP Class & Methods</option>
+          <option value="comprehension">List Comprehensions</option>
+          <option value="input_demo">Interactive User Input</option>
+        </select>
+
+        <button class="btn btn-secondary btn-sm" id="pg-btn-reset" title="Reset to default code">
+          <span>↺ Reset</span>
+        </button>
+
+        <button class="btn btn-secondary btn-sm" id="pg-btn-save" title="Save this script to your personal library">
+          <span>💾 Save Script</span>
+        </button>
+
+        <button class="btn btn-secondary btn-sm" id="pg-btn-saved-list" title="View my saved scripts">
+          <span>📂 My Library (<span id="pg-saved-count">0</span>)</span>
+        </button>
+
+        <button class="btn btn-primary btn-sm" id="pg-btn-run" style="padding:6px 18px;font-size:13px;">
+          <span>▶ Run Code</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Playground Workspace (Editor + Output) -->
+    <div class="playground-body">
+      
+      <!-- Left: Editor Card -->
+      <div class="editor-card">
+        <div class="editor-header">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="badge badge-purple" style="font-size:10px;font-family:'JetBrains Mono',monospace;">Python 3.10+</span>
+            <span id="pg-script-name" style="font-weight:600;color:#cbd5e1;">main.py</span>
+          </div>
+          <span>Ctrl + Enter to run</span>
+        </div>
+
+        <div class="editor-mount" id="pg-editor-mount">
+          <!-- CodeMirror editor mounted here -->
+        </div>
+
+        <!-- Stdin Drawer for user input -->
+        <div class="stdin-panel">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <span style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">Standard Input (stdin for input() statements):</span>
+          </div>
+          <textarea id="pg-stdin-input" class="stdin-textarea" placeholder="Enter input here (each line will be read by input())..."></textarea>
+        </div>
+      </div>
+
+      <!-- Right: Output & Console Panel -->
+      <div class="output-panel">
+        <div class="output-header">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="font-size:13px;font-weight:700;color:#fff;">Terminal Output</span>
+            <span id="pg-status-badge" class="badge badge-gray">Idle</span>
+            <span id="pg-exec-time" style="font-size:11px;color:var(--text-muted);">0 ms</span>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <button class="btn btn-ghost btn-sm" id="pg-btn-clear" style="font-size:11px;padding:3px 8px;">
+              <span>Clear Terminal</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="output-console custom-scroll" id="pg-console-output">
+Press "Run Code" to execute Python script...
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Saved Scripts Modal Drawer -->
+  <div id="pg-library-modal" class="modal-overlay hidden">
+    <div class="modal-card" style="max-width:540px;">
+      <div style="padding:18px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+        <h3 style="font-size:16px;margin:0;">📂 My Saved Python Scripts</h3>
+        <button class="btn btn-ghost btn-sm" id="pg-modal-close" style="font-size:16px;padding:4px 8px;">✕</button>
+      </div>
+      <div style="padding:20px;max-height:400px;overflow-y:auto;" id="pg-saved-items-container" class="custom-scroll">
+        <!-- Rendered saved programs -->
+      </div>
+    </div>
+  </div>
+
+</div>
+

@@ -1,0 +1,64 @@
+<div class="auth-page">
+  <div class="auth-brand">
+    <div class="brand-content">
+      <div class="brand-logo-big">🚀</div>
+      <h1 class="brand-title">Start Your <span>Python</span><br>Journey</h1>
+      <p class="brand-desc">Join thousands of students building real-world Python skills with step-by-step guidance and hands-on coding practice.</p>
+      
+      <div class="brand-features">
+        <div class="brand-feature">
+          <div class="brand-feature-icon">🛡️</div>
+          <span>Completely isolated private student profile & dashboard</span>
+        </div>
+        <div class="brand-feature">
+          <div class="brand-feature-icon">⚡</div>
+          <span>Free experimentation Python Playground</span>
+        </div>
+        <div class="brand-feature">
+          <div class="brand-feature-icon">🎓</div>
+          <span>Automated evaluation with instant test feedback</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-form-area">
+    <div class="auth-box animate-in">
+      <div class="auth-tabs">
+        <button class="auth-tab" id="tab-login" onclick="window.location.hash='#login'">Sign In</button>
+        <button class="auth-tab active" id="tab-register">Sign Up</button>
+      </div>
+
+      <h2 class="auth-heading">Create Student Account</h2>
+      <p class="auth-sub">Sign up with your personal credentials to get started</p>
+
+      <div id="auth-alert"></div>
+
+      <form id="register-form">
+        <div class="form-group">
+          <label class="form-label" for="reg-username">Username</label>
+          <input id="reg-username" class="form-input" type="text" placeholder="your_unique_username" autocomplete="username" required autofocus>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-email">Email Address</label>
+          <input id="reg-email" class="form-input" type="email" placeholder="student@example.com" autocomplete="email" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-password">Password <span style="color:var(--text-muted);font-weight:400;">(minimum 6 characters)</span></label>
+          <input id="reg-password" class="form-input" type="password" placeholder="••••••••" autocomplete="new-password" required minlength="6">
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full btn-lg" id="register-btn">
+          <span>Create Account & Start Learning →</span>
+        </button>
+      </form>
+
+      <div style="margin-top:24px;text-align:center;font-size:13px;color:var(--text-muted);">
+        Already registered? <a href="#login" style="color:var(--text-accent);font-weight:600;text-decoration:none;">Sign In here</a>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,74 @@
+<div class="page-content animate-in" style="padding:14px 24px;">
+  
+  <div class="mentor-chat-wrapper">
+    
+    <!-- Collapsible Sessions Sidebar -->
+    <div class="mentor-sidebar" id="mentor-sidebar">
+      <div class="mentor-sidebar-header">
+        <h3 style="font-size:14px;font-weight:700;margin:0;color:#fff;">Conversations</h3>
+        <button class="btn btn-primary btn-sm" id="btn-mentor-new" style="font-size:11.5px;padding:4px 10px;">
+          <span>+ New</span>
+        </button>
+      </div>
+
+      <div class="mentor-sessions-list custom-scroll" id="mentor-sessions-container">
+        <!-- Rendered conversation list -->
+      </div>
+    </div>
+
+    <!-- Main Chat Surface -->
+    <div class="chat-main-area">
+      
+      <!-- Top Chat Bar -->
+      <div class="chat-header-bar">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <button class="btn btn-ghost btn-sm" id="btn-toggle-sidebar" style="padding:4px 8px;font-size:14px;" title="Toggle conversations sidebar">
+            ☰
+          </button>
+          <div class="msg-avatar" style="width:34px;height:34px;background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.4);color:var(--text-accent);">
+            🤖
+          </div>
+          <div>
+            <div style="font-size:14.5px;font-weight:700;color:#fff;" id="chat-session-title">PyMentor Assistant</div>
+            <div style="font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:6px;">
+              <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);"></span>
+              <span id="chat-mode-indicator">Offline Pedagogical Model</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:8px;">
+          <button class="btn btn-ghost btn-sm" id="btn-delete-session" style="font-size:12px;color:var(--red);" title="Delete current conversation">
+            🗑️ Delete Chat
+          </button>
+        </div>
+      </div>
+
+      <!-- Messages Thread -->
+      <div class="chat-messages-container custom-scroll" id="chat-messages-box">
+        <!-- Rendered messages -->
+      </div>
+
+      <!-- Quick Action Prompt Chips -->
+      <div class="chat-chips-tray custom-scroll">
+        <button class="action-chip" data-action="explain_differently">🔄 Explain Differently</button>
+        <button class="action-chip" data-action="hint">💡 Give Me a Hint</button>
+        <button class="action-chip" data-action="practice_problem">🎯 Generate Practice Problem</button>
+        <button class="action-chip" data-action="explain_error">🔍 Explain My Error</button>
+        <button class="action-chip" data-action="continue_learning">🚀 Continue Learning</button>
+      </div>
+
+      <!-- Input Box -->
+      <div class="chat-input-area">
+        <textarea id="chat-user-input" class="chat-textarea" placeholder="Ask anything about Python, syntax, logic, or request an explanation..." rows="1"></textarea>
+        <button class="btn btn-primary" id="btn-chat-send" style="padding:9px 18px;border-radius:var(--r-md);flex-shrink:0;">
+          <span>Send ↑</span>
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
