@@ -47,7 +47,7 @@ app.add_middleware(
         "http://127.0.0.1:8000",
         settings.FRONTEND_URL,
     ],
-    allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:\d+)?",
+    allow_origin_regex=r"https?://(localhost|127\.0\.0\.1|.*\.onrender\.com)(:\d+)?",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
