@@ -26,19 +26,19 @@
   box-shadow: 3px 0 24px rgba(44,26,14,0.4);
 }
 
-/* Top accent line — moving brown & gold gradient stripe */
+/* Top accent line — moving brown, gold & blue gradient stripe */
 .sidebar::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 3px;
-  background: linear-gradient(90deg, #2C1A0E, #8A6D3B, #B45309, #D97706, #F59E0B, #FDE68A, #F59E0B, #D97706, #B45309, #8A6D3B, #2C1A0E);
+  background: linear-gradient(90deg, #2C1A0E, #8A6D3B, #D97706, #F59E0B, #2563EB, #3B82F6, #FDE68A, #3B82F6, #2563EB, #F59E0B, #D97706, #8A6D3B, #2C1A0E);
   background-size: 300% 100%;
   animation: movingGradientBorder 4s linear infinite;
   z-index: 20;
 }
 
-/* Right border — luminous animated moving brown-gold gradient border */
+/* Right border — luminous animated moving brown, gold & blue gradient border */
 .sidebar::after {
   content: '';
   position: absolute;
@@ -46,10 +46,10 @@
   right: 0;
   bottom: 0;
   width: 2.5px;
-  background: linear-gradient(180deg, #2C1A0E, #8A6D3B, #B45309, #D97706, #F59E0B, #FDE68A, #F59E0B, #D97706, #B45309, #8A6D3B, #2C1A0E);
+  background: linear-gradient(180deg, #2C1A0E, #8A6D3B, #D97706, #F59E0B, #2563EB, #3B82F6, #FDE68A, #3B82F6, #2563EB, #F59E0B, #D97706, #8A6D3B, #2C1A0E);
   background-size: 100% 300%;
   animation: movingSidebarGlow 4s linear infinite;
-  box-shadow: 0 0 10px rgba(245, 158, 11, 0.35);
+  box-shadow: 0 0 10px rgba(37, 99, 235, 0.4);
   z-index: 20;
 }
 

@@ -8,10 +8,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-  <!-- CodeMirror Editor Assets: Python, XML/HTML, CSS, JS -->
+  <!-- CodeMirror Editor Assets: Python, C/C++/Java (clike), XML/HTML, CSS, JS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/codemirror.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/codemirror.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/mode/python/python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/mode/clike/clike.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/mode/xml/xml.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/mode/javascript/javascript.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/mode/css/css.min.js"></script>
@@ -142,8 +143,17 @@
                   <button class="lang-tab-btn active" data-lang="python">
                     <span>🐍 Python</span>
                   </button>
+                  <button class="lang-tab-btn" data-lang="c">
+                    <span>⚙️ C</span>
+                  </button>
+                  <button class="lang-tab-btn" data-lang="cpp">
+                    <span>⚡ C++</span>
+                  </button>
+                  <button class="lang-tab-btn" data-lang="java">
+                    <span>☕ Java</span>
+                  </button>
                   <button class="lang-tab-btn" data-lang="web">
-                    <span>🌐 Web App (HTML/CSS/JS)</span>
+                    <span>🌐 Web App</span>
                   </button>
                 </div>
 

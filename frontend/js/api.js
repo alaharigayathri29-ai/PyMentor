@@ -157,8 +157,8 @@ export const workspaceApi = {
   createProgram: (data) => apiFetch('/api/workspace/programs', { method: 'POST', body: JSON.stringify(data) }),
   updateProgram: (id, data) => apiFetch(`/api/workspace/programs/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   deleteProgram: (id) => apiFetch(`/api/workspace/programs/${id}`, { method: 'DELETE' }),
-  runCode:       (code, stdinInput = '') => apiFetch('/api/workspace/run', {
-    method: 'POST', body: JSON.stringify({ code, stdin_input: stdinInput }),
+  runCode:       (code, stdinInput = '', language = 'python') => apiFetch('/api/workspace/run', {
+    method: 'POST', body: JSON.stringify({ code, stdin_input: stdinInput, language }),
   }),
 };
 

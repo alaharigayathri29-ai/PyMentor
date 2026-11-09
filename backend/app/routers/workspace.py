@@ -125,6 +125,10 @@ def run_workspace_code(
     payload: WorkspaceRunRequest,
     current_user: User = Depends(get_current_user),
 ):
-    """Execute arbitrary Python code in the sandbox playground."""
-    result = _runner.run_custom_script(payload.code, payload.stdin_input or "")
+    """Execute arbitrary Python, C, C++, or Java code in the playground sandbox."""
+    result = _runner.run_multi_language(
+        payload.code,
+        payload.language or "python",
+        payload.stdin_input or ""
+    )
     return result

@@ -17,11 +17,17 @@ let currentLoadedProjectId = null;
 let currentLoadedProjectTitle = null;
 
 // Current IDE State
-let currentLang = 'python'; // 'python' | 'web'
+let currentLang = 'python'; // 'python' | 'c' | 'cpp' | 'java' | 'web'
 let activeWebFile = 'html';  // 'html' | 'css' | 'js'
 let activeWebSubtab = 'preview'; // 'preview' | 'console'
 
-let pythonCode = `# Write your Python code here\nprint("Hello from Python Playground!")\n`;
+let pythonCode = `# Python 3.12 Playground\nprint("Hello from Python Playground!")\n\nnames = ["Alice", "Bob", "Charlie"]\nfor idx, name in enumerate(names, 1):\n    print(f"{idx}. Welcome {name}!")\n`;
+
+let cCode = `// C Project Template (GCC)\n#include <stdio.h>\n\nint main() {\n    printf("⚡ Hello from C Playground!\\n");\n    int a = 15, b = 27;\n    printf("Result: %d + %d = %d\\n", a, b, a + b);\n    return 0;\n}\n`;
+
+let cppCode = `// C++ Project Template (G++)\n#include <iostream>\n#include <vector>\n#include <numeric>\n\nint main() {\n    std::cout << "🚀 Hello from C++ Playground!" << std::endl;\n    std::vector<int> numbers = {10, 20, 30, 40, 50};\n    int total = std::accumulate(numbers.begin(), numbers.end(), 0);\n    std::cout << "Vector Sum = " << total << std::endl;\n    return 0;\n}\n`;
+
+let javaCode = `// Java Project Template (OpenJDK 21)\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println("☕ Hello from Java Playground!");\n        int x = 40, y = 2;\n        System.out.println("Answer: " + (x + y));\n    }\n}\n`;
 
 const WEB_TEMPLATES = {
   counter: {
@@ -553,6 +559,12 @@ function saveCurrentEditorCode() {
   const currentVal = editor.getValue();
   if (currentLang === 'python') {
     pythonCode = currentVal;
+  } else if (currentLang === 'c') {
+    cCode = currentVal;
+  } else if (currentLang === 'cpp') {
+    cppCode = currentVal;
+  } else if (currentLang === 'java') {
+    javaCode = currentVal;
   } else {
     webFiles[activeWebFile] = currentVal;
   }
@@ -593,6 +605,51 @@ function switchLanguage(lang) {
     if (editor) {
       editor.setOption('mode', 'python');
       editor.setValue(pythonCode);
+    }
+  } else if (lang === 'c') {
+    topbarTitle.textContent = 'C Project Playground (GCC)';
+    webFileTabs?.classList.add('hidden');
+    templateSelect?.classList.add('hidden');
+    stdinDrawer?.classList.remove('hidden');
+    pythonHeader?.classList.remove('hidden');
+    webHeader?.classList.add('hidden');
+    pythonOutput?.classList.remove('hidden');
+    webPreview?.classList.add('hidden');
+    browserConsole?.classList.add('hidden');
+
+    if (editor) {
+      editor.setOption('mode', 'text/x-csrc');
+      editor.setValue(cCode);
+    }
+  } else if (lang === 'cpp') {
+    topbarTitle.textContent = 'C++ Project Playground (G++)';
+    webFileTabs?.classList.add('hidden');
+    templateSelect?.classList.add('hidden');
+    stdinDrawer?.classList.remove('hidden');
+    pythonHeader?.classList.remove('hidden');
+    webHeader?.classList.add('hidden');
+    pythonOutput?.classList.remove('hidden');
+    webPreview?.classList.add('hidden');
+    browserConsole?.classList.add('hidden');
+
+    if (editor) {
+      editor.setOption('mode', 'text/x-c++src');
+      editor.setValue(cppCode);
+    }
+  } else if (lang === 'java') {
+    topbarTitle.textContent = 'Java Project Playground (OpenJDK 21)';
+    webFileTabs?.classList.add('hidden');
+    templateSelect?.classList.add('hidden');
+    stdinDrawer?.classList.remove('hidden');
+    pythonHeader?.classList.remove('hidden');
+    webHeader?.classList.add('hidden');
+    pythonOutput?.classList.remove('hidden');
+    webPreview?.classList.add('hidden');
+    browserConsole?.classList.add('hidden');
+
+    if (editor) {
+      editor.setOption('mode', 'text/x-java');
+      editor.setValue(javaCode);
     }
   } else {
     topbarTitle.textContent = 'Web Application Playground (HTML / CSS / JS)';
@@ -755,9 +812,13 @@ async function runPlaygroundCode() {
     return;
   }
 
-  // Python Sandbox Execution (Backend code runner)
+  // Multi-Language Sandbox Execution (Python, C, C++, Java)
   saveCurrentEditorCode();
-  const code = pythonCode;
+  let code = pythonCode;
+  if (currentLang === 'c') code = cCode;
+  else if (currentLang === 'cpp') code = cppCode;
+  else if (currentLang === 'java') code = javaCode;
+
   if (!code.trim()) {
     showToast('Cannot run empty code.', 'warn');
     return;
@@ -778,12 +839,12 @@ async function runPlaygroundCode() {
   }
 
   if (consoleOutput) {
-    consoleOutput.textContent = 'Executing sandbox environment…\n';
+    consoleOutput.textContent = `Compiling & executing ${currentLang.toUpperCase()} environment…\n`;
   }
 
   try {
     const startTime = performance.now();
-    const result = await workspaceApi.runCode(code, stdinInput);
+    const result = await workspaceApi.runCode(code, stdinInput, currentLang);
     const duration = Math.round(performance.now() - startTime);
 
     if (execTime) execTime.textContent = `${duration} ms`;
@@ -838,10 +899,16 @@ async function saveCurrentScript() {
 
     if (updateChoice) {
       try {
+        let activeCode = pythonCode;
+        if (currentLang === 'c') activeCode = cCode;
+        else if (currentLang === 'cpp') activeCode = cppCode;
+        else if (currentLang === 'java') activeCode = javaCode;
+        else if (currentLang === 'web') activeCode = webFiles.html;
+
         const payload = {
           title: currentLoadedProjectTitle,
           language: currentLang,
-          code: currentLang === 'python' ? pythonCode : webFiles.html,
+          code: activeCode,
           extra_data: currentLang === 'web' ? { css: webFiles.css, js: webFiles.js } : null,
         };
         await workspaceApi.updateProgram(currentLoadedProjectId, payload);
@@ -855,29 +922,35 @@ async function saveCurrentScript() {
     }
   }
 
-  if (currentLang === 'python') {
-    if (!pythonCode.trim()) {
-      showToast('Cannot save empty Python script.', 'warn');
+  if (currentLang !== 'web') {
+    let activeCode = pythonCode;
+    let langName = 'Python';
+    if (currentLang === 'c') { activeCode = cCode; langName = 'C'; }
+    else if (currentLang === 'cpp') { activeCode = cppCode; langName = 'C++'; }
+    else if (currentLang === 'java') { activeCode = javaCode; langName = 'Java'; }
+
+    if (!activeCode.trim()) {
+      showToast(`Cannot save empty ${langName} project code.`, 'warn');
       return;
     }
     const title = await showPromptModal({
-      title: 'Save Python Script',
-      message: 'Enter a name for this Python script:',
-      placeholder: 'e.g. My Algorithm, Data Parser',
-      defaultValue: currentLoadedProjectTitle ? `${currentLoadedProjectTitle} (Copy)` : 'Python Script',
-      confirmText: 'Save Script',
+      title: `Save ${langName} Project`,
+      message: `Enter a name for this ${langName} project:`,
+      placeholder: `e.g. My ${langName} Algorithm, Data Structure`,
+      defaultValue: currentLoadedProjectTitle ? `${currentLoadedProjectTitle} (Copy)` : `${langName} Project`,
+      confirmText: 'Save Project',
     });
     if (!title || !title.trim()) return;
 
     try {
       const created = await workspaceApi.createProgram({
         title: title.trim(),
-        language: 'python',
-        code: pythonCode,
+        language: currentLang,
+        code: activeCode,
       });
       currentLoadedProjectId = created.id;
       currentLoadedProjectTitle = created.title;
-      showToast(`Saved Python script "${title.trim()}"!`, 'success');
+      showToast(`Saved ${langName} project "${title.trim()}"!`, 'success');
       updateLibraryCount();
     } catch (err) {
       showToast(`Failed to save program: ${err.message}`, 'error');
@@ -1073,9 +1146,9 @@ export async function loadProjectIntoWorkspace(prog) {
   }
   if (!extra || typeof extra !== 'object') extra = {};
 
-  const isWeb = prog.language === 'web';
+  const lang = (prog.language || 'python').toLowerCase();
 
-  if (isWeb) {
+  if (lang === 'web') {
     currentLang = 'web';
     webFiles = {
       html: prog.code || '',
@@ -1118,12 +1191,30 @@ export async function loadProjectIntoWorkspace(prog) {
 
     runPlaygroundCode();
   } else {
-    currentLang = 'python';
-    pythonCode = prog.code || '';
+    currentLang = lang;
+    const modeMap = {
+      python: 'python',
+      c: 'text/x-csrc',
+      cpp: 'text/x-c++src',
+      'c++': 'text/x-c++src',
+      java: 'text/x-java',
+    };
+    const titleMap = {
+      python: 'Python Code Playground',
+      c: 'C Project Playground',
+      cpp: 'C++ Project Playground',
+      'c++': 'C++ Project Playground',
+      java: 'Java Project Playground',
+    };
+
+    if (lang === 'c') cCode = prog.code || '';
+    else if (lang === 'cpp' || lang === 'c++') cppCode = prog.code || '';
+    else if (lang === 'java') javaCode = prog.code || '';
+    else pythonCode = prog.code || '';
 
     // Update Language Tabs UI
     document.querySelectorAll('#pg-lang-tabs .lang-tab-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.lang === 'python');
+      btn.classList.toggle('active', btn.dataset.lang === lang || (lang === 'c++' && btn.dataset.lang === 'cpp'));
     });
 
     const webFileTabs = document.getElementById('pg-web-file-tabs');
@@ -1136,7 +1227,7 @@ export async function loadProjectIntoWorkspace(prog) {
     const browserConsole = document.getElementById('pg-browser-console-list');
     const topbarTitle = document.getElementById('topbar-title');
 
-    if (topbarTitle) topbarTitle.textContent = `Python Code Playground — ${prog.title}`;
+    if (topbarTitle) topbarTitle.textContent = `${titleMap[lang] || 'Code Playground'} — ${prog.title}`;
     webFileTabs?.classList.add('hidden');
     templateSelect?.classList.add('hidden');
     stdinDrawer?.classList.remove('hidden');
@@ -1147,8 +1238,8 @@ export async function loadProjectIntoWorkspace(prog) {
     browserConsole?.classList.add('hidden');
 
     if (editor) {
-      editor.setOption('mode', 'python');
-      editor.setValue(pythonCode);
+      editor.setOption('mode', modeMap[lang] || 'python');
+      editor.setValue(prog.code || '');
     }
   }
 

@@ -542,7 +542,11 @@ tbody tr:hover { background: rgba(217,119,6,0.04); }
   opacity: 0.95 !important;
 }
 
-/* ── Animated Moving Gradient Border Keyframes ───────────────────────────── */
+/* ── Animated Moving Gradient Border Keyframes (Brown, Gold & Sapphire Blue) ───────────── */
+:root {
+  --moving-border-gradient: linear-gradient(90deg, #2C1A0E, #8A6D3B, #D97706, #F59E0B, #2563EB, #3B82F6, #60A5FA, #3B82F6, #2563EB, #FDE68A, #F59E0B, #D97706, #8A6D3B, #2C1A0E);
+}
+
 @keyframes movingGradientBorder {
   0% {
     background-position: 0% 50%;
@@ -552,6 +556,18 @@ tbody tr:hover { background: rgba(217,119,6,0.04); }
   }
   100% {
     background-position: 0% 50%;
+  }
+}
+
+@keyframes movingGoldBrownBorder {
+  0% {
+    background-position: 0% 0%, 0% 50%;
+  }
+  50% {
+    background-position: 0% 0%, 100% 50%;
+  }
+  100% {
+    background-position: 0% 0%, 0% 50%;
   }
 }
 
@@ -565,6 +581,19 @@ tbody tr:hover { background: rgba(217,119,6,0.04); }
   100% {
     background-position: 0% 0%;
   }
+}
+
+/* Universal Luxury Moving Border Utility */
+.moving-luxury-border {
+  position: relative;
+  border: 2.5px solid transparent !important;
+  background-image: linear-gradient(#FFFFFF, #FFFFFF),
+                    linear-gradient(90deg, #2C1A0E, #8A6D3B, #D97706, #F59E0B, #2563EB, #3B82F6, #60A5FA, #3B82F6, #2563EB, #FDE68A, #F59E0B, #D97706, #8A6D3B, #2C1A0E) !important;
+  background-origin: padding-box, border-box !important;
+  background-clip: padding-box, border-box !important;
+  background-size: 100% 100%, 300% 300% !important;
+  animation: movingGoldBrownBorder 4s linear infinite !important;
+  box-shadow: 0 4px 18px rgba(37, 99, 235, 0.08), 0 2px 8px rgba(245, 158, 11, 0.06) !important;
 }
 
 /* ── Standard In-Page Modal Dialogs ──────────────────────────────────────── */

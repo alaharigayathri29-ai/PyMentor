@@ -3,6 +3,18 @@
    Rich Cream Canvas · Crisp Ivory Reading Cards · Espresso Code Demos
    ══════════════════════════════════════════════════════════════════════════════ */
 
+@keyframes movingGoldBrownBorder {
+  0% {
+    background-position: 0% 0%, 0% 50%;
+  }
+  50% {
+    background-position: 0% 0%, 100% 50%;
+  }
+  100% {
+    background-position: 0% 0%, 0% 50%;
+  }
+}
+
 .lesson-layout {
   display: grid;
   grid-template-columns: 2.4fr 1fr;
@@ -12,11 +24,17 @@
 
 /* ── Main Article Card ────────────────────────────────────────────────────── */
 .lesson-article-card {
-  background-color: #FFFFFF;
-  border: 1px solid rgba(200, 160, 100, 0.22);
+  background-image:
+    linear-gradient(#FFFFFF, #FFFFFF),
+    linear-gradient(90deg, #2C1A0E, #8A6D3B, #D97706, #F59E0B, #2563EB, #3B82F6, #60A5FA, #3B82F6, #2563EB, #FDE68A, #F59E0B, #D97706, #8A6D3B, #2C1A0E);
+  background-origin: padding-box, border-box;
+  background-clip: padding-box, border-box;
+  background-size: 100% 100%, 300% 300%;
+  border: 2.5px solid transparent;
   border-radius: var(--r-xl);
   padding: 32px 36px;
-  box-shadow: 0 4px 18px rgba(100, 50, 0, 0.07);
+  box-shadow: 0 6px 24px rgba(37, 99, 235, 0.1), 0 2px 8px rgba(245, 158, 11, 0.08);
+  animation: movingGoldBrownBorder 4s linear infinite;
 }
 
 .lesson-header {
@@ -152,13 +170,67 @@
 
 /* ── Lesson Sidebar / Quick Actions ───────────────────────────────────────── */
 .lesson-side-card {
-  background-color: #FFFFFF;
-  border: 1px solid rgba(200, 160, 100, 0.22);
+  background-image:
+    linear-gradient(#FFFFFF, #FFFFFF),
+    linear-gradient(90deg, #2C1A0E, #8A6D3B, #D97706, #F59E0B, #2563EB, #3B82F6, #60A5FA, #3B82F6, #2563EB, #FDE68A, #F59E0B, #D97706, #8A6D3B, #2C1A0E);
+  background-origin: padding-box, border-box;
+  background-clip: padding-box, border-box;
+  background-size: 100% 100%, 300% 300%;
+  border: 2.5px solid transparent;
   border-radius: var(--r-xl);
   padding: 24px;
-  box-shadow: 0 4px 18px rgba(100, 50, 0, 0.07);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.1), 0 2px 8px rgba(245, 158, 11, 0.08);
   position: sticky;
   top: 24px;
+  animation: movingGoldBrownBorder 4s linear infinite;
+}
+
+/* ── Downloadable PDF Study Guide Print Styles ────────────────────────────── */
+@media print {
+  body {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+  }
+  .sidebar, .topbar, .lesson-side-card, #btn-download-pdf, #btn-complete-lesson, #btn-practice-topic, .btn {
+    display: none !important;
+  }
+  .app-shell, .main-area, .main-scroll-content, .page-content {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .lesson-layout {
+    display: block !important;
+  }
+  .lesson-article-card {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    animation: none !important;
+  }
+  .code-demo-card pre {
+    background: #F8FAFC !important;
+    color: #0F172A !important;
+    border: 1px solid #CBD5E1 !important;
+  }
+  .demo-output-box {
+    background: #F1F5F9 !important;
+    color: #1E293B !important;
+    border: 1px solid #CBD5E1 !important;
+  }
+  .pdf-watermark-header {
+    display: block !important;
+    margin-bottom: 24px;
+    border-bottom: 2px solid #2563EB;
+    padding-bottom: 12px;
+  }
+}
+
+.pdf-watermark-header {
+  display: none;
 }
 
 @media (max-width: 960px) {

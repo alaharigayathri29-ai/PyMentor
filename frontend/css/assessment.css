@@ -10,14 +10,32 @@
   margin: 0 auto;
 }
 
-/* ── Test Stepper Card ────────────────────────────────────────────────────── */
+@keyframes movingGoldBrownBorder {
+  0% {
+    background-position: 0% 0%, 0% 50%;
+  }
+  50% {
+    background-position: 0% 0%, 100% 50%;
+  }
+  100% {
+    background-position: 0% 0%, 0% 50%;
+  }
+}
+
+/* ── Test Stepper Card with Moving Luxury Border ──────────────────────────── */
 .assessment-card {
-  background-color: #FFFFFF;
-  border: 1px solid rgba(200, 160, 100, 0.25);
+  background-image:
+    linear-gradient(#FFFFFF, #FFFFFF),
+    linear-gradient(90deg, #2C1A0E, #8A6D3B, #D97706, #F59E0B, #2563EB, #3B82F6, #60A5FA, #3B82F6, #2563EB, #FDE68A, #F59E0B, #D97706, #8A6D3B, #2C1A0E);
+  background-origin: padding-box, border-box;
+  background-clip: padding-box, border-box;
+  background-size: 100% 100%, 300% 300%;
+  border: 2.5px solid transparent;
   border-radius: var(--r-xl);
   padding: 36px 40px;
-  box-shadow: 0 16px 48px rgba(100, 50, 0, 0.1);
+  box-shadow: 0 16px 48px rgba(37, 99, 235, 0.1), 0 4px 18px rgba(245, 158, 11, 0.08);
   margin-bottom: 24px;
+  animation: movingGoldBrownBorder 4s linear infinite;
 }
 
 .assess-progress-header {

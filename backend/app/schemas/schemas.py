@@ -177,6 +177,7 @@ class SavedProgramOut(BaseModel):
 
 class WorkspaceRunRequest(BaseModel):
     code: str
+    language: Optional[str] = "python"
     stdin_input: Optional[str] = ""
 
 

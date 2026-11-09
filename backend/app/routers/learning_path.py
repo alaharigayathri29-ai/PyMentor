@@ -162,6 +162,17 @@ def get_topic_lesson(
         .all()
     )
 
+    lesson_data = dict(t.lesson_content or {})
+    try:
+        from app.curriculum_data import CURRICULUM_MODULES
+        for mod in CURRICULUM_MODULES:
+            for top in mod.get("topics", []):
+                if top.get("slug") == t.slug and top.get("lesson_content"):
+                    lesson_data = {**lesson_data, **top["lesson_content"]}
+                    break
+    except Exception:
+        pass
+
     return {
         "id": t.id,
         "name": t.name,
@@ -173,7 +184,7 @@ def get_topic_lesson(
         "module_name": t.module_name,
         "subtopics": t.subtopics or [],
         "learning_objectives": t.learning_objectives or [],
-        "lesson_content": t.lesson_content or {},
+        "lesson_content": lesson_data,
         "status": k.status if k else "available",
         "mastery_score": round(k.mastery_score, 1) if k else 0.0,
         "lesson_completed": k.lesson_completed if k else False,

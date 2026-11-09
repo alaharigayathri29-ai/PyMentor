@@ -19,7 +19,7 @@
 .welcome-strip {
   background:
     linear-gradient(135deg, #2C1A0E 0%, #3D2512 55%, #4C2D15 100%) padding-box,
-    linear-gradient(90deg, #2C1A0E, #8A6D3B, #B45309, #D97706, #F59E0B, #FDE68A, #F59E0B, #D97706, #B45309, #8A6D3B, #2C1A0E) border-box;
+    linear-gradient(90deg, #2C1A0E, #8A6D3B, #D97706, #F59E0B, #2563EB, #3B82F6, #FDE68A, #3B82F6, #2563EB, #F59E0B, #D97706, #8A6D3B, #2C1A0E) border-box;
   background-size: 100% 100%, 300% 300%;
   border: 2px solid transparent;
   border-radius: 16px;
@@ -158,7 +158,7 @@
 .learning-radar {
   background:
     linear-gradient(#FFFFFF, #FFFFFF) padding-box,
-    linear-gradient(90deg, #2C1A0E, #8A6D3B, #B45309, #D97706, #F59E0B, #FDE68A, #F59E0B, #D97706, #B45309, #8A6D3B, #2C1A0E) border-box;
+    linear-gradient(90deg, #2C1A0E, #8A6D3B, #D97706, #F59E0B, #2563EB, #3B82F6, #FDE68A, #3B82F6, #2563EB, #F59E0B, #D97706, #8A6D3B, #2C1A0E) border-box;
   background-size: 100% 100%, 300% 300%;
   border: 2px solid transparent;
   border-radius: 16px;
@@ -271,7 +271,7 @@
 .activity-pulse {
   background:
     linear-gradient(#FFFFFF, #FFFFFF) padding-box,
-    linear-gradient(90deg, #2C1A0E, #8A6D3B, #B45309, #D97706, #F59E0B, #FDE68A, #F59E0B, #D97706, #B45309, #8A6D3B, #2C1A0E) border-box;
+    linear-gradient(90deg, #2C1A0E, #8A6D3B, #D97706, #F59E0B, #2563EB, #3B82F6, #FDE68A, #3B82F6, #2563EB, #F59E0B, #D97706, #8A6D3B, #2C1A0E) border-box;
   background-size: 100% 100%, 300% 300%;
   border: 2px solid transparent;
   border-radius: 16px; padding: 20px 22px;
@@ -348,7 +348,7 @@
 .courses-panel {
   background:
     linear-gradient(#FFFFFF, #FFFFFF) padding-box,
-    linear-gradient(90deg, #2C1A0E, #8A6D3B, #B45309, #D97706, #F59E0B, #FDE68A, #F59E0B, #D97706, #B45309, #8A6D3B, #2C1A0E) border-box;
+    linear-gradient(90deg, #2C1A0E, #8A6D3B, #D97706, #F59E0B, #2563EB, #3B82F6, #FDE68A, #3B82F6, #2563EB, #F59E0B, #D97706, #8A6D3B, #2C1A0E) border-box;
   background-size: 100% 100%, 300% 300%;
   border: 2px solid transparent;
   border-radius: 16px; padding: 22px 26px;
@@ -387,7 +387,7 @@
   padding: 14px 18px;
   background:
     linear-gradient(#FFFFFF, #FFFFFF) padding-box,
-    linear-gradient(90deg, #2C1A0E, #8A6D3B, #B45309, #D97706, #F59E0B, #FDE68A, #F59E0B, #D97706, #B45309, #8A6D3B, #2C1A0E) border-box;
+    linear-gradient(90deg, #2C1A0E, #8A6D3B, #D97706, #F59E0B, #2563EB, #3B82F6, #FDE68A, #3B82F6, #2563EB, #F59E0B, #D97706, #8A6D3B, #2C1A0E) border-box;
   background-size: 100% 100%, 300% 300%;
   border: 1.5px solid transparent;
   border-radius: 12px;

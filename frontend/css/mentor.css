@@ -20,13 +20,15 @@
 .mentor-container {
   display: flex;
   height: calc(100vh - var(--topbar-h) - 40px);
-  background:
-    linear-gradient(#FFFDF9, #FFFDF9) padding-box,
-    linear-gradient(90deg, #2C1A0E, #8A6D3B, #B45309, #D97706, #F59E0B, #FDE68A, #F59E0B, #D97706, #B45309, #8A6D3B, #2C1A0E) border-box;
+  background-image:
+    linear-gradient(#FFFDF9, #FFFDF9),
+    linear-gradient(90deg, #2C1A0E, #8A6D3B, #D97706, #F59E0B, #2563EB, #3B82F6, #60A5FA, #3B82F6, #2563EB, #FDE68A, #F59E0B, #D97706, #8A6D3B, #2C1A0E);
+  background-origin: padding-box, border-box;
+  background-clip: padding-box, border-box;
   background-size: 100% 100%, 300% 300%;
-  border: 2px solid transparent;
+  border: 2.5px solid transparent;
   border-radius: 16px; overflow: hidden;
-  box-shadow: 0 16px 48px rgba(100,50,0,0.12);
+  box-shadow: 0 16px 48px rgba(37, 99, 235, 0.12), 0 4px 18px rgba(245, 158, 11, 0.08);
   animation: movingGoldBrownBorder 4s linear infinite;
 }
 

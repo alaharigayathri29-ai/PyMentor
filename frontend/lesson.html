@@ -93,6 +93,9 @@
           <span id="lesson-module-tag" class="badge badge-blue">Module 1</span>
         </div>
         <div class="topbar-right">
+          <button class="btn btn-primary btn-sm" id="btn-topbar-download-pdf" style="background:linear-gradient(135deg, #2563EB, #1D4ED8);box-shadow:0 4px 14px rgba(37,99,235,0.35);font-weight:700;">
+            <span>📥 Download PDF Notes</span>
+          </button>
           <a href="/playground.html" class="btn btn-secondary btn-sm"><span>⚡ Open Playground</span></a>
           <div class="user-avatar" id="topbar-avatar" style="width:34px;height:34px;font-size:13px;">?</div>
         </div>
@@ -105,6 +108,20 @@
             
             <!-- Main Reading & Demonstration Article -->
             <div class="lesson-article-card">
+              <!-- Printable Official Header (Shown in Print / PDF Export) -->
+              <div class="pdf-watermark-header">
+                <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #2563EB;padding-bottom:12px;margin-bottom:20px;">
+                  <div>
+                    <h1 style="font-size:20px;font-weight:800;color:#1E3A8A;margin:0 0 4px 0;">PyMentor — Official Academic Study Guide & Reference Notes</h1>
+                    <p style="font-size:12px;color:#64748B;margin:0;">Python Competency & Software Engineering Curriculum • Verified Student Edition</p>
+                  </div>
+                  <div style="text-align:right;">
+                    <span id="pdf-watermark-user" style="font-size:13px;font-weight:700;color:#0F172A;">Student: Student</span><br>
+                    <span id="pdf-watermark-date" style="font-size:11px;color:#64748B;">Date: November 2026</span>
+                  </div>
+                </div>
+              </div>
+
               <div class="lesson-header">
                 <div class="lesson-meta-bar">
                   <span id="lesson-diff-tag" class="badge badge-teal">Beginner</span>
@@ -143,10 +160,19 @@
 
             <!-- Sticky Side Card / Actions -->
             <div class="lesson-side-card">
-              <span class="card-title" style="font-size:15px;display:block;margin-bottom:12px;">Lesson Progress</span>
-              <p style="font-size:13px;color:var(--text-secondary);line-height:1.5;margin-bottom:20px;">
-                Review the code demonstrations, test out snippets in the playground, and mark the lesson complete to unlock practice problems.
+              <span class="card-title" style="font-size:15px;display:block;margin-bottom:12px;">Lesson Progress & Downloads</span>
+              <p style="font-size:13px;color:var(--text-secondary);line-height:1.5;margin-bottom:18px;">
+                Master theoretical concepts, review code demonstrations, and download full topic reference guides for offline study.
               </p>
+
+              <!-- PDF Study Guide Download Button -->
+              <button class="btn btn-primary btn-full" id="btn-download-pdf" style="margin-bottom:10px;background:linear-gradient(135deg, #2563EB, #1D4ED8);box-shadow:0 4px 14px rgba(37,99,235,0.35);font-weight:700;">
+                <span>📥 Download Topic PDF Study Guide</span>
+              </button>
+
+              <button class="btn btn-secondary btn-full" id="btn-download-markdown" style="margin-bottom:14px;font-size:12.5px;">
+                <span>📄 Download Study Notes (.md)</span>
+              </button>
 
               <button class="btn btn-success btn-full" id="btn-complete-lesson" style="margin-bottom:12px;">
                 <span>✓ Mark Lesson Complete</span>
