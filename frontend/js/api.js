@@ -93,8 +93,8 @@ export const authApi = {
 
 // ── Assessment API ───────────────────────────────────────────────────────────
 export const assessmentApi = {
-  questions: () => apiFetch('/api/assessment/questions'),
-  submit:    (answers) => apiFetch('/api/assessment/submit', { method: 'POST', body: JSON.stringify({ answers }) }),
+  questions: (course = 'python') => apiFetch(`/api/assessment/questions?course=${encodeURIComponent(course)}`),
+  submit:    (answers, course = 'python') => apiFetch(`/api/assessment/submit?course=${encodeURIComponent(course)}`, { method: 'POST', body: JSON.stringify({ answers }) }),
   result:    () => apiFetch('/api/assessment/result'),
 };
 
@@ -132,10 +132,10 @@ export const practiceApi = {
   },
   recommended:   () => apiFetch('/api/practice/problems/recommended'),
   problem:       (id) => apiFetch(`/api/practice/problems/${id}`),
-  testRun:       (problemId, code) => apiFetch(`/api/practice/test-run/${problemId}`, {
+  testRun:       (problemId, code, language = 'python') => apiFetch(`/api/practice/test-run/${problemId}?language=${encodeURIComponent(language)}`, {
     method: 'POST', body: JSON.stringify({ code }),
   }),
-  submit:        (problemId, code) => apiFetch(`/api/practice/submissions/${problemId}`, {
+  submit:        (problemId, code, language = 'python') => apiFetch(`/api/practice/submissions/${problemId}?language=${encodeURIComponent(language)}`, {
     method: 'POST', body: JSON.stringify({ code }),
   }),
   mySubmissions: (problemId = null) => {

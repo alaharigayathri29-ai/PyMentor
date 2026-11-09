@@ -53,6 +53,7 @@ async function init() {
     renderModuleList(data.enrolled_modules || []);
     setupFilters();
     loadDashboardSavedProjects();
+    setupCourseTrackSwitcher();
   } catch (err) {
     console.error('[Dashboard] Load error:', err);
     const container = document.getElementById('dash-modules-container');
@@ -291,6 +292,30 @@ async function loadDashboardSavedProjects() {
 function set(id, val) {
   const el = document.getElementById(id);
   if (el) el.textContent = val;
+}
+
+function setupCourseTrackSwitcher() {
+  let activeCourseTrack = localStorage.getItem('selected_course_track') || 'python';
+  const coursePills = document.querySelectorAll('#dash-course-tabs .course-pill-btn');
+  if (!coursePills || coursePills.length === 0) return;
+
+  coursePills.forEach(btn => {
+    if (btn.getAttribute('data-course') === activeCourseTrack) {
+      coursePills.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+    btn.addEventListener('click', () => {
+      coursePills.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeCourseTrack = btn.getAttribute('data-course') || 'python';
+      localStorage.setItem('selected_course_track', activeCourseTrack);
+      showToast(`Switched dashboard focus to ${activeCourseTrack.toUpperCase()} Track`, 'info');
+      const welcomeSub = document.getElementById('dash-welcome-sub');
+      if (welcomeSub) {
+        welcomeSub.textContent = `You are focusing on the ${activeCourseTrack.toUpperCase()} Engineering Track. Practice labs and explore interactive lessons.`;
+      }
+    });
+  });
 }
 
 init();

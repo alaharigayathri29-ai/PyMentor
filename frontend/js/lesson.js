@@ -34,9 +34,95 @@ async function init() {
   const completeBtn = document.getElementById('btn-complete-lesson');
   const practiceBtn = document.getElementById('btn-practice-topic');
 
+  let activeLessonLang = 'python'; // 'python' | 'c' | 'cpp' | 'java'
+
+  // Helper to generate polyglot code demonstrations across all 4 courses
+  function getPolyglotExamples(slug, lang, baseExamples) {
+    if (lang === 'python') return baseExamples;
+
+    if (lang === 'c') {
+      return [
+        {
+          title: `C Systems Demonstration — ${slug.toUpperCase()}`,
+          code: `// C Project Template (GCC)\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    printf("⚙️ Executing C Systems Track for: ${slug}\\n");\n    int val = 42;\n    void* ptr = &val;\n    printf("Scalar Value: %d at Memory Address: %p\\n", val, ptr);\n    return 0;\n}`,
+          expected_output: `⚙️ Executing C Systems Track for: ${slug}\nScalar Value: 42 at Memory Address: 0x7ffd9820a100`,
+          explanation: `Demonstrates C systems memory layout, address pointers, and scalar compilation for ${slug}.`
+        }
+      ];
+    } else if (lang === 'cpp') {
+      return [
+        {
+          title: `Modern C++ (C++20) Demonstration — ${slug.toUpperCase()}`,
+          code: `// Modern C++ (G++ C++20)\n#include <iostream>\n#include <vector>\n#include <numeric>\n\nint main() {\n    std::cout << "⚡ Executing Modern C++ Track for: ${slug}" << std::endl;\n    std::vector<int> records = {10, 20, 30, 40, 50};\n    int total = std::accumulate(records.begin(), records.end(), 0);\n    std::cout << "Vector Processing Sum: " << total << std::endl;\n    return 0;\n}`,
+          expected_output: `⚡ Executing Modern C++ Track for: ${slug}\nVector Processing Sum: 150`,
+          explanation: `Demonstrates modern C++ STL container vectors, zero-overhead algorithms, and stream output.`
+        }
+      ];
+    } else if (lang === 'java') {
+      return [
+        {
+          title: `Enterprise Java (OpenJDK 21) Demonstration — ${slug.toUpperCase()}`,
+          code: `// Enterprise Java 21 LTS\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println("☕ Executing Enterprise Java Track for: ${slug}");\n        int[] dataset = {100, 200, 300};\n        int sum = 0;\n        for (int num : dataset) sum += num;\n        System.out.println("JVM Aggregated Total: " + sum);\n    }\n}`,
+          expected_output: `☕ Executing Enterprise Java Track for: ${slug}\nJVM Aggregated Total: 600`,
+          explanation: `Demonstrates Java JVM bytecode execution, array iteration, and console formatting.`
+        }
+      ];
+    }
+    return baseExamples;
+  }
+
+  function renderExamples(examples, lang) {
+    if (!exList) return;
+    if (examples.length > 0) {
+      exList.innerHTML = examples.map((ex, idx) => `
+        <div class="code-demo-card">
+          <div class="code-demo-header">
+            <span style="font-weight:600;color:var(--text-primary);">Example ${idx + 1} (${lang.toUpperCase()} Track): ${ex.title || 'Code Demonstration'}</span>
+            <button class="btn btn-ghost btn-sm btn-run-playground" data-example-idx="${idx}">
+              <span>▶ Open in ${lang.toUpperCase()} Playground</span>
+            </button>
+          </div>
+          <pre style="margin:0;padding:16px;background:#2A1A0C;color:#F5E6D3;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.6;overflow-x:auto;"><code>${escapeHtml(ex.code || '')}</code></pre>
+          <div class="demo-output-box">
+            <div style="font-size:10px;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px;letter-spacing:0.05em;">Expected Output</div>
+            <div>${escapeHtml(ex.output || ex.expected_output || '')}</div>
+          </div>
+        </div>
+      `).join('');
+
+      exList.querySelectorAll('.btn-run-playground').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = parseInt(btn.getAttribute('data-example-idx'), 10);
+          const ex = examples[idx];
+          if (ex && ex.code) {
+            sessionStorage.setItem('playground_code', ex.code);
+            sessionStorage.setItem('playground_lang', lang);
+            window.location.href = '/playground.html';
+          }
+        });
+      });
+    } else {
+      exList.innerHTML = '<div style="font-size:13px;color:var(--text-muted);padding:14px 0;">Practical examples for this module will appear here.</div>';
+    }
+  }
+
   try {
     const topic = await learningPathApi.getTopicLesson(topicId);
     const lesson = topic.lesson_content || {};
+    const baseExamples = lesson.examples || lesson.code_examples || [];
+
+    // Bind Multi-Language Track Selector
+    const langTabs = document.querySelectorAll('#lesson-lang-tabs .btn-lang-track');
+    langTabs.forEach(btn => {
+      btn.addEventListener('click', () => {
+        langTabs.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeLessonLang = btn.getAttribute('data-lang') || 'python';
+        const polyExamples = getPolyglotExamples(topic.slug || 'topic', activeLessonLang, baseExamples);
+        renderExamples(polyExamples, activeLessonLang);
+        showToast(`Switched code demonstrations to ${activeLessonLang.toUpperCase()} track`, 'info');
+      });
+    });
 
     if (titleEl) titleEl.textContent = topic.name;
     if (modTag) modTag.textContent = `Module ${topic.module_number || 1}: ${topic.module_name || 'Core'}`;
@@ -72,40 +158,8 @@ async function init() {
         : '<p style="color:var(--text-muted);">Lesson content is currently being prepared for this topic.</p>';
     }
 
-    // Runnable Practical Examples
-    if (exList) {
-      const examples = lesson.examples || lesson.code_examples || [];
-      if (examples.length > 0) {
-        exList.innerHTML = examples.map((ex, idx) => `
-          <div class="code-demo-card">
-            <div class="code-demo-header">
-              <span style="font-weight:600;color:var(--text-primary);">Example ${idx + 1}: ${ex.title || 'Code Demonstration'}</span>
-              <button class="btn btn-ghost btn-sm btn-run-playground" data-example-idx="${idx}">
-                <span>▶ Open in Playground</span>
-              </button>
-            </div>
-            <pre style="margin:0;padding:16px;background:#2A1A0C;color:#F5E6D3;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.6;overflow-x:auto;"><code>${escapeHtml(ex.code || '')}</code></pre>
-            <div class="demo-output-box">
-              <div style="font-size:10px;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px;letter-spacing:0.05em;">Expected Output</div>
-              <div>${escapeHtml(ex.output || ex.expected_output || '')}</div>
-            </div>
-          </div>
-        `).join('');
-
-        exList.querySelectorAll('.btn-run-playground').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const idx = parseInt(btn.getAttribute('data-example-idx'), 10);
-            const ex = examples[idx];
-            if (ex && ex.code) {
-              sessionStorage.setItem('playground_code', ex.code);
-              window.location.href = '/playground.html';
-            }
-          });
-        });
-      } else {
-        exList.innerHTML = '<div style="font-size:13px;color:var(--text-muted);padding:14px 0;">Practical examples for this module will appear here.</div>';
-      }
-    }
+    // Initial Render of Examples
+    renderExamples(baseExamples, activeLessonLang);
 
     // Interactive Knowledge Check / Quizzes
     if (quizList) {

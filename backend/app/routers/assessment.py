@@ -1,23 +1,44 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from datetime import datetime, timezone
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from app.database import get_db
 from app.models.models import Question, Topic, AssessmentAttempt, User
 from app.schemas.schemas import AssessmentSubmit, AssessmentResult
 from app.routers.auth import get_current_user
 from app.services import progress_service
+from app.curriculum.polyglot_assessment import POLYGLOT_QUESTIONS
 
 router = APIRouter(prefix="/api/assessment", tags=["assessment"])
 
 
 @router.get("/questions")
 def get_questions(
+    course: Optional[str] = Query("python", description="Language course: python, c, cpp, java"),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    """Return assessment questions for 2 core modules only (Variables and Operators)."""
+    """Return assessment questions for specified course (Python, C, Modern C++, Enterprise Java)."""
+    course_clean = (course or "python").lower().strip()
+
+    if course_clean in POLYGLOT_QUESTIONS:
+        return [
+            {
+                "id": q["id"],
+                "text": q["text"],
+                "type": q["type"],
+                "options": q["options"],
+                "difficulty": q["difficulty"],
+                "topic": q["topic"],
+                "topic_slug": q["topic_slug"],
+                "module_number": 1,
+                "course": course_clean,
+            }
+            for q in POLYGLOT_QUESTIONS[course_clean]
+        ]
+
+    # Default Python Diagnostic Questions from DB
     core_slugs = ["variables", "operators"]
     topics = {t.id: t for t in db.query(Topic).filter(Topic.slug.in_(core_slugs)).all()}
     if not topics:
@@ -40,6 +61,7 @@ def get_questions(
             "topic": topics[q.topic_id].name if q.topic_id in topics else "General",
             "topic_slug": topics[q.topic_id].slug if q.topic_id in topics else "general",
             "module_number": 1 if (topics.get(q.topic_id) and topics[q.topic_id].slug == "variables") else 2,
+            "course": "python",
         }
         for q in questions
     ]
@@ -49,35 +71,57 @@ def get_questions(
 @router.post("/submit", response_model=AssessmentResult)
 def submit_assessment(
     submission: AssessmentSubmit,
+    course: Optional[str] = Query("python"),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
     """Grade submitted answers, determine skill level, create learning path."""
-    questions: Dict[int, Question] = {q.id: q for q in db.query(Question).all()}
+    db_questions: Dict[int, Question] = {q.id: q for q in db.query(Question).all()}
     topics: Dict[int, Topic] = {t.id: t for t in db.query(Topic).all()}
+
+    # Merge polyglot assessment questions into lookup dictionary
+    poly_lookup = {}
+    for c_key, q_list in POLYGLOT_QUESTIONS.items():
+        for q in q_list:
+            poly_lookup[q["id"]] = q
 
     topic_correct: Dict[str, List[bool]] = {}
     answers_map: Dict[str, dict] = {}
     total_correct = 0
 
     for ans in submission.answers:
-        q = questions.get(ans.question_id)
-        if not q:
+        q_id = ans.question_id
+        is_correct = False
+        correct_answer = ""
+        explanation = ""
+        topic_slug = "general"
+
+        if q_id in poly_lookup:
+            q = poly_lookup[q_id]
+            correct_answer = str(q.get("correct_answer", "")).strip()
+            explanation = q.get("explanation", "")
+            topic_slug = q.get("topic_slug", "polyglot")
+            is_correct = ans.answer.strip() == correct_answer
+        elif q_id in db_questions:
+            q = db_questions[q_id]
+            correct_answer = str(q.correct_answer).strip()
+            explanation = q.explanation or ""
+            topic = topics.get(q.topic_id)
+            topic_slug = topic.slug if topic else "general"
+            is_correct = ans.answer.strip() == correct_answer
+        else:
             continue
 
-        is_correct = ans.answer.strip() == str(q.correct_answer).strip()
         if is_correct:
             total_correct += 1
 
-        topic = topics.get(q.topic_id)
-        if topic:
-            topic_correct.setdefault(topic.slug, []).append(is_correct)
+        topic_correct.setdefault(topic_slug, []).append(is_correct)
 
-        answers_map[str(ans.question_id)] = {
+        answers_map[str(q_id)] = {
             "answer": ans.answer,
             "correct": is_correct,
-            "correct_answer": q.correct_answer,
-            "explanation": q.explanation,
+            "correct_answer": correct_answer,
+            "explanation": explanation,
         }
 
     total_q = len(submission.answers)

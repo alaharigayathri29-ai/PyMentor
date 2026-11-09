@@ -245,6 +245,31 @@ input, textarea, select { font-family: inherit; }
 .btn-sm { padding: 6px 13px; font-size: 12.5px; border-radius: var(--r-sm); }
 .btn-lg { padding: 12px 24px; font-size: 14.5px; border-radius: var(--r-lg); }
 
+/* ── Moving Border Animation (Brown, Gold, Blue Luxury) ─────────────────────── */
+@keyframes movingGoldBrownBorder {
+  0% {
+    background-position: 0% 0%, 0% 50%;
+  }
+  50% {
+    background-position: 0% 0%, 100% 50%;
+  }
+  100% {
+    background-position: 0% 0%, 0% 50%;
+  }
+}
+
+.animated-border,
+.animated-card-border {
+  background-image:
+    linear-gradient(#FFFFFF, #FFFFFF),
+    linear-gradient(90deg, #2C1A0E, #8A6D3B, #D97706, #F59E0B, #2563EB, #3B82F6, #60A5FA, #3B82F6, #2563EB, #FDE68A, #F59E0B, #D97706, #8A6D3B, #2C1A0E) !important;
+  background-origin: padding-box, border-box !important;
+  background-clip: padding-box, border-box !important;
+  background-size: 100% 100%, 300% 300% !important;
+  border: 2px solid transparent !important;
+  animation: movingGoldBrownBorder 5s linear infinite !important;
+}
+
 /* ── Cards ─────────────────────────────────────────────────────────────────── */
 .card {
   background: var(--card-bg);

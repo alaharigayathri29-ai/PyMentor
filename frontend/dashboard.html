@@ -129,6 +129,27 @@
       <div class="main-scroll-content">
         <div class="page-content" style="max-width:1400px;margin:0 auto;display:flex;flex-direction:column;gap:24px;">
 
+          <!-- 0. 4 Engineering Courses Hub Bar -->
+          <div class="courses-hub-bar animated-card-border" style="
+            display: flex; align-items: center; justify-content: space-between;
+            background: #FFFDF9; border-radius: 16px; padding: 14px 22px; flex-wrap: wrap; gap: 14px;
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.08);
+          ">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span style="font-size:24px;">🎓</span>
+              <div>
+                <div style="font-size:14.5px;font-weight:800;color:#1C0E04;">4 Polytechnic Engineering Courses</div>
+                <div style="font-size:11.5px;color:#A07050;">Switch between Python, C, C++, and Java curricula</div>
+              </div>
+            </div>
+            <div class="course-pills-row" style="display:flex;gap:8px;flex-wrap:wrap;" id="dash-course-tabs">
+              <button class="course-pill-btn active" data-course="python">🐍 Python Systems</button>
+              <button class="course-pill-btn" data-course="c">⚙️ C Programming</button>
+              <button class="course-pill-btn" data-course="cpp">⚡ Modern C++</button>
+              <button class="course-pill-btn" data-course="java">☕ Enterprise Java</button>
+            </div>
+          </div>
+
           <!-- 1. Daily Action Welcome Strip -->
           <div class="welcome-strip">
             <div class="welcome-text">

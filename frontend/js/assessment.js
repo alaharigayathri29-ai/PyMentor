@@ -14,12 +14,37 @@ let questions = [];
 let answers = {}; // { [question_id]: selected_option_index }
 let currentIdx = 0;
 let isSubmitting = false;
+let currentCourse = 'python';
 
 async function init() {
   const user = await requireAuth();
   if (!user) return;
 
   initLayout('assessment', user);
+
+  // Setup Course Track Selector
+  const courseButtons = document.querySelectorAll('#assess-course-selector button');
+  courseButtons.forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const selected = btn.getAttribute('data-course');
+      if (selected === currentCourse) return;
+      currentCourse = selected;
+      courseButtons.forEach(b => b.classList.toggle('active', b === btn));
+      
+      const titleEl = document.getElementById('topbar-title');
+      if (titleEl) {
+        const titles = {
+          python: 'Python Diagnostic Assessment',
+          c: 'C Systems Diagnostic Assessment',
+          cpp: 'Modern C++ Diagnostic Assessment',
+          java: 'Enterprise Java Diagnostic Assessment',
+        };
+        titleEl.textContent = titles[selected] || 'Skill Assessment';
+      }
+
+      await loadQuestions(currentCourse);
+    });
+  });
 
   const prevBtn = document.getElementById('btn-assess-prev');
   const nextBtn = document.getElementById('btn-assess-next');
@@ -56,10 +81,10 @@ async function init() {
   }
 
   // Load diagnostic questions
-  await loadQuestions();
+  await loadQuestions(currentCourse);
 }
 
-async function loadQuestions() {
+async function loadQuestions(course = 'python') {
   const quizBox = document.getElementById('assess-quiz-box');
   const resultsBox = document.getElementById('assess-results-box');
   const promptEl = document.getElementById('assess-question-prompt');
@@ -75,11 +100,11 @@ async function loadQuestions() {
   if (promptEl) promptEl.textContent = 'Loading diagnostic assessment questions…';
 
   try {
-    const data = await assessmentApi.questions();
+    const data = await assessmentApi.questions(course);
     questions = Array.isArray(data) ? data : (data.questions || []);
 
     if (questions.length === 0) {
-      if (promptEl) promptEl.textContent = 'No diagnostic questions found in database.';
+      if (promptEl) promptEl.textContent = 'No diagnostic questions found for this course track.';
       return;
     }
 
@@ -113,7 +138,23 @@ function renderActiveQuestion() {
     const pct = ((currentIdx + 1) / questions.length) * 100;
     progressFill.style.width = `${pct}%`;
   }
-  if (promptEl) promptEl.textContent = q.text;
+  if (promptEl) {
+    const rawText = q.text || '';
+    if (rawText.includes('```')) {
+      const parts = rawText.split(/(```[a-z]*\n[\s\S]*?```)/g);
+      promptEl.innerHTML = parts.map(part => {
+        if (part.startsWith('```')) {
+          const match = part.match(/```([a-z]*)\n([\s\S]*?)```/);
+          const lang = match ? match[1] : '';
+          const code = match ? match[2] : part.slice(3, -3);
+          return `<pre style="background:#1C0E04;color:#FDE68A;padding:14px 18px;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:13px;overflow-x:auto;margin:14px 0;line-height:1.45;border:1.5px solid rgba(245,158,11,0.3);"><div style="font-size:10.5px;color:#94A3B8;text-transform:uppercase;margin-bottom:6px;font-weight:700;">${escapeHtml(lang || 'code')}</div><code>${escapeHtml(code)}</code></pre>`;
+        }
+        return `<div>${escapeHtml(part)}</div>`;
+      }).join('');
+    } else {
+      promptEl.textContent = rawText;
+    }
+  }
 
   // Render options
   if (optionsList) {
@@ -222,7 +263,7 @@ async function submitAssessment() {
   }));
 
   try {
-    const res = await assessmentApi.submit(payload);
+    const res = await assessmentApi.submit(payload, currentCourse);
     showToast('Diagnostic assessment completed and skill path calibrated!', 'success');
     renderResults(res);
   } catch (err) {

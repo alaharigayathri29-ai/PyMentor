@@ -8,6 +8,33 @@ import { practiceApi, learningPathApi } from './api.js?v=20261108_v18';
 import { showToast } from './components/toast.js?v=20261108_v18';
 import { capitalize } from './utils/formatters.js?v=20261108_v18';
 
+const LANG_TEMPLATES = {
+  python: {
+    mode: 'python',
+    file: 'main.py',
+    icon: '🐍',
+    template: (p) => p?.starter_code || '# Write your Python solution here\n'
+  },
+  c: {
+    mode: 'text/x-csrc',
+    file: 'solution.c',
+    icon: '⚙️',
+    template: (p) => `// C (GCC) Practice Solution\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    printf("Running C Solution for: ${p?.title || 'Practice Challenge'}\\n");\n    return 0;\n}\n`
+  },
+  cpp: {
+    mode: 'text/x-c++src',
+    file: 'solution.cpp',
+    icon: '⚡',
+    template: (p) => `// Modern C++ (G++)\n#include <iostream>\n#include <vector>\n#include <numeric>\n\nint main() {\n    std::cout << "Running C++ Solution for: ${p?.title || 'Practice Challenge'}" << std::endl;\n    return 0;\n}\n`
+  },
+  java: {
+    mode: 'text/x-java',
+    file: 'Solution.java',
+    icon: '☕',
+    template: (p) => `// Enterprise Java 21\npublic class Solution {\n    public static void main(String[] args) {\n        System.out.println("Running Java Solution for: ${p?.title || 'Practice Challenge'}");\n    }\n}\n`
+  }
+};
+
 let editor = null;
 let topicsList = [];
 let currentTopic = null;
@@ -380,16 +407,26 @@ function loadProblemIntoWorkspace(problem) {
   });
 
   // Populate Editor with saved draft / submission if present, else starter code
+  const langSelect = document.getElementById('practice-lang-select');
+  const currentLang = langSelect ? langSelect.value : 'python';
+  const cfg = LANG_TEMPLATES[currentLang] || LANG_TEMPLATES.python;
+
   const prevSub = mySubmissions.find(s => s.problem_id === problem.id);
-  const localDraft = localStorage.getItem(`pym_practice_draft_${problem.id}`);
-  const codeToLoad = localDraft || prevSub?.code || problem.starter_code || '# Write your code here\n';
+  const localDraft = localStorage.getItem(`pym_practice_draft_${problem.id}_${currentLang}`) || (currentLang === 'python' ? localStorage.getItem(`pym_practice_draft_${problem.id}`) : null);
+  const codeToLoad = localDraft || prevSub?.code || cfg.template(problem);
 
   if (editor) {
+    if (editor.setOption) editor.setOption('mode', cfg.mode);
     editor.setValue(codeToLoad);
     if (editor.refresh) {
       setTimeout(() => editor.refresh(), 80);
     }
   }
+
+  const fileIcon = document.getElementById('editor-file-icon');
+  const fileName = document.getElementById('editor-file-name');
+  if (fileIcon) fileIcon.textContent = cfg.icon;
+  if (fileName) fileName.textContent = cfg.file;
 
   // Populate Right Pane Details
   set('ws-problem-title', problem.title);
@@ -485,18 +522,44 @@ function setupWorkspaceActions() {
   const submitBtn = document.getElementById('btn-workspace-submit');
   const resetBtn = document.getElementById('btn-reset-code');
   const revealHintBtn = document.getElementById('btn-ws-reveal-hint');
+  const langSelect = document.getElementById('practice-lang-select');
+
+  // Multi-Language Switcher
+  langSelect?.addEventListener('change', () => {
+    if (!currentProblem || !editor) return;
+    const lang = langSelect.value;
+    const cfg = LANG_TEMPLATES[lang] || LANG_TEMPLATES.python;
+
+    const fileIcon = document.getElementById('editor-file-icon');
+    const fileName = document.getElementById('editor-file-name');
+    if (fileIcon) fileIcon.textContent = cfg.icon;
+    if (fileName) fileName.textContent = cfg.file;
+
+    if (editor && editor.setOption) {
+      editor.setOption('mode', cfg.mode);
+    }
+
+    const savedDraft = localStorage.getItem(`pym_practice_draft_${currentProblem.id}_${lang}`);
+    if (savedDraft) {
+      editor.setValue(savedDraft);
+    } else {
+      editor.setValue(cfg.template(currentProblem));
+    }
+    showToast(`Switched workspace environment to ${lang.toUpperCase()}`, 'info');
+  });
 
   // Run Sample Tests
   runBtn?.addEventListener('click', async () => {
     if (!currentProblem || !editor) return;
     const code = editor.getValue();
+    const lang = langSelect ? langSelect.value : 'python';
 
     runBtn.disabled = true;
     runBtn.innerHTML = '<span>⏳ Testing…</span>';
-    set('eval-console-output', 'Executing code in secure Python sandbox against test suite…');
+    set('eval-console-output', `Executing code in secure ${lang.toUpperCase()} environment…`);
 
     try {
-      const res = await practiceApi.testRun(currentProblem.id, code);
+      const res = await practiceApi.testRun(currentProblem.id, code, lang);
       displayEvaluationResults(res, false);
     } catch (err) {
       set('eval-console-output', `⚠️ Test execution error: ${err.message}`);
@@ -510,13 +573,14 @@ function setupWorkspaceActions() {
   submitBtn?.addEventListener('click', async () => {
     if (!currentProblem || !editor) return;
     const code = editor.getValue();
+    const lang = langSelect ? langSelect.value : 'python';
 
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<span>⚡ Evaluating…</span>';
-    set('eval-console-output', 'Submitting solution and recording performance…');
+    set('eval-console-output', `Submitting ${lang.toUpperCase()} solution and recording performance…`);
 
     try {
-      const res = await practiceApi.submit(currentProblem.id, code);
+      const res = await practiceApi.submit(currentProblem.id, code, lang);
       displayEvaluationResults(res, true);
 
       // Update local checkmark state
@@ -547,9 +611,12 @@ function setupWorkspaceActions() {
   // Reset Starter Code
   resetBtn?.addEventListener('click', () => {
     if (!currentProblem || !editor) return;
-    localStorage.removeItem(`pym_practice_draft_${currentProblem.id}`);
-    editor.setValue(currentProblem.starter_code || '# Write your code here\n');
-    showToast('Starter code restored', 'info');
+    const lang = langSelect ? langSelect.value : 'python';
+    const cfg = LANG_TEMPLATES[lang] || LANG_TEMPLATES.python;
+    localStorage.removeItem(`pym_practice_draft_${currentProblem.id}_${lang}`);
+    if (lang === 'python') localStorage.removeItem(`pym_practice_draft_${currentProblem.id}`);
+    editor.setValue(cfg.template(currentProblem));
+    showToast(`Starter code for ${lang.toUpperCase()} restored`, 'info');
   });
 
   // Reveal Hints

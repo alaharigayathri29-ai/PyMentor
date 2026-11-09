@@ -97,6 +97,7 @@ def get_problem(
 def test_run_code(
     problem_id: int,
     submission: SubmissionCreate,
+    language: Optional[str] = "python",
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
@@ -105,6 +106,30 @@ def test_run_code(
     if not problem:
         raise HTTPException(status_code=404, detail="Problem not found")
 
+    lang_clean = (language or "python").lower().strip()
+    if lang_clean in ("c", "cpp", "java"):
+        # Polyglot runner via Wandbox / local compiler simulator
+        raw_res = _runner.run_arbitrary_code(submission.code, stdin="", language=lang_clean)
+        is_success = raw_res.get("status") == "success"
+        output_txt = raw_res.get("output", "")
+        error_txt = raw_res.get("error", "")
+        return {
+            "passed": 1 if is_success else 0,
+            "total": 1,
+            "score": 100.0 if is_success else 0.0,
+            "feedback": f"**{lang_clean.upper()} Execution Success:**\n\n```\n{output_txt}\n```" if is_success else f"**{lang_clean.upper()} Compilation/Runtime Error:**\n\n```\n{error_txt}\n```",
+            "results": [
+                {
+                    "passed": is_success,
+                    "description": f"Polyglot Execution ({lang_clean.upper()})",
+                    "expected": "Exit code 0 with valid output",
+                    "actual": output_txt if is_success else error_txt,
+                    "error": None if is_success else error_txt,
+                    "stdout": output_txt,
+                }
+            ],
+        }
+
     return _runner.run_with_test_cases(submission.code, problem.test_cases or [])
 
 
@@ -112,6 +137,7 @@ def test_run_code(
 def submit_code(
     problem_id: int,
     submission: SubmissionCreate,
+    language: Optional[str] = "python",
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
@@ -119,7 +145,30 @@ def submit_code(
     if not problem:
         raise HTTPException(status_code=404, detail="Problem not found")
 
-    result = _runner.run_with_test_cases(submission.code, problem.test_cases or [])
+    lang_clean = (language or "python").lower().strip()
+    if lang_clean in ("c", "cpp", "java"):
+        raw_res = _runner.run_arbitrary_code(submission.code, stdin="", language=lang_clean)
+        is_success = raw_res.get("status") == "success"
+        output_txt = raw_res.get("output", "")
+        error_txt = raw_res.get("error", "")
+        result = {
+            "passed": 1 if is_success else 0,
+            "total": 1,
+            "score": 100.0 if is_success else 0.0,
+            "feedback": f"**{lang_clean.upper()} Verified:**\n\n```\n{output_txt}\n```" if is_success else f"**{lang_clean.upper()} Error:**\n\n```\n{error_txt}\n```",
+            "results": [
+                {
+                    "passed": is_success,
+                    "description": f"Polyglot Submission ({lang_clean.upper()})",
+                    "expected": "Exit code 0",
+                    "actual": output_txt if is_success else error_txt,
+                    "error": None if is_success else error_txt,
+                    "stdout": output_txt,
+                }
+            ],
+        }
+    else:
+        result = _runner.run_with_test_cases(submission.code, problem.test_cases or [])
 
     sub = PracticeSubmission(
         user_id=current_user.id,

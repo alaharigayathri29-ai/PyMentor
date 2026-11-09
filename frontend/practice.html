@@ -205,11 +205,16 @@
                       ← Back to Labs Catalog
                     </button>
                     <div class="editor-file-tab">
-                      <span>📄</span> <span>main.py</span>
+                      <span id="editor-file-icon">📄</span> <span id="editor-file-name">main.py</span>
                     </div>
                   </div>
                   <div style="display:flex;align-items:center;gap:10px;">
-                    <span class="badge badge-blue" style="font-size:11px;">PYTHON 3.10+</span>
+                    <select id="practice-lang-select" style="padding:4px 8px;font-size:11.5px;font-weight:700;border-radius:6px;background:#FFFDF9;color:#2C1A0E;border:1.5px solid rgba(200,160,100,0.4);cursor:pointer;">
+                      <option value="python">🐍 Python 3.10+</option>
+                      <option value="c">⚙️ C (GCC)</option>
+                      <option value="cpp">⚡ Modern C++</option>
+                      <option value="java">☕ Enterprise Java</option>
+                    </select>
                     <button class="btn btn-ghost btn-sm" id="btn-reset-code" title="Reset starter code" style="color:#FFF8F0;font-size:12px;">
                       ↺ Reset
                     </button>
@@ -307,6 +312,7 @@
   <!-- Dependencies -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>
   <script type="module" src="/js/practice.js?v=20261108_v19"></script>
 </body>
 

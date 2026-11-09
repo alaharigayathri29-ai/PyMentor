@@ -352,14 +352,30 @@ async function init() {
 
   // Check if a code snippet was transferred from a lesson
   const passedCode = sessionStorage.getItem('playground_code');
+  const passedLang = sessionStorage.getItem('playground_lang') || 'python';
   if (passedCode) {
-    pythonCode = passedCode;
+    if (passedLang === 'c') cCode = passedCode;
+    else if (passedLang === 'cpp') cppCode = passedCode;
+    else if (passedLang === 'java') javaCode = passedCode;
+    else pythonCode = passedCode;
+    currentLang = passedLang;
     sessionStorage.removeItem('playground_code');
+    sessionStorage.removeItem('playground_lang');
   }
 
-  // Create CodeMirror instance
+  // Create CodeMirror instance with appropriate initial code and language
+  const initialCode = currentLang === 'c' ? cCode
+    : currentLang === 'cpp' ? cppCode
+    : currentLang === 'java' ? javaCode
+    : pythonCode;
+
   if (mountEl) {
-    editor = createCodeEditor(mountEl, pythonCode, false, 'python');
+    editor = createCodeEditor(mountEl, initialCode, false, currentLang);
+  }
+
+  // Set active tab UI if transferred with non-python language
+  if (currentLang !== 'python') {
+    switchLanguage(currentLang);
   }
 
   // Bind Language Selector Tabs
@@ -422,38 +438,52 @@ async function init() {
     }
   });
 
-  // Reset editor
+  // Reset editor to pristine starter template for active language
   resetBtn?.addEventListener('click', () => {
-    if (currentLang === 'python') {
-      pythonCode = `# Write your Python code here\nprint("Hello from Python Playground!")\n`;
-      if (editor) editor.setValue(pythonCode);
-      showToast('Python editor reset.', 'info');
-    } else {
+    if (currentLang === 'web') {
       const def = WEB_TEMPLATES.counter;
       webFiles = { html: def.html, css: def.css, js: def.js };
       if (editor) editor.setValue(webFiles[activeWebFile]);
       runPlaygroundCode();
       showToast('Web project reset to starter template.', 'info');
+    } else {
+      const tplMap = {
+        python: pythonCode,
+        c: cCode,
+        cpp: cppCode,
+        java: javaCode,
+      };
+      const initialTpl = {
+        python: `# Python 3.12 Playground\nprint("Hello from Python Playground!")\n\nnames = ["Alice", "Bob", "Charlie"]\nfor idx, name in enumerate(names, 1):\n    print(f"{idx}. Welcome {name}!")\n`,
+        c: `// C Project Template (GCC)\n#include <stdio.h>\n\nint main() {\n    printf("⚡ Hello from C Playground!\\n");\n    int a = 15, b = 27;\n    printf("Result: %d + %d = %d\\n", a, b, a + b);\n    return 0;\n}\n`,
+        cpp: `// C++ Project Template (G++)\n#include <iostream>\n#include <vector>\n#include <numeric>\n\nint main() {\n    std::cout << "🚀 Hello from C++ Playground!" << std::endl;\n    std::vector<int> numbers = {10, 20, 30, 40, 50};\n    int total = std::accumulate(numbers.begin(), numbers.end(), 0);\n    std::cout << "Vector Sum = " << total << std::endl;\n    return 0;\n}\n`,
+        java: `// Java Project Template (OpenJDK 21)\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println("☕ Hello from Java Playground!");\n        int x = 40, y = 2;\n        System.out.println("Answer: " + (x + y));\n    }\n}\n`,
+      };
+      const tpl = initialTpl[currentLang] || initialTpl.python;
+      if (currentLang === 'python') pythonCode = tpl;
+      else if (currentLang === 'c') cCode = tpl;
+      else if (currentLang === 'cpp') cppCode = tpl;
+      else if (currentLang === 'java') javaCode = tpl;
+
+      if (editor) editor.setValue(tpl);
+      showToast(`${currentLang.toUpperCase()} editor reset to starter template.`, 'info');
     }
   });
 
   // Clear output terminal or browser console
   clearBtn?.addEventListener('click', () => {
-    if (currentLang === 'python') {
-      const consoleOutput = document.getElementById('pg-console-output');
-      const statusBadge = document.getElementById('pg-status-badge');
-      const execTime = document.getElementById('pg-exec-time');
-      if (consoleOutput) consoleOutput.textContent = 'Ready. Write Python code and click "Run Code".';
-      if (statusBadge) {
-        statusBadge.textContent = 'Idle';
-        statusBadge.className = 'badge badge-gray';
-      }
-      if (execTime) execTime.textContent = '0 ms';
-    } else {
-      browserLogs = [];
-      renderBrowserLogs();
-      showToast('Browser console cleared.', 'info');
+    const consoleOutput = document.getElementById('pg-console-output');
+    const statusBadge = document.getElementById('pg-status-badge');
+    const execTime = document.getElementById('pg-exec-time');
+    if (consoleOutput) consoleOutput.textContent = 'Ready. Click "▶ Run Code" to execute.';
+    if (statusBadge) {
+      statusBadge.textContent = 'Idle';
+      statusBadge.className = 'badge badge-gray';
     }
+    if (execTime) execTime.textContent = '0 ms';
+    browserLogs = [];
+    renderBrowserLogs();
+    showToast('Terminal output cleared.', 'info');
   });
 
   // Quick project switcher dropdown
@@ -516,20 +546,53 @@ async function init() {
       badge.textContent = '';
       badge.classList.add('hidden');
     }
+    const quickSel = document.getElementById('pg-quick-select');
+    if (quickSel) quickSel.value = '';
+
     const topbarTitle = document.getElementById('topbar-title');
-    if (currentLang === 'python') {
-      if (topbarTitle) topbarTitle.textContent = 'Python Code Playground';
-      pythonCode = `# Write your Python code here\nprint("Hello from Python Playground!")\n`;
-      if (editor) editor.setValue(pythonCode);
-    } else {
+    if (currentLang === 'web') {
       if (topbarTitle) topbarTitle.textContent = 'Web Application Playground (HTML / CSS / JS)';
       const def = WEB_TEMPLATES.counter;
       webFiles = { html: def.html, css: def.css, js: def.js };
       activeWebFile = 'html';
-      if (editor) editor.setValue(webFiles.html);
+      if (editor) {
+        editor.setOption('mode', 'htmlmixed');
+        editor.setValue(webFiles.html);
+      }
       runPlaygroundCode();
+    } else {
+      const modeMap = {
+        python: 'python',
+        c: 'text/x-csrc',
+        cpp: 'text/x-c++src',
+        java: 'text/x-java',
+      };
+      const titleMap = {
+        python: 'Python Code Playground',
+        c: 'C Project Playground (GCC)',
+        cpp: 'C++ Project Playground (G++)',
+        java: 'Java Project Playground (OpenJDK 21)',
+      };
+      if (topbarTitle) topbarTitle.textContent = titleMap[currentLang] || 'Code Playground';
+
+      const initialTpl = {
+        python: `# Python 3.12 Playground\nprint("Hello from Python Playground!")\n\nnames = ["Alice", "Bob", "Charlie"]\nfor idx, name in enumerate(names, 1):\n    print(f"{idx}. Welcome {name}!")\n`,
+        c: `// C Project Template (GCC)\n#include <stdio.h>\n\nint main() {\n    printf("⚡ Hello from C Playground!\\n");\n    int a = 15, b = 27;\n    printf("Result: %d + %d = %d\\n", a, b, a + b);\n    return 0;\n}\n`,
+        cpp: `// C++ Project Template (G++)\n#include <iostream>\n#include <vector>\n#include <numeric>\n\nint main() {\n    std::cout << "🚀 Hello from C++ Playground!" << std::endl;\n    std::vector<int> numbers = {10, 20, 30, 40, 50};\n    int total = std::accumulate(numbers.begin(), numbers.end(), 0);\n    std::cout << "Vector Sum = " << total << std::endl;\n    return 0;\n}\n`,
+        java: `// Java Project Template (OpenJDK 21)\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println("☕ Hello from Java Playground!");\n        int x = 40, y = 2;\n        System.out.println("Answer: " + (x + y));\n    }\n}\n`,
+      };
+      const tpl = initialTpl[currentLang] || initialTpl.python;
+      if (currentLang === 'python') pythonCode = tpl;
+      else if (currentLang === 'c') cCode = tpl;
+      else if (currentLang === 'cpp') cppCode = tpl;
+      else if (currentLang === 'java') javaCode = tpl;
+
+      if (editor) {
+        editor.setOption('mode', modeMap[currentLang] || 'python');
+        editor.setValue(tpl);
+      }
     }
-    showToast('Started new workspace project.', 'info');
+    showToast(`Started new clean ${currentLang.toUpperCase()} workspace.`, 'info');
   });
 
   // Check URL parameters for explicit project to open: ?project=X or ?id=X
@@ -548,9 +611,6 @@ async function init() {
         console.warn('Could not load project from URL param:', err);
       }
     }
-  } else if (savedPrograms && savedPrograms.length > 0) {
-    // Automatically open the student's saved workspace project!
-    loadProjectIntoWorkspace(savedPrograms[0]);
   }
 }
 
@@ -575,6 +635,22 @@ function switchLanguage(lang) {
   saveCurrentEditorCode();
   currentLang = lang;
 
+  // If a project of a different language was loaded, decouple it so clean template loads
+  if (currentLoadedProjectId) {
+    const loadedProg = savedPrograms.find(p => p.id === currentLoadedProjectId);
+    if (loadedProg && loadedProg.language !== lang) {
+      currentLoadedProjectId = null;
+      currentLoadedProjectTitle = null;
+      const badge = document.getElementById('pg-active-project-badge');
+      if (badge) {
+        badge.textContent = '';
+        badge.classList.add('hidden');
+      }
+      const quickSel = document.getElementById('pg-quick-select');
+      if (quickSel) quickSel.value = '';
+    }
+  }
+
   // Update tabs visual
   document.querySelectorAll('#pg-lang-tabs .lang-tab-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.lang === lang);
@@ -590,6 +666,17 @@ function switchLanguage(lang) {
   const browserConsole = document.getElementById('pg-browser-console-list');
   const topbarTitle = document.getElementById('topbar-title');
   const statusBadge = document.getElementById('pg-status-badge');
+
+  // Prevent any HTML template from leaking into compiled language workspaces
+  if (lang === 'c' && cCode.trim().startsWith('<')) {
+    cCode = `// C Project Template (GCC)\n#include <stdio.h>\n\nint main() {\n    printf("⚡ Hello from C Playground!\\n");\n    int a = 15, b = 27;\n    printf("Result: %d + %d = %d\\n", a, b, a + b);\n    return 0;\n}\n`;
+  }
+  if (lang === 'cpp' && cppCode.trim().startsWith('<')) {
+    cppCode = `// C++ Project Template (G++)\n#include <iostream>\n#include <vector>\n#include <numeric>\n\nint main() {\n    std::cout << "🚀 Hello from C++ Playground!" << std::endl;\n    std::vector<int> numbers = {10, 20, 30, 40, 50};\n    int total = std::accumulate(numbers.begin(), numbers.end(), 0);\n    std::cout << "Vector Sum = " << total << std::endl;\n    return 0;\n}\n`;
+  }
+  if (lang === 'java' && javaCode.trim().startsWith('<')) {
+    javaCode = `// Java Project Template (OpenJDK 21)\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println("☕ Hello from Java Playground!");\n        int sum = 0;\n        for (int i = 1; i <= 5; i++) sum += i;\n        System.out.println("Sum 1..5 = " + sum);\n    }\n}\n`;
+  }
 
   if (lang === 'python') {
     topbarTitle.textContent = 'Python Code Playground';
