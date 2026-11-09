@@ -35,6 +35,7 @@ const LANG_TEMPLATES = {
   }
 };
 
+let activeCourse = 'python';
 let editor = null;
 let topicsList = [];
 let currentTopic = null;
@@ -88,8 +89,30 @@ async function init() {
     console.warn('[Practice] Submissions load error:', err);
   }
 
+  // Read URL parameters for course and topic
+  const urlParams = new URLSearchParams(window.location.search);
+  const courseParam = (urlParams.get('course') || '').toLowerCase();
+  if (['python', 'c', 'cpp', 'java'].includes(courseParam)) {
+    activeCourse = courseParam;
+  }
+
+  // Setup practice course selector buttons
+  const courseSelector = document.getElementById('practice-course-selector');
+  if (courseSelector) {
+    courseSelector.querySelectorAll('.course-pill-btn').forEach(btn => {
+      const c = btn.getAttribute('data-practice-course');
+      btn.classList.toggle('active', c === activeCourse);
+      btn.addEventListener('click', () => {
+        courseSelector.querySelectorAll('.course-pill-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeCourse = c;
+        loadTopics(activeCourse);
+      });
+    });
+  }
+
   // Load topics
-  await loadTopics();
+  await loadTopics(activeCourse);
 
   // Setup UI event listeners
   setupViewToggles();
@@ -140,12 +163,12 @@ function initEditor() {
 }
 
 /* ── 2. Load Topics & Render Top Strip ─────────────────────────────────────── */
-async function loadTopics() {
+async function loadTopics(course = activeCourse) {
   const strip = document.getElementById('topic-pills-strip');
   if (!strip) return;
 
   try {
-    const curriculum = await learningPathApi.curriculum().catch(() => ({ modules: [] }));
+    const curriculum = await learningPathApi.curriculum(course).catch(() => ({ modules: [] }));
     const extracted = [];
 
     // Extract all topics from curriculum modules
@@ -155,26 +178,18 @@ async function loadTopics() {
           id: t.id,
           name: t.name,
           slug: t.slug,
-          icon: TOPIC_ICONS[t.slug] || t.icon || '📚',
+          course: course,
+          icon: TOPIC_ICONS[t.slug] || t.icon || (course === 'c' ? '⚙️' : course === 'cpp' ? '⚡' : course === 'java' ? '☕' : '📚'),
         });
       });
     });
 
     topicsList = extracted.length > 0 ? extracted : [
-      { id: 1, name: 'Variables & Data Types', slug: 'variables', icon: '📦' },
-      { id: 2, name: 'Operators & Expressions', slug: 'operators', icon: '🧮' },
-      { id: 3, name: 'Conditional Statements', slug: 'conditions', icon: '⚡' },
-      { id: 4, name: 'Loops', slug: 'loops', icon: '🔄' },
-      { id: 5, name: 'Functions', slug: 'functions', icon: '🧩' },
-      { id: 6, name: 'Lists & Tuples', slug: 'lists', icon: '📊' },
-      { id: 7, name: 'Dictionaries & Sets', slug: 'dictionaries', icon: '🗂️' },
-      { id: 8, name: 'String Operations', slug: 'strings', icon: '🔤' },
-      { id: 9, name: 'List Comprehensions', slug: 'comprehensions', icon: '💡' },
-      { id: 10, name: 'Error Handling', slug: 'error-handling', icon: '🛡️' },
-      { id: 11, name: 'File I/O', slug: 'file-io', icon: '📁' },
-      { id: 12, name: 'Object-Oriented Programming', slug: 'oop', icon: '🏛️' },
-      { id: 13, name: 'Modules & Packages', slug: 'modules', icon: '📦' },
-      { id: 14, name: 'Problem Solving & Projects', slug: 'practical-python', icon: '🚀' },
+      { id: 1, name: 'Variables & Data Types', slug: 'variables', icon: '📦', course: 'python' },
+      { id: 2, name: 'Operators & Expressions', slug: 'operators', icon: '🧮', course: 'python' },
+      { id: 3, name: 'Conditional Statements', slug: 'conditions', icon: '⚡', course: 'python' },
+      { id: 4, name: 'Loops', slug: 'loops', icon: '🔄', course: 'python' },
+      { id: 5, name: 'Functions', slug: 'functions', icon: '🧩', course: 'python' },
     ];
 
     // Check URL topic_id parameter
@@ -217,13 +232,13 @@ async function selectTopic(topic) {
   });
 
   // Update headers
-  set('current-topic-label', `${topic.icon} ${topic.name}`);
+  set('current-topic-label', `${topic.icon} ${topic.name} (${activeCourse.toUpperCase()})`);
   set('catalog-heading', `${topic.name} Labs`);
-  set('catalog-subheading', `Practice lab exercises on ${topic.name}. Select any challenge to code and test run.`);
+  set('catalog-subheading', `Practice lab exercises on ${topic.name} in ${activeCourse.toUpperCase()}. Select any challenge to code and test run.`);
 
   // Load 50 problems for this topic
   try {
-    const problems = await practiceApi.problems(topic.id);
+    const problems = await practiceApi.problems(topic.id, null, activeCourse);
     currentProblems = problems;
 
     const solvedCount = problems.filter(p => solvedProblemIds.has(p.id)).length;
@@ -408,7 +423,11 @@ function loadProblemIntoWorkspace(problem) {
 
   // Populate Editor with saved draft / submission if present, else starter code
   const langSelect = document.getElementById('practice-lang-select');
-  const currentLang = langSelect ? langSelect.value : 'python';
+  const targetCourse = problem.course || activeCourse || 'python';
+  if (langSelect && targetCourse) {
+    langSelect.value = targetCourse;
+  }
+  const currentLang = langSelect ? langSelect.value : targetCourse;
   const cfg = LANG_TEMPLATES[currentLang] || LANG_TEMPLATES.python;
 
   const prevSub = mySubmissions.find(s => s.problem_id === problem.id);

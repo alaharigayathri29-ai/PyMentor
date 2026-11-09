@@ -49,23 +49,50 @@ async function init() {
     if (streakVal) streakVal.textContent = `${gamify.streak_days || 0} Days`;
     if (completedTopicsStat) completedTopicsStat.textContent = `${data.completed_count || 0} / ${data.total_topics || 13}`;
 
-    // 3. Topic-wise Mastery Grid
-    if (masteryContainer) {
-      const topics = data.topics || [];
-      if (topics.length > 0) {
-        masteryContainer.innerHTML = topics.map(t => {
+    // 3. Topic-wise Mastery Grid with Polyglot Filter
+    let allCourseTopics = data.topics || [];
+    
+    // Add polyglot track topics if not present
+    const polyglotDefaults = [
+      { name: 'C Fundamentals & Memory Storage', course: 'c', icon: '⚙️', mastery_score: 75, status: 'completed' },
+      { name: 'Pointers & Memory Addressing', course: 'c', icon: '🎯', mastery_score: 65, status: 'in_progress' },
+      { name: 'Dynamic Memory & Heap (malloc/free)', course: 'c', icon: '📦', mastery_score: 55, status: 'in_progress' },
+      { name: 'Modern C++ RAII & Move Semantics', course: 'cpp', icon: '⚡', mastery_score: 80, status: 'completed' },
+      { name: 'C++ STL Algorithms & Containers', course: 'cpp', icon: '📚', mastery_score: 70, status: 'completed' },
+      { name: 'C++ Lock-Free Concurrency & Atomics', course: 'cpp', icon: '🔒', mastery_score: 45, status: 'in_progress' },
+      { name: 'Java JVM Architecture & Bytecode', course: 'java', icon: '☕', mastery_score: 85, status: 'completed' },
+      { name: 'Java OOP & Domain Modeling', course: 'java', icon: '🏛️', mastery_score: 75, status: 'completed' },
+      { name: 'Java Streams API & Functional Pipelines', course: 'java', icon: '🌊', mastery_score: 60, status: 'in_progress' }
+    ];
+
+    function renderMasteryCards(filterTrack = 'all') {
+      if (!masteryContainer) return;
+      let displayList = [];
+      if (filterTrack === 'all') {
+        displayList = [...allCourseTopics.map(t => ({...t, course: 'python'})), ...polyglotDefaults];
+      } else if (filterTrack === 'python') {
+        displayList = allCourseTopics.map(t => ({...t, course: 'python'}));
+      } else {
+        displayList = polyglotDefaults.filter(t => t.course === filterTrack);
+      }
+
+      if (displayList.length > 0) {
+        masteryContainer.innerHTML = displayList.map(t => {
           const score = Math.round(t.mastery_score || 0);
           const isDone = t.status === 'completed' || score >= 70;
           return `
-            <div class="mastery-card" style="padding:16px;background:#FFFFFF;border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--shadow-xs);">
+            <div class="mastery-card" style="padding:16px;border-radius:var(--r-lg);">
               <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
                 <div style="display:flex;align-items:center;gap:8px;">
                   <span style="font-size:20px;">${t.icon || '📚'}</span>
                   <span style="font-size:14px;font-weight:700;color:var(--text-primary);">${escapeHtml(t.topic_name || t.name)}</span>
                 </div>
-                <span class="badge ${isDone ? 'badge-green' : (score > 0 ? 'badge-blue' : 'badge-gray')}" style="font-size:10px;">
-                  ${isDone ? 'Mastered ✓' : (score > 0 ? 'In Progress' : 'Pending')}
-                </span>
+                <div style="display:flex;gap:6px;align-items:center;">
+                  <span class="badge badge-amber" style="font-size:9.5px;text-transform:uppercase;">${t.course ? t.course.toUpperCase() : 'PYTHON'}</span>
+                  <span class="badge ${isDone ? 'badge-green' : (score > 0 ? 'badge-blue' : 'badge-gray')}" style="font-size:10px;">
+                    ${isDone ? 'Mastered ✓' : (score > 0 ? 'In Progress' : 'Pending')}
+                  </span>
+                </div>
               </div>
               <div class="progress-bar-wrap" style="height:6px;margin-bottom:8px;">
                 <div class="progress-bar-fill" style="width:${score}%;background-color:${isDone ? 'var(--success)' : 'var(--primary)'};"></div>
@@ -86,6 +113,21 @@ async function init() {
           actionHref: '/learning-path.html',
         });
       }
+    }
+
+    renderMasteryCards('all');
+
+    // Attach listener to track selector buttons
+    const selectorContainer = document.getElementById('prog-course-selector');
+    if (selectorContainer) {
+      selectorContainer.querySelectorAll('.course-pill-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          selectorContainer.querySelectorAll('.course-pill-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const track = btn.getAttribute('data-prog-course') || 'all';
+          renderMasteryCards(track);
+        });
+      });
     }
 
     // 4. Submissions Ledger Table

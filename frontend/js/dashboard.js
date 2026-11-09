@@ -299,20 +299,29 @@ function setupCourseTrackSwitcher() {
   const coursePills = document.querySelectorAll('#dash-course-tabs .course-pill-btn');
   if (!coursePills || coursePills.length === 0) return;
 
+  function updateActionLinks(course) {
+    const resumeBtn = document.getElementById('dash-btn-resume');
+    const practiceBtn = document.getElementById('dash-btn-practice');
+    if (resumeBtn) resumeBtn.href = `/learning-path.html?course=${course}`;
+    if (practiceBtn) practiceBtn.href = `/practice.html?course=${course}`;
+  }
+
   coursePills.forEach(btn => {
     if (btn.getAttribute('data-course') === activeCourseTrack) {
       coursePills.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
+      updateActionLinks(activeCourseTrack);
     }
     btn.addEventListener('click', () => {
       coursePills.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       activeCourseTrack = btn.getAttribute('data-course') || 'python';
       localStorage.setItem('selected_course_track', activeCourseTrack);
-      showToast(`Switched dashboard focus to ${activeCourseTrack.toUpperCase()} Track`, 'info');
+      updateActionLinks(activeCourseTrack);
+      showToast(`Switched active track to ${activeCourseTrack.toUpperCase()} Systems. Explore curriculum & practice labs!`, 'info');
       const welcomeSub = document.getElementById('dash-welcome-sub');
       if (welcomeSub) {
-        welcomeSub.textContent = `You are focusing on the ${activeCourseTrack.toUpperCase()} Engineering Track. Practice labs and explore interactive lessons.`;
+        welcomeSub.textContent = `You are actively focusing on the ${activeCourseTrack.toUpperCase()} Engineering Track. All lessons and labs are calibrated for ${activeCourseTrack.toUpperCase()}.`;
       }
     });
   });

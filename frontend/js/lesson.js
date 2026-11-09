@@ -232,6 +232,22 @@ async function init() {
       }
     }
 
+    // ── 5-Chapter Page Navigation ───────────────────────────────────────────
+    const chapterNav = document.getElementById('lesson-chapter-nav');
+    if (chapterNav) {
+      chapterNav.querySelectorAll('button[data-chapter]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          chapterNav.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const chNum = btn.getAttribute('data-chapter');
+          const target = document.getElementById(`lesson-page-${chNum}-anchor`);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
+    }
+
     // ── PDF & Markdown Study Guide Downloads ───────────────────────────────────
     const triggerPdfDownload = () => {
       const watermarkUser = document.getElementById('pdf-watermark-user');

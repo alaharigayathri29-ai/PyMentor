@@ -22,7 +22,7 @@
         <div class="logo-icon">🐍</div>
         <div>
           <div class="logo-text">PyMentor</div>
-          <div class="logo-sub">Learn Python Better</div>
+          <div class="logo-sub">Master 4 Languages</div>
         </div>
       </a>
 
@@ -156,29 +156,47 @@
                     <button class="btn-lang-track" data-lang="java">☕ Java</button>
                   </div>
                 </div>
+
+                <!-- 5-Page Depth Navigation Bar -->
+                <div class="lesson-page-nav-bar animated-card-border" id="lesson-chapter-nav" style="
+                  display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; padding: 8px 12px;
+                  background: #FFFDF9; border-radius: 12px; border: 1.5px solid rgba(200, 160, 100, 0.3);
+                ">
+                  <button class="course-pill-btn active" data-chapter="1">📖 Page 1: Foundations</button>
+                  <button class="course-pill-btn" data-chapter="2">🎯 Page 2: Blueprint & Objectives</button>
+                  <button class="course-pill-btn" data-chapter="3">⚡ Page 3: Deep Mechanics</button>
+                  <button class="course-pill-btn" data-chapter="4">💻 Page 4: Code Labs</button>
+                  <button class="course-pill-btn" data-chapter="5">🧠 Page 5: Mastery Quiz</button>
+                </div>
               </div>
 
-              <!-- Lesson Introduction -->
-              <div id="lesson-intro" class="lesson-prose"></div>
-
-              <!-- Learning Objectives Checklist -->
-              <div class="objectives-card">
-                <div class="objectives-title">🎯 Learning Objectives</div>
-                <div id="lesson-objectives-list"></div>
+              <!-- Lesson Introduction (Page 1) -->
+              <div id="lesson-page-1-anchor">
+                <div id="lesson-intro" class="lesson-prose"></div>
               </div>
 
-              <!-- Core Explanation Section -->
-              <div id="lesson-explanation" class="lesson-prose"></div>
+              <!-- Learning Objectives Checklist (Page 2) -->
+              <div id="lesson-page-2-anchor">
+                <div class="objectives-card">
+                  <div class="objectives-title">🎯 Page 2: Core Engineering Objectives & Mental Models</div>
+                  <div id="lesson-objectives-list"></div>
+                </div>
+              </div>
 
-              <!-- Practical Code Walkthroughs -->
-              <div style="margin:28px 0;">
-                <h2 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:14px;">💻 Code Demonstrations</h2>
+              <!-- Core Explanation Section (Page 3) -->
+              <div id="lesson-page-3-anchor">
+                <div id="lesson-explanation" class="lesson-prose"></div>
+              </div>
+
+              <!-- Practical Code Walkthroughs (Page 4) -->
+              <div id="lesson-page-4-anchor" style="margin:28px 0;">
+                <h2 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:14px;">💻 Page 4: Real-World Systems Code Demonstrations</h2>
                 <div id="lesson-examples-list"></div>
               </div>
 
-              <!-- Interactive Topic Check Quiz -->
-              <div style="margin-top:36px;border-top:1px solid var(--border);padding-top:24px;">
-                <h2 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:14px;">🧠 Quick Knowledge Check</h2>
+              <!-- Interactive Topic Check Quiz (Page 5) -->
+              <div id="lesson-page-5-anchor" style="margin-top:36px;border-top:1px solid var(--border);padding-top:24px;">
+                <h2 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:14px;">🧠 Page 5: Academic Mastery Check & Concept Calibration</h2>
                 <div id="lesson-quiz-list"></div>
               </div>
             </div>

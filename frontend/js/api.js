@@ -124,10 +124,11 @@ export const mentorApi = {
 
 // ── Practice Lab API ─────────────────────────────────────────────────────────
 export const practiceApi = {
-  problems:      (topicId, difficulty) => {
+  problems:      (topicId, difficulty, course) => {
     const params = new URLSearchParams();
     if (topicId) params.set('topic_id', topicId);
     if (difficulty) params.set('difficulty', difficulty);
+    if (course) params.set('course', course);
     return apiFetch(`/api/practice/problems?${params}`);
   },
   recommended:   () => apiFetch('/api/practice/problems/recommended'),

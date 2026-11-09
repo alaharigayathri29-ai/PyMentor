@@ -28,7 +28,7 @@
         <div class="logo-icon">🐍</div>
         <div>
           <div class="logo-text">PyMentor</div>
-          <div class="logo-sub">Learn Python Better</div>
+          <div class="logo-sub">Master 4 Languages</div>
         </div>
       </a>
 
@@ -122,6 +122,25 @@
         <div class="page-content animate-in" style="padding:18px 24px;">
 
           <div class="practice-page-wrap">
+
+            <!-- 0. Course Selector Bar (Python, C, C++, Java) -->
+            <div class="profile-courses-bar animated-card-border" style="
+              display:flex;align-items:center;justify-content:space-between;
+              background:#FFFDF9;border-radius:14px;padding:12px 20px;flex-wrap:wrap;gap:12px;margin-bottom:16px;
+              box-shadow:0 4px 14px rgba(37,99,235,0.06);
+            ">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="font-size:18px;">💻</span>
+                <span style="font-size:13.5px;font-weight:800;color:#1C0E04;">Practice Lab Language Track:</span>
+                <span style="font-size:12px;color:#A07050;">50 Unique Challenges per Topic</span>
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;" id="practice-course-selector">
+                <button class="course-pill-btn active" data-practice-course="python">🐍 Python Systems</button>
+                <button class="course-pill-btn" data-practice-course="c">⚙️ ANSI C Systems</button>
+                <button class="course-pill-btn" data-practice-course="cpp">⚡ Modern C++20</button>
+                <button class="course-pill-btn" data-practice-course="java">☕ Enterprise Java</button>
+              </div>
+            </div>
 
             <!-- 1. Top Topic Selector Navigation Strip (50 Problems per Topic) -->
             <div class="topic-nav-strip" id="topic-pills-strip">

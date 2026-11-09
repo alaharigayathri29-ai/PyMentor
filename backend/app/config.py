@@ -37,11 +37,15 @@ class Settings(BaseSettings):
     )
 
     def get_database_url(self) -> str:
+        # Convert legacy postgres:// to postgresql:// (Render PostgreSQL standard)
+        url = self.DATABASE_URL
+        if url.startswith("postgres://"):
+            url = url.replace("postgres://", "postgresql://", 1)
         # If relative sqlite path in .env, resolve to BACKEND_DIR
-        if self.DATABASE_URL.startswith("sqlite:///./"):
-            rel_file = self.DATABASE_URL.replace("sqlite:///./", "")
+        elif url.startswith("sqlite:///./"):
+            rel_file = url.replace("sqlite:///./", "")
             return f"sqlite:///{(BACKEND_DIR / rel_file).as_posix()}"
-        return self.DATABASE_URL
+        return url
 
 
 settings = Settings()

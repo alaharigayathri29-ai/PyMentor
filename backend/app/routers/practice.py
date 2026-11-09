@@ -8,6 +8,7 @@ from app.schemas.schemas import SubmissionCreate
 from app.routers.auth import get_current_user
 from app.services.code_runner import CodeRunner
 from app.services import progress_service
+from app.curriculum.polyglot_problems import get_polyglot_problems, get_polyglot_problem_by_id
 
 router = APIRouter(prefix="/api/practice", tags=["practice"])
 _runner = CodeRunner()
@@ -39,13 +40,48 @@ def _problem_out(p: PracticeProblem, topic: Optional[Topic]) -> dict:
     }
 
 
+def _polyglot_problem_out(p: dict) -> dict:
+    cases = p.get("test_cases") or []
+    sample_cases = [
+        {
+            "description": tc.get("description", f"Sample Test {i+1}"),
+            "call": tc.get("call", ""),
+            "input": tc.get("input", ""),
+            "expected_output": tc.get("expected_output", ""),
+        }
+        for i, tc in enumerate(cases[:2])
+    ]
+    return {
+        "id": p["id"],
+        "title": p["title"],
+        "description": p["description"],
+        "difficulty": p["difficulty"],
+        "starter_code": p["starter_code"],
+        "constraints": p.get("constraints", "Time Limit: 2.5s\nMemory Limit: 128 MB"),
+        "hints": p.get("hints", []),
+        "topic_id": p["topic_id"],
+        "topic_name": p["topic_name"],
+        "course": p.get("course", "python"),
+        "test_count": len(cases),
+        "sample_cases": sample_cases,
+    }
+
+
 @router.get("/problems")
 def get_problems(
     topic_id: Optional[int] = None,
     difficulty: Optional[str] = None,
+    course: Optional[str] = None,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
+    # Deliver the 50 unique challenges per topic from the polyglot catalog
+    if topic_id or course:
+        tid = topic_id if topic_id else 1
+        poly_probs = get_polyglot_problems(tid, difficulty=difficulty, course=course)
+        if poly_probs:
+            return [_polyglot_problem_out(p) for p in poly_probs]
+
     query = db.query(PracticeProblem)
     if topic_id:
         query = query.filter(PracticeProblem.topic_id == topic_id)
@@ -59,6 +95,7 @@ def get_problems(
 
 @router.get("/problems/recommended")
 def get_recommended(
+    course: Optional[str] = None,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
@@ -66,14 +103,10 @@ def get_recommended(
     lp = db.query(LearningPath).filter(LearningPath.user_id == current_user.id).first()
     topics = {t.id: t for t in db.query(Topic).all()}
 
-    if lp and lp.current_topic_id:
-        problems = (
-            db.query(PracticeProblem)
-            .filter(PracticeProblem.topic_id == lp.current_topic_id)
-            .all()
-        )
-        if problems:
-            return [_problem_out(p, topics.get(p.topic_id)) for p in problems]
+    target_tid = lp.current_topic_id if (lp and lp.current_topic_id) else 1
+    poly_probs = get_polyglot_problems(target_tid, course=course)
+    if poly_probs:
+        return [_polyglot_problem_out(p) for p in poly_probs[:10]]
 
     # Fallback: all problems
     problems = db.query(PracticeProblem).limit(10).all()
@@ -86,6 +119,10 @@ def get_problem(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
+    poly_prob = get_polyglot_problem_by_id(problem_id)
+    if poly_prob:
+        return _polyglot_problem_out(poly_prob)
+
     p = db.query(PracticeProblem).filter(PracticeProblem.id == problem_id).first()
     if not p:
         raise HTTPException(status_code=404, detail="Problem not found")
