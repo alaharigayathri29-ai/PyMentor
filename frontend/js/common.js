@@ -60,9 +60,15 @@ export function initLayout(activePageKey, user) {
     const roleBadge = document.getElementById('role-mode-badge');
     const adminNav = document.getElementById('nav-admin-section');
 
-    const displayName = (user.username === 'honey_qis')
-      ? 'A.sri Lakshmi Gayatri'
-      : (user.username || 'Student');
+    const studentNameMap = {
+      'honey_qis': 'A.sri Lakshmi Gayatri',
+      'priya_beginner': 'Priya Sharma (Beginner)',
+      'rahul_intermediate': 'Rahul Verma (Interm.)',
+      'ananya_advanced': 'Ananya Iyer (Advanced)',
+      'vikram_code': 'Vikram Patel',
+      'admin': 'Administrator',
+    };
+    const displayName = studentNameMap[user.username] || (user.username || 'Student');
 
     if (usernameEl) usernameEl.textContent = displayName;
     if (roleEl) roleEl.textContent = user.role === 'admin' ? 'Administrator' : 'STUDENT · QISCET';
@@ -135,7 +141,7 @@ export function initLayout(activePageKey, user) {
     logoutBtn.addEventListener('click', (e) => {
       e.preventDefault();
       clearToken();
-      window.location.replace('/login.html');
+      window.location.replace('/login.html?switch=true');
     });
   }
 

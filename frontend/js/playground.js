@@ -450,6 +450,17 @@ async function init() {
     }
   });
 
+  // Quick project switcher dropdown
+  const quickSelect = document.getElementById('pg-quick-select');
+  quickSelect?.addEventListener('change', async (e) => {
+    const id = parseInt(e.target.value, 10);
+    if (!id) return;
+    const prog = savedPrograms.find(p => p.id === id);
+    if (prog) {
+      await loadProjectIntoWorkspace(prog);
+    }
+  });
+
   // Save script/project to real backend database
   saveBtn?.addEventListener('click', saveCurrentScript);
 
@@ -903,11 +914,27 @@ async function saveCurrentScript() {
 
 async function updateLibraryCount() {
   const badge = document.getElementById('pg-saved-count');
+  const quickSelect = document.getElementById('pg-quick-select');
   try {
     savedPrograms = await workspaceApi.listPrograms();
     if (badge) badge.textContent = savedPrograms.length;
+
+    if (quickSelect) {
+      if (savedPrograms && savedPrograms.length > 0) {
+        quickSelect.classList.remove('hidden');
+        quickSelect.innerHTML = `<option value="">⚡ Switch Saved Workspace (${savedPrograms.length})...</option>` +
+          savedPrograms.map(p => {
+            const icon = p.language === 'web' ? '🌐' : '🐍';
+            const selected = p.id === currentLoadedProjectId ? 'selected' : '';
+            return `<option value="${p.id}" ${selected}>${icon} ${escapeHtml(p.title)}</option>`;
+          }).join('');
+      } else {
+        quickSelect.classList.add('hidden');
+      }
+    }
   } catch {
     if (badge) badge.textContent = '0';
+    if (quickSelect) quickSelect.classList.add('hidden');
   }
 }
 
@@ -922,10 +949,10 @@ async function loadSavedLibrary() {
 
     if (!savedPrograms || savedPrograms.length === 0) {
       container.innerHTML = `
-        <div style="text-align:center;padding:32px 16px;color:var(--text-secondary);">
-          <div style="font-size:32px;margin-bottom:8px;">📁</div>
-          <p style="font-weight:600;color:var(--text-primary);margin-bottom:4px;">No saved projects yet</p>
-          <p style="font-size:12.5px;color:var(--text-muted);">Write code in the editor and click "Save Project" to store it in your account.</p>
+        <div style="text-align:center;padding:36px 16px;color:var(--text-secondary);">
+          <div style="font-size:36px;margin-bottom:10px;">📁</div>
+          <p style="font-weight:700;color:var(--text-primary);font-size:15px;margin-bottom:4px;">No saved projects yet</p>
+          <p style="font-size:13px;color:var(--text-muted);max-width:360px;margin:0 auto 16px;">Write code in the editor and click "💾 Save Project" to store your workspaces permanently in your account.</p>
         </div>
       `;
       return;
@@ -933,40 +960,48 @@ async function loadSavedLibrary() {
 
     container.innerHTML = savedPrograms.map(p => {
       const isWeb = p.language === 'web';
+      const isActive = p.id === currentLoadedProjectId;
       return `
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:#F8FAFC;border:1px solid var(--border);border-radius:var(--r-md);margin-bottom:10px;">
-          <div>
-            <div style="display:flex;align-items:center;gap:8px;">
-              <span class="badge ${isWeb ? 'badge-blue' : 'badge-green'}" style="font-size:10.5px;padding:2px 6px;">
-                ${isWeb ? '🌐 Web App' : '🐍 Python'}
+        <div class="saved-prog-card" data-id="${p.id}" style="display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:${isActive ? 'rgba(217,119,6,0.08)' : '#FFFDF9'};border:1.5px solid ${isActive ? 'var(--amber)' : 'rgba(200,160,100,0.25)'};border-radius:12px;margin-bottom:12px;cursor:pointer;transition:all 0.18s var(--ease);" title="Click to open this saved workspace">
+          <div style="flex:1;min-width:0;padding-right:12px;">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+              <span class="badge ${isWeb ? 'badge-blue' : 'badge-green'}" style="font-size:11px;padding:3px 8px;font-weight:700;">
+                ${isWeb ? '🌐 Web App' : '🐍 Python Script'}
               </span>
-              <span style="font-weight:600;font-size:13.5px;color:var(--text-primary);">${escapeHtml(p.title)}</span>
+              <span style="font-weight:700;font-size:14px;color:#1C0E04;">${escapeHtml(p.title)}</span>
+              ${isActive ? '<span class="badge badge-purple" style="font-size:10px;">Active Workspace</span>' : ''}
             </div>
-            <div style="font-size:11.5px;color:var(--text-muted);margin-top:4px;">
-              Saved ${new Date(p.created_at).toLocaleDateString()}
+            <div style="font-size:11.5px;color:#8A6D3B;margin-top:6px;display:flex;gap:14px;flex-wrap:wrap;">
+              <span>🕒 ${new Date(p.updated_at || p.created_at).toLocaleString()}</span>
+              <span>📄 ${(p.code || '').length} chars</span>
             </div>
           </div>
-          <div style="display:flex;gap:6px;">
-            <button class="btn btn-primary btn-sm btn-load-prog" data-id="${p.id}">Load</button>
-            <button class="btn btn-ghost btn-sm btn-del-prog" data-id="${p.id}" style="color:var(--danger);padding:4px 8px;">✕</button>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <button class="btn btn-primary btn-sm btn-load-prog" data-id="${p.id}" style="font-weight:700;border-radius:8px;padding:6px 14px;">
+              ⚡ Open Workspace
+            </button>
+            <button class="btn btn-ghost btn-sm btn-del-prog" data-id="${p.id}" style="color:var(--danger);padding:6px 10px;font-size:14px;" title="Delete project">✕</button>
           </div>
         </div>
       `;
     }).join('');
 
-    // Load project listener
-    container.querySelectorAll('.btn-load-prog').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const id = parseInt(btn.getAttribute('data-id'), 10);
+    // Clicking anywhere on the card opens the project
+    container.querySelectorAll('.saved-prog-card').forEach(card => {
+      card.addEventListener('click', async (e) => {
+        if (e.target.closest('.btn-del-prog')) return;
+        const id = parseInt(card.getAttribute('data-id'), 10);
         const prog = savedPrograms.find(p => p.id === id);
-        if (!prog) return;
-        await loadProjectIntoWorkspace(prog);
+        if (prog) {
+          await loadProjectIntoWorkspace(prog);
+        }
       });
     });
 
     // Delete project listener
     container.querySelectorAll('.btn-del-prog').forEach(btn => {
-      btn.addEventListener('click', async () => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
         const id = parseInt(btn.getAttribute('data-id'), 10);
         const ok = await showConfirmModal({
           title: 'Delete Saved Project',
@@ -979,8 +1014,14 @@ async function loadSavedLibrary() {
         try {
           await workspaceApi.deleteProgram(id);
           showToast('Project deleted.', 'info');
-          updateLibraryCount();
-          loadSavedLibrary();
+          if (currentLoadedProjectId === id) {
+            currentLoadedProjectId = null;
+            currentLoadedProjectTitle = null;
+            const badge = document.getElementById('pg-active-project-badge');
+            if (badge) badge.classList.add('hidden');
+          }
+          await updateLibraryCount();
+          await loadSavedLibrary();
         } catch (err) {
           showToast(`Delete failed: ${err.message}`, 'error');
         }
@@ -995,15 +1036,34 @@ async function loadSavedLibrary() {
 export async function loadProjectIntoWorkspace(prog) {
   if (!prog) return;
 
+  // Fetch full project representation from backend to ensure code and extra_data are complete
+  try {
+    const full = await workspaceApi.getProgram(prog.id);
+    if (full) prog = full;
+  } catch (err) {
+    console.warn('[Playground] Could not fetch fresh program, using cached:', err);
+  }
+
   currentLoadedProjectId = prog.id;
   currentLoadedProjectTitle = prog.title;
+
+  // Sync toolbar dropdown selector
+  const quickSelect = document.getElementById('pg-quick-select');
+  if (quickSelect) quickSelect.value = prog.id;
 
   // Update visual active project badge in toolbar
   const badge = document.getElementById('pg-active-project-badge');
   if (badge) {
     badge.textContent = `📁 ${prog.title}`;
-    badge.title = `Currently editing: ${prog.title} (ID #${prog.id})`;
+    badge.title = `Currently editing: ${prog.title} (ID #${prog.id}) — click to close`;
     badge.classList.remove('hidden');
+    if (!badge.dataset.closeBound) {
+      badge.dataset.closeBound = 'true';
+      badge.style.cursor = 'pointer';
+      badge.addEventListener('click', () => {
+        document.getElementById('pg-btn-new-project')?.click();
+      });
+    }
   }
 
   // Parse extra_data safely whether JSON string or object
@@ -1102,7 +1162,7 @@ export async function loadProjectIntoWorkspace(prog) {
     libModal.classList.add('hidden');
   }
 
-  showToast(`Opened project "${prog.title}" into workspace!`, 'success');
+  showToast(`Opened workspace "${prog.title}"!`, 'success');
 }
 
 init();

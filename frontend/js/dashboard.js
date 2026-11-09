@@ -4,7 +4,7 @@
  */
 
 import { requireAuth, initLayout, renderEmptyState, escapeHtml } from './common.js?v=20261108_v17';
-import { progressApi } from './api.js?v=20261108_v17';
+import { progressApi, workspaceApi } from './api.js?v=20261108_v17';
 import { capitalize } from './utils/formatters.js?v=20261108_v17';
 
 let allModules = [];
@@ -52,6 +52,7 @@ async function init() {
     populateWeeklyActivity(data);
     renderModuleList(data.enrolled_modules || []);
     setupFilters();
+    loadDashboardSavedProjects();
   } catch (err) {
     console.error('[Dashboard] Load error:', err);
     const container = document.getElementById('dash-modules-container');
@@ -234,6 +235,57 @@ function setupFilters() {
 
   search?.addEventListener('input', filter);
   status?.addEventListener('change', filter);
+}
+
+/* ── 6. Load Saved Workspaces ─────────────────────────────────────────────── */
+async function loadDashboardSavedProjects() {
+  const container = document.getElementById('dash-saved-projects-list');
+  const countBadge = document.getElementById('dash-saved-count');
+  if (!container) return;
+
+  try {
+    const progs = await workspaceApi.listPrograms();
+    if (countBadge) countBadge.textContent = `${progs.length} saved`;
+
+    if (!progs || progs.length === 0) {
+      container.innerHTML = `
+        <div style="grid-column:1/-1;text-align:center;padding:28px 16px;background:#FFFDF9;border:1.5px dashed rgba(200,160,100,0.3);border-radius:12px;">
+          <div style="font-size:28px;margin-bottom:6px;">⚡</div>
+          <div style="font-size:13.5px;font-weight:700;color:#1C0E04;">No saved workspaces yet</div>
+          <p style="font-size:12px;color:#8A6D3B;margin:4px 0 12px;">Create and save your custom Python scripts or interactive Web apps in the playground.</p>
+          <a href="/playground.html" class="btn btn-primary btn-sm" style="border-radius:var(--r-full);">Launch Blank Workspace</a>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = progs.map(p => {
+      const isWeb = p.language === 'web';
+      return `
+        <div style="background:#FFFDF9;border:1.5px solid rgba(200,160,100,0.28);border-radius:12px;padding:16px;display:flex;flex-direction:column;justify-content:space-between;gap:12px;transition:all 0.2s var(--ease);box-shadow:0 2px 8px rgba(44,26,14,0.03);">
+          <div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;">
+              <span class="badge ${isWeb ? 'badge-blue' : 'badge-green'}" style="font-size:10.5px;font-weight:700;">
+                ${isWeb ? '🌐 Web App' : '🐍 Python'}
+              </span>
+              <span style="font-size:11px;color:#8A6D3B;">${new Date(p.updated_at || p.created_at).toLocaleDateString()}</span>
+            </div>
+            <h4 style="font-size:14.5px;font-weight:700;color:#1C0E04;margin:0 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(p.title)}</h4>
+            <div style="font-size:11.5px;color:#8A6D3B;">${(p.code || '').length} characters of code</div>
+          </div>
+          <a href="/playground.html?project=${p.id}" class="btn btn-primary btn-sm btn-full" style="font-weight:700;border-radius:8px;font-size:12px;">
+            ⚡ Open Workspace →
+          </a>
+        </div>
+      `;
+    }).join('');
+
+  } catch (err) {
+    console.warn('[Dashboard] Could not load saved projects:', err);
+    if (container) {
+      container.innerHTML = `<div style="grid-column:1/-1;color:#8A6D3B;font-size:12px;">Could not load saved projects.</div>`;
+    }
+  }
 }
 
 function set(id, val) {

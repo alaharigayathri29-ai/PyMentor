@@ -7,8 +7,13 @@ import { authApi, setToken, setUser, clearToken, getToken } from './api.js?v=202
 import { showToast } from './components/toast.js?v=20261108_v17';
 
 export function initLogin() {
-  // If already logged in, redirect directly to dashboard or stored destination
-  if (getToken()) {
+  const urlParams = new URLSearchParams(window.location.search);
+  const isSwitching = urlParams.get('switch') === 'true' || urlParams.get('logout') === 'true';
+
+  if (isSwitching) {
+    clearToken();
+  } else if (getToken()) {
+    // If already logged in and not explicitly switching accounts, redirect
     authApi.me().then(user => {
       setUser(user);
       const dest = sessionStorage.getItem('redirectAfterLogin') || (user.role === 'admin' ? '/admin/dashboard.html' : '/dashboard.html');
@@ -18,6 +23,36 @@ export function initLogin() {
       clearToken();
     });
   }
+
+  // Bind One-Click Quick Demo Student Login buttons
+  document.querySelectorAll('.quick-login-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const u = btn.dataset.user;
+      const p = btn.dataset.pwd;
+      const usernameInput = document.getElementById('login-username');
+      const passwordInput = document.getElementById('login-password');
+      if (usernameInput) usernameInput.value = u;
+      if (passwordInput) passwordInput.value = p;
+
+      clearToken();
+      btn.style.opacity = '0.6';
+      btn.style.pointerEvents = 'none';
+
+      try {
+        const res = await authApi.login(u, p);
+        setToken(res.access_token);
+        const user = await authApi.me();
+        setUser(user);
+        showToast(`Signed in as ${user.username}!`, 'success');
+        const dest = user.role === 'admin' ? '/admin/dashboard.html' : '/dashboard.html';
+        setTimeout(() => window.location.replace(dest), 200);
+      } catch (err) {
+        showToast(`Quick login failed: ${err.message}`, 'error');
+        btn.style.opacity = '1';
+        btn.style.pointerEvents = 'auto';
+      }
+    });
+  });
 
   const form = document.getElementById('login-form');
   if (!form) return;

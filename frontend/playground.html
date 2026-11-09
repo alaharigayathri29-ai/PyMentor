@@ -166,9 +166,14 @@
                   <option value="blank">Template: Blank Slate</option>
                 </select>
 
-                <button class="btn btn-secondary btn-sm" id="pg-btn-saved-list">
-                  <span>📁 My Saved Projects (<span id="pg-saved-count">0</span>)</span>
-                </button>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <button class="btn btn-secondary btn-sm" id="pg-btn-saved-list" style="background:#FFFDF9;border:1.5px solid rgba(217,119,6,0.35);font-weight:700;">
+                    <span>📁 Saved Projects (<span id="pg-saved-count">0</span>)</span>
+                  </button>
+                  <select id="pg-quick-select" class="form-select hidden" style="font-size:12px;padding:3px 8px;height:32px;max-width:190px;border:1.5px solid rgba(217,119,6,0.35);background:#FFFDF9;font-weight:600;color:#2C1A0E;" title="Quick switch between your saved workspaces">
+                    <option value="">⚡ Switch Workspace...</option>
+                  </select>
+                </div>
                 <button class="btn btn-ghost btn-sm" id="pg-btn-clear" title="Clear console/terminal">
                   <span>🧹 Clear</span>
                 </button>

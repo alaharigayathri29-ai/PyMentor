@@ -14,6 +14,7 @@ import { formatRelative } from './utils/formatters.js?v=20261108_v17';
 let sessions = [];
 let activeSessionId = null;
 let isSending = false;
+let currentUser = null;
 
 // Multi-Language & Voice Assistant State
 let currentLang = localStorage.getItem('pym_mentor_lang') || 'en';
@@ -49,6 +50,7 @@ const LANG_PLACEHOLDERS = {
 async function init() {
   const user = await requireAuth();
   if (!user) return;
+  currentUser = user;
 
   initLayout('mentor', user);
 
@@ -638,6 +640,10 @@ function renderMessages(msgs) {
   const messagesBox = document.getElementById('chat-messages-box');
   if (!messagesBox) return;
 
+  const studentName = (currentUser?.username === 'honey_qis')
+    ? 'A.sri Lakshmi Gayatri'
+    : (currentUser?.username || 'You');
+
   messagesBox.innerHTML = msgs.map((m, idx) => {
     const isUser = m.role === 'user';
     return `
@@ -645,7 +651,7 @@ function renderMessages(msgs) {
         <div class="chat-avatar">${isUser ? '👤' : '🤖'}</div>
         <div class="chat-bubble ${isUser ? 'user-bubble' : 'assistant-bubble'}">
           <div class="chat-bubble-author">
-            <span>${isUser ? 'You' : 'PyMentor'}</span>
+            <span>${isUser ? escapeHtml(studentName) : 'PyMentor'}</span>
             ${!isUser ? `<button class="btn-speech-play" data-msg-idx="${idx}" title="Listen to response"><span>🔊 Listen</span></button>` : ''}
           </div>
           <div class="chat-bubble-content markdown-body">
@@ -710,12 +716,16 @@ async function handleSendMessage(action = 'chat') {
   if (emptyPrompt) emptyPrompt.remove();
 
   // Optimistically append user message to UI
+  const studentName = (currentUser?.username === 'honey_qis')
+    ? 'A.sri Lakshmi Gayatri'
+    : (currentUser?.username || 'You');
+
   const tempUserRow = document.createElement('div');
   tempUserRow.className = 'chat-message-row user-row';
   tempUserRow.innerHTML = `
     <div class="chat-avatar">👤</div>
     <div class="chat-bubble user-bubble">
-      <div class="chat-bubble-author">You</div>
+      <div class="chat-bubble-author">${escapeHtml(studentName)}</div>
       <div class="chat-bubble-content">${escapeHtml(content)}</div>
     </div>
   `;
