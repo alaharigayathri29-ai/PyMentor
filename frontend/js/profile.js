@@ -41,6 +41,7 @@ async function init() {
     populateStudentIdentity(user, progData);
     populateAchievementsVitals(progData, leaderboardData, assessResult, user);
     populateSpeedometer(progData, assessResult);
+    populatePolyglotVisualizer(progData, assessResult);
     populateInteractiveProblemsChart(progData);
     renderScoreOverTimeHeatmap(progData);
     renderRealLeaderboard(leaderboardData, user);
@@ -126,6 +127,50 @@ function populateSpeedometer(data, assess) {
   set('speedo-part-prac', `${perf.practice_pct ?? 60}%`);
   set('speedo-part-quiz', `${perf.quiz_pct ?? 67}%`);
   set('speedo-part-part', `${perf.participation_pct ?? 7}%`);
+}
+
+/* ── 3.5. Power BI Multi-Course Competency Visualizer ─────────────────────── */
+function populatePolyglotVisualizer(data, assess) {
+  const assessScore = Number(assess?.score || 65);
+  const solved = data?.problems_solved || 0;
+
+  // Calibrate 4 languages
+  const pyPct = Math.min(100, Math.max(30, Math.round(assessScore * 0.9 + solved * 5)));
+  const cPct = Math.min(100, Math.max(25, Math.round(assessScore * 0.75 + solved * 3)));
+  const cppPct = Math.min(100, Math.max(20, Math.round(assessScore * 0.70 + solved * 2)));
+  const javaPct = Math.min(100, Math.max(35, Math.round(assessScore * 0.95 + solved * 4)));
+
+  const overall = Math.round((pyPct + cPct + cppPct + javaPct) / 4);
+
+  // Update Center text
+  set('pbi-center-pct', `${overall}%`);
+
+  // Animate SVG Rings (circumference calculation: 2 * pi * r)
+  const ringPy = document.getElementById('ring-python');
+  const ringC = document.getElementById('ring-c');
+  const ringCpp = document.getElementById('ring-cpp');
+  const ringJava = document.getElementById('ring-java');
+
+  if (ringPy) ringPy.style.strokeDashoffset = `${515.2 * (1 - pyPct / 100)}`;
+  if (ringC) ringC.style.strokeDashoffset = `${427.2 * (1 - cPct / 100)}`;
+  if (ringCpp) ringCpp.style.strokeDashoffset = `${339.3 * (1 - cppPct / 100)}`;
+  if (ringJava) ringJava.style.strokeDashoffset = `${251.3 * (1 - javaPct / 100)}`;
+
+  // Update cards
+  set('pbi-val-python', `${pyPct}%`);
+  set('pbi-val-c', `${cPct}%`);
+  set('pbi-val-cpp', `${cppPct}%`);
+  set('pbi-val-java', `${javaPct}%`);
+
+  const barPy = document.getElementById('pbi-bar-python');
+  const barC = document.getElementById('pbi-bar-c');
+  const barCpp = document.getElementById('pbi-bar-cpp');
+  const barJava = document.getElementById('pbi-bar-java');
+
+  if (barPy) barPy.style.width = `${pyPct}%`;
+  if (barC) barC.style.width = `${cPct}%`;
+  if (barCpp) barCpp.style.width = `${cppPct}%`;
+  if (barJava) barJava.style.width = `${javaPct}%`;
 }
 
 /* ── 4. Interactive Solved Problems & Languages Bar Chart (Click UX) ───────── */

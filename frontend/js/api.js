@@ -102,8 +102,8 @@ export const assessmentApi = {
 export const learningPathApi = {
   get:             () => apiFetch('/api/learning-path/'),
   setTopic:        (topicId) => apiFetch(`/api/learning-path/set-topic/${topicId}`, { method: 'POST' }),
-  curriculum:      () => apiFetch('/api/learning-path/curriculum'),
-  getTopicLesson:  (topicId) => apiFetch(`/api/learning-path/topics/${topicId}`),
+  curriculum:      (course = 'python') => apiFetch(`/api/learning-path/curriculum?course=${encodeURIComponent(course || 'python')}`),
+  getTopicLesson:  (topicId, course = '') => apiFetch(`/api/learning-path/topics/${topicId}${course ? `?course=${encodeURIComponent(course)}` : ''}`),
   completeLesson:  (topicId) => apiFetch(`/api/learning-path/topics/${topicId}/complete-lesson`, { method: 'POST' }),
 };
 

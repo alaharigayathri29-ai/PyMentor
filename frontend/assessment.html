@@ -31,15 +31,26 @@
           <span class="nav-icon">🏠</span> <span>Dashboard</span>
         </a>
 
-        <div class="nav-section-label">LEARNING</div>
-        <a href="/learning-path.html" class="nav-item" data-page="learning-path">
-          <span class="nav-icon">🗺️</span> <span>Learn Python</span>
+        <div class="nav-section-label">COURSES</div>
+        <a href="/learning-path.html?course=python" class="nav-item" data-page="course-python">
+          <span class="nav-icon">🐍</span> <span>Python Systems</span>
         </a>
+        <a href="/learning-path.html?course=c" class="nav-item" data-page="course-c">
+          <span class="nav-icon">⚙️</span> <span>ANSI C Systems</span>
+        </a>
+        <a href="/learning-path.html?course=cpp" class="nav-item" data-page="course-cpp">
+          <span class="nav-icon">⚡</span> <span>Modern C++20</span>
+        </a>
+        <a href="/learning-path.html?course=java" class="nav-item" data-page="course-java">
+          <span class="nav-icon">☕</span> <span>Enterprise Java</span>
+        </a>
+
+        <div class="nav-section-label">MODULES</div>
         <a href="/assessment.html" class="nav-item active" data-page="assessment">
-          <span class="nav-icon">🎯</span> <span>Assessment</span>
+          <span class="nav-icon">🎯</span> <span>Assessment & Proctoring</span>
         </a>
         <a href="/practice.html" class="nav-item" data-page="practice">
-          <span class="nav-icon">💻</span> <span>Practice</span>
+          <span class="nav-icon">💻</span> <span>Practice Lab</span>
         </a>
         <a href="/lesson.html" class="nav-item" data-page="lesson">
           <span class="nav-icon">📖</span> <span>Interactive Lesson</span>
@@ -108,6 +119,77 @@
 
           <div class="assessment-container">
             
+            <!-- Daily Assessment Streak & Notification Banner -->
+            <div class="daily-streak-card moving-luxury-border" style="
+              display:flex;align-items:center;justify-content:space-between;
+              background:linear-gradient(135deg, #FFFDF9 0%, #FEF3C7 100%);
+              border-radius:16px;padding:16px 24px;margin-bottom:20px;flex-wrap:wrap;gap:14px;
+              box-shadow:0 4px 18px rgba(217,119,6,0.12);
+            ">
+              <div style="display:flex;align-items:center;gap:16px;">
+                <div style="width:48px;height:48px;border-radius:14px;background:#F59E0B;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 4px 12px rgba(245,158,11,0.35);">
+                  🔥
+                </div>
+                <div>
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <span style="font-size:16px;font-weight:800;color:#1C0E04;">Daily Polytechnic Assessment Streak</span>
+                    <span class="badge badge-amber" style="background:#FDE68A;color:#92400E;font-weight:700;">Day 5 Active</span>
+                  </div>
+                  <div style="font-size:12.5px;color:#78350F;margin-top:2px;">
+                    🔔 <strong>Notification:</strong> Daily calibration refreshed with new challenges. Complete today's test to maintain your leaderboard XP boost!
+                  </div>
+                </div>
+              </div>
+
+              <!-- Assessment Mode Toggle: Diagnostic vs Written Lab -->
+              <div style="display:flex;align-items:center;gap:8px;background:#FFFFFF;padding:4px;border-radius:12px;border:1.5px solid rgba(200,160,100,0.3);">
+                <button type="button" class="btn btn-sm" id="btn-mode-diagnostic" style="border-radius:8px;background:var(--primary);color:#FFF;font-weight:700;font-size:12px;padding:6px 14px;">
+                  📋 Diagnostic MCQs
+                </button>
+                <button type="button" class="btn btn-sm" id="btn-mode-written" style="border-radius:8px;background:transparent;color:#6B4226;font-weight:700;font-size:12px;padding:6px 14px;">
+                  ✍️ Written Code Lab
+                </button>
+              </div>
+            </div>
+
+            <!-- AI Proctoring HUD & WebCam Stream Monitor -->
+            <div class="proctoring-hud-bar moving-luxury-border" style="
+              display:flex;align-items:center;justify-content:space-between;
+              background:#1C0E04;border-radius:16px;padding:14px 22px;margin-bottom:20px;color:#FFF;flex-wrap:wrap;gap:16px;
+              box-shadow:0 6px 20px rgba(28,14,4,0.3);
+            ">
+              <div style="display:flex;align-items:center;gap:16px;">
+                <!-- Real WebCam Video Feed Element -->
+                <div style="position:relative;width:120px;height:82px;background:#000;border-radius:10px;overflow:hidden;border:2px solid #2563EB;box-shadow:0 0 12px rgba(37,99,235,0.5);">
+                  <video id="proctor-video-feed" autoplay playsinline muted style="width:100%;height:100%;object-fit:cover;"></video>
+                  <div id="proctor-cam-label" style="position:absolute;bottom:2px;left:4px;font-size:9.5px;background:rgba(0,0,0,0.7);padding:1px 5px;border-radius:4px;color:#10B981;font-weight:700;">
+                    LIVE FEED
+                  </div>
+                </div>
+                <div>
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#10B981;animation:pulseDot 1.5s infinite;"></span>
+                    <span style="font-size:14px;font-weight:800;color:#FFFFFF;letter-spacing:0.02em;">AI WebCam Proctoring Active</span>
+                    <span class="badge badge-teal" style="background:rgba(16,185,129,0.2);color:#34D399;font-size:10.5px;">Verified Environment</span>
+                  </div>
+                  <div style="display:flex;gap:14px;margin-top:6px;font-size:11.5px;color:#94A3B8;">
+                    <span>⚠️ Tab Switches: <strong id="proctor-tab-count" style="color:#F59E0B;">0 / 3</strong></span>
+                    <span>🔒 Copy-Paste Lock: <strong style="color:#10B981;">Active</strong></span>
+                    <span>👁️ Gaze Track: <strong style="color:#10B981;">Calibrated</strong></span>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display:flex;gap:10px;">
+                <button type="button" class="btn btn-sm btn-secondary" id="btn-proctor-cam-toggle" style="font-size:11.5px;border-color:rgba(255,255,255,0.2);color:#FFF;">
+                  📷 Restart Camera
+                </button>
+                <button type="button" class="btn btn-sm btn-primary" id="btn-proctor-fullscreen" style="font-size:11.5px;">
+                  🖥️ Enforce Fullscreen
+                </button>
+              </div>
+            </div>
+
             <!-- 4 Course Selector Track Bar -->
             <div class="courses-hub-bar moving-luxury-border" style="
               display:flex;align-items:center;justify-content:space-between;
@@ -155,6 +237,66 @@
 
               <!-- Numbered Navigation Dots -->
               <div class="assess-pills-bar" id="assess-pills-container"></div>
+            </div>
+
+            <!-- Written-Type Assessment Lab Card -->
+            <div class="assessment-card moving-luxury-border hidden" id="assess-written-box" style="display:none;">
+              <div class="assess-progress-header">
+                <div class="assess-step-tracker">
+                  <span id="written-q-counter" style="font-weight:800;color:#1C0E04;">Written Assessment Challenge 1 of 3</span>
+                  <span id="written-lang-badge" class="badge badge-teal">PYTHON SYSTEMS</span>
+                </div>
+                <div style="font-size:12px;color:#78350F;font-weight:600;">
+                  ⏳ Time Remaining: <span id="written-timer" style="font-family:'JetBrains Mono',monospace;font-weight:700;">45:00</span>
+                </div>
+              </div>
+
+              <!-- Problem Statement -->
+              <div style="background:#FFFDF9;border:1.5px solid rgba(200,160,100,0.3);border-radius:12px;padding:18px 22px;margin:16px 0;">
+                <h3 id="written-problem-title" style="font-size:17px;font-weight:800;color:#1C0E04;margin-bottom:8px;">
+                  Write an Idiomatic Polyglot Solution
+                </h3>
+                <div id="written-problem-desc" style="font-size:13.5px;color:#4A2E1B;line-height:1.6;">
+                  Implement the target function adhering to optimal time and space complexity constraints.
+                </div>
+                <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;font-size:12px;">
+                  <span style="background:#FEF3C7;color:#92400E;padding:3px 10px;border-radius:6px;font-weight:700;">Time Complexity: O(N)</span>
+                  <span style="background:#E0E7FF;color:#3730A3;padding:3px 10px;border-radius:6px;font-weight:700;">Auxiliary Memory: O(1)</span>
+                </div>
+              </div>
+
+              <!-- Code Editor Block -->
+              <div style="margin-bottom:16px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;background:#1C0E04;color:#FDE68A;padding:8px 16px;border-radius:10px 10px 0 0;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;">
+                  <span id="written-editor-title">SOLUTION_WORKSPACE</span>
+                  <span style="color:#94A3B8;font-size:11px;">Real Compiler Sandbox</span>
+                </div>
+                <textarea id="written-code-input" spellcheck="false" style="
+                  width:100%;height:220px;background:#0F0702;color:#38BDF8;border:2px solid #1C0E04;border-top:none;
+                  border-radius:0 0 10px 10px;padding:14px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.5;resize:vertical;outline:none;
+                "></textarea>
+              </div>
+
+              <!-- Test Output Terminal -->
+              <div id="written-output-panel" style="background:#050505;color:#E2E8F0;padding:12px 16px;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:12px;margin-bottom:18px;min-height:50px;border:1px solid #334155;display:none;">
+                <div style="font-size:10.5px;color:#94A3B8;text-transform:uppercase;margin-bottom:4px;">Test Runner Diagnostics</div>
+                <div id="written-output-text">Ready to run diagnostic test cases.</div>
+              </div>
+
+              <!-- Controls -->
+              <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:18px;">
+                <div style="display:flex;gap:10px;">
+                  <button type="button" class="btn btn-secondary btn-sm" id="btn-written-run-test">
+                    ▶ Run Test Cases
+                  </button>
+                  <button type="button" class="btn btn-secondary btn-sm" id="btn-written-reset">
+                    ↺ Reset Starter Code
+                  </button>
+                </div>
+                <button type="button" class="btn btn-primary" id="btn-written-submit">
+                  Submit Written Solution ✓
+                </button>
+              </div>
             </div>
 
             <!-- Results Card (Hidden until submitted) -->

@@ -115,9 +115,9 @@ The student is interacting in: {lang_name} ({lang_code}).
 """
         else:
             lang_instruction = """
-Language Instruction:
-- The student requested explanations in English.
-- Provide clear, engaging conceptual explanations directly in English with runnable Python code examples.
+Language & Course Instruction:
+- Provide clear, engaging systems engineering explanations directly in English with runnable code examples.
+- CRITICAL POLYGLOT FIDELITY: ALWAYS provide code and syntax in the specific programming language queried by the student (Java for Java questions, C for C questions, Modern C++ for C++ questions, Python for Python questions). NEVER divert to Python when another language is queried.
 - When spoken aloud by the voice assistant, ensure sentences flow smoothly and conversationally.
 """
 
@@ -159,6 +159,17 @@ class GeminiProvider(AIProvider):
     async def chat(self, messages: List[Dict], student_context: Dict) -> str:
         import asyncio
         last_user_prompt = (messages[-1].get("content", "") if messages else "Hello").strip() or "Hello"
+
+        # Check instant polyglot curriculum match first for 0-latency systems accuracy
+        try:
+            from app.curriculum.polyglot_mentor_knowledge import detect_polyglot_response
+            cur_top = student_context.get("current_topic", "")
+            poly_resp = detect_polyglot_response(last_user_prompt, cur_top, student_context.get("skill_level", "intermediate"))
+            if poly_resp:
+                return poly_resp
+        except Exception:
+            pass
+
         system_prompt = self.build_system_prompt(student_context, last_user_prompt)
 
         model = self.genai.GenerativeModel(
@@ -196,7 +207,7 @@ class GeminiProvider(AIProvider):
                 res = model.generate_content(contents)
                 return res.text if res and res.text else None
 
-            result_text = await asyncio.wait_for(asyncio.to_thread(_call_gemini), timeout=14.0)
+            result_text = await asyncio.wait_for(asyncio.to_thread(_call_gemini), timeout=5.0)
             if result_text and result_text.strip():
                 return result_text.strip()
             raise ValueError("Empty response received from Gemini model")
@@ -1184,6 +1195,15 @@ Also, which topic does this relate to? I can tailor my explanation to your curre
         elif lang == "hi":
             return self._get_hindi_explanation(last_msg, current_topic, action)
 
+        # Check Polyglot Systems Knowledge (Java, C, C++, Python)
+        try:
+            from app.curriculum.polyglot_mentor_knowledge import detect_polyglot_response
+            poly_resp = detect_polyglot_response(last_msg, current_topic, level)
+            if poly_resp:
+                return poly_resp
+        except Exception:
+            pass
+
         # Detect topic from message + current topic context
         topic_key = self._detect_topic(last_msg.lower() + " " + current_topic.lower())
 
@@ -1439,27 +1459,25 @@ Hints: `time.time()`, `functools.wraps`, closure pattern ⏱️""",
         return level_problems.get(level, level_problems["beginner"])
 
     def _welcome(self, context: Dict) -> str:
-        level = context.get("skill_level", "beginner")
-        topic = context.get("current_topic", "Python")
-        return f"""👋 Hello! I'm **PyMentor** — your personal Python learning assistant!
+        level = context.get("skill_level", "intermediate")
+        topic = context.get("current_topic", "Polyglot Systems")
+        return f"""👋 Hello! I'm **PyMentor Polyglot Edition** — your Senior Systems Engineering Mentor across **Python**, **C**, **Modern C++**, and **Enterprise Java**!
 
-I'm here to help you learn Python interactively as a **{level.capitalize()}** learner.
-Your current focus: **{topic}**
+I'm here to guide you through deep systems architecture, memory models, compiler mechanics, and high-performance engineering.
 
-**How I can help you:**
-- 💬 Ask me any Python question
-- 🔄 Click **"Explain Differently"** if my explanation doesn't click
-- 💡 Click **"Give me a Hint"** when you're stuck on a problem
-- 🎯 Click **"Practice Problem"** for hands-on coding challenges
+**How I can help you across all 4 courses:**
+- 🐍 **Python Systems**: Dynamic memory, generators, async event loops, data pipelines
+- ⚙️ **ANSI C**: Pointers, heap memory (`malloc`/`free`), cache alignment, system calls
+- ⚡ **Modern C++**: RAII, smart pointers, move semantics, VTables, C++20 concepts
+- ☕ **Enterprise Java**: JVM memory architecture, Garbage Collection, Streams, OOP & Spring
 
 **Try asking me:**
-- "What are variables and how do I use them?"
-- "Explain loops with a real example"
-- "How do functions work?"
-- "What is object-oriented programming?"
-- "Why do I get an IndexError?"
+- "What are loops in Java?"
+- "How do pointers and memory allocation work in C?"
+- "Explain RAII and smart pointers in C++"
+- "What are Python list comprehensions?"
 
-What would you like to learn today? 🚀"""
+Which language or concept would you like to explore today? 🚀"""
 
 
 # ── Factory ──────────────────────────────────────────────────────────────────

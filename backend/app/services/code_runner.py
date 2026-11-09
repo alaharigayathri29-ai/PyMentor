@@ -148,8 +148,8 @@ class CodeRunner:
                 "code": exec_code,
                 "stdin": stdin_input or "",
             }
-            # Fast network timeout: 6 seconds to prevent freezing the UI
-            resp = requests.post(url, json=payload, timeout=6)
+            # Fast network timeout: 3.5 seconds to prevent freezing the UI
+            resp = requests.post(url, json=payload, timeout=3.5)
             elapsed_ms = round((time.time() - start_time) * 1000, 2)
 
             if resp.status_code == 200:

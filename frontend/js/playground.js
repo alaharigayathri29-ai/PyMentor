@@ -617,14 +617,16 @@ async function init() {
 function saveCurrentEditorCode() {
   if (!editor) return;
   const currentVal = editor.getValue();
+  const isHtml = currentVal.trim().startsWith('<') || currentVal.includes('<!DOCTYPE');
+
   if (currentLang === 'python') {
-    pythonCode = currentVal;
+    if (!isHtml) pythonCode = currentVal;
   } else if (currentLang === 'c') {
-    cCode = currentVal;
+    if (!isHtml) cCode = currentVal;
   } else if (currentLang === 'cpp') {
-    cppCode = currentVal;
+    if (!isHtml) cppCode = currentVal;
   } else if (currentLang === 'java') {
-    javaCode = currentVal;
+    if (!isHtml) javaCode = currentVal;
   } else {
     webFiles[activeWebFile] = currentVal;
   }
@@ -668,13 +670,13 @@ function switchLanguage(lang) {
   const statusBadge = document.getElementById('pg-status-badge');
 
   // Prevent any HTML template from leaking into compiled language workspaces
-  if (lang === 'c' && cCode.trim().startsWith('<')) {
+  if (lang === 'c' && (!cCode.includes('#include') || cCode.includes('<html') || cCode.includes('<!DOCTYPE'))) {
     cCode = `// C Project Template (GCC)\n#include <stdio.h>\n\nint main() {\n    printf("⚡ Hello from C Playground!\\n");\n    int a = 15, b = 27;\n    printf("Result: %d + %d = %d\\n", a, b, a + b);\n    return 0;\n}\n`;
   }
-  if (lang === 'cpp' && cppCode.trim().startsWith('<')) {
+  if (lang === 'cpp' && (!cppCode.includes('#include') || cppCode.includes('<html') || cppCode.includes('<!DOCTYPE'))) {
     cppCode = `// C++ Project Template (G++)\n#include <iostream>\n#include <vector>\n#include <numeric>\n\nint main() {\n    std::cout << "🚀 Hello from C++ Playground!" << std::endl;\n    std::vector<int> numbers = {10, 20, 30, 40, 50};\n    int total = std::accumulate(numbers.begin(), numbers.end(), 0);\n    std::cout << "Vector Sum = " << total << std::endl;\n    return 0;\n}\n`;
   }
-  if (lang === 'java' && javaCode.trim().startsWith('<')) {
+  if (lang === 'java' && ((!javaCode.includes('class Main') && !javaCode.includes('class ')) || javaCode.includes('<html') || javaCode.includes('<!DOCTYPE'))) {
     javaCode = `// Java Project Template (OpenJDK 21)\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println("☕ Hello from Java Playground!");\n        int sum = 0;\n        for (int i = 1; i <= 5; i++) sum += i;\n        System.out.println("Sum 1..5 = " + sum);\n    }\n}\n`;
   }
 

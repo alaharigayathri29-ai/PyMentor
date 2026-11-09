@@ -522,15 +522,26 @@
           <span class="nav-icon">🏠</span> <span>Dashboard</span>
         </a>
 
-        <div class="nav-section-label">LEARNING</div>
-        <a href="/learning-path.html" class="nav-item" data-page="learning-path">
-          <span class="nav-icon">🗺️</span> <span>Learn Python</span>
+        <div class="nav-section-label">COURSES</div>
+        <a href="/learning-path.html?course=python" class="nav-item" data-page="course-python">
+          <span class="nav-icon">🐍</span> <span>Python Systems</span>
         </a>
+        <a href="/learning-path.html?course=c" class="nav-item" data-page="course-c">
+          <span class="nav-icon">⚙️</span> <span>ANSI C Systems</span>
+        </a>
+        <a href="/learning-path.html?course=cpp" class="nav-item" data-page="course-cpp">
+          <span class="nav-icon">⚡</span> <span>Modern C++20</span>
+        </a>
+        <a href="/learning-path.html?course=java" class="nav-item" data-page="course-java">
+          <span class="nav-icon">☕</span> <span>Enterprise Java</span>
+        </a>
+
+        <div class="nav-section-label">MODULES</div>
         <a href="/assessment.html" class="nav-item" data-page="assessment">
-          <span class="nav-icon">🎯</span> <span>Assessment</span>
+          <span class="nav-icon">🎯</span> <span>Assessment & Proctoring</span>
         </a>
         <a href="/practice.html" class="nav-item" data-page="practice">
-          <span class="nav-icon">💻</span> <span>Practice</span>
+          <span class="nav-icon">💻</span> <span>Practice Lab</span>
         </a>
         <a href="/lesson.html" class="nav-item" data-page="lesson">
           <span class="nav-icon">📖</span> <span>Interactive Lesson</span>
@@ -681,6 +692,185 @@
                   <div class="metric-title">Diagnostic Test Score</div>
                   <div class="metric-val" id="achieve-assess-score">66.7%</div>
                   <div style="font-size:11px;color:#7C3AED;margin-top:2px;">Intermediate Calibration</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Power BI-Style Multi-Language Circular Data Visualizer -->
+            <div class="polyglot-pbi-card moving-luxury-border" style="
+              background: linear-gradient(#FFFFFF, #FFFFFF) padding-box,
+                linear-gradient(90deg, #2C1A0E, #8A6D3B, #D97706, #F59E0B, #2563EB, #3B82F6, #60A5FA, #3B82F6, #2563EB, #FDE68A, #F59E0B, #D97706, #8A6D3B, #2C1A0E) border-box !important;
+              background-size: 100% 100%, 300% 300% !important;
+              border: 2.5px solid transparent !important;
+              border-radius: 16px;
+              padding: 24px 28px;
+              margin-bottom: 24px;
+              box-shadow: 0 6px 20px rgba(37, 99, 235, 0.1), 0 2px 8px rgba(245, 158, 11, 0.08);
+              animation: movingGoldBrownBorder 4s linear infinite !important;
+            ">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+                <div>
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <span style="font-size:22px;">📊</span>
+                    <h3 style="font-size:18px;font-weight:800;color:#1C0E04;margin:0;">Power BI Multi-Course Competency Visualizer</h3>
+                    <span class="badge badge-blue">Polyglot Analytics</span>
+                  </div>
+                  <div style="font-size:12.5px;color:#A07050;margin-top:3px;font-weight:600;">
+                    Real-time circular mastery breakdown across Python, C, Modern C++, and Enterprise Java
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="font-size:12px;color:#6B4226;font-weight:700;">Calibration Engine:</span>
+                  <span class="badge badge-amber" id="pbi-engine-badge">Active Power BI Model</span>
+                </div>
+              </div>
+
+              <!-- Main Visualizer Grid: Left Donut & Radial Rings, Right 4 Course Mastery Cards -->
+              <div style="display:grid;grid-template-columns:300px 1fr;gap:28px;align-items:center;" class="pbi-visualizer-grid">
+                
+                <!-- Left: Donut SVG Chart with Center Score & Circular Rings -->
+                <div style="display:flex;flex-direction:column;align-items:center;position:relative;background:#FFFDF9;border-radius:14px;padding:18px;border:1.5px solid rgba(200,160,100,0.25);">
+                  <div style="position:relative;width:220px;height:220px;">
+                    <svg viewBox="0 0 200 200" style="width:100%;height:100%;transform:rotate(-90deg);">
+                      <!-- Background Tracks -->
+                      <circle cx="100" cy="100" r="82" fill="none" stroke="#F1F5F9" stroke-width="10"/>
+                      <circle cx="100" cy="100" r="68" fill="none" stroke="#F1F5F9" stroke-width="10"/>
+                      <circle cx="100" cy="100" r="54" fill="none" stroke="#F1F5F9" stroke-width="10"/>
+                      <circle cx="100" cy="100" r="40" fill="none" stroke="#F1F5F9" stroke-width="10"/>
+
+                      <!-- 4 Language Radial Progress Rings -->
+                      <!-- 1. Python (Emerald / Amber) Ring (r=82, circumference=515.2) -->
+                      <circle id="ring-python" cx="100" cy="100" r="82" fill="none" stroke="url(#gradPython)" stroke-width="10" stroke-linecap="round" stroke-dasharray="515.2" stroke-dashoffset="128.8" style="transition:stroke-dashoffset 1s ease;"/>
+
+                      <!-- 2. C Systems (Blue) Ring (r=68, circumference=427.2) -->
+                      <circle id="ring-c" cx="100" cy="100" r="68" fill="none" stroke="url(#gradC)" stroke-width="10" stroke-linecap="round" stroke-dasharray="427.2" stroke-dashoffset="149.5" style="transition:stroke-dashoffset 1s ease;"/>
+
+                      <!-- 3. Modern C++ (Indigo) Ring (r=54, circumference=339.3) -->
+                      <circle id="ring-cpp" cx="100" cy="100" r="54" fill="none" stroke="url(#gradCpp)" stroke-width="10" stroke-linecap="round" stroke-dasharray="339.3" stroke-dashoffset="169.6" style="transition:stroke-dashoffset 1s ease;"/>
+
+                      <!-- 4. Enterprise Java (Amber Gold) Ring (r=40, circumference=251.3) -->
+                      <circle id="ring-java" cx="100" cy="100" r="40" fill="none" stroke="url(#gradJava)" stroke-width="10" stroke-linecap="round" stroke-dasharray="251.3" stroke-dashoffset="50.2" style="transition:stroke-dashoffset 1s ease;"/>
+
+                      <!-- Gradients -->
+                      <defs>
+                        <linearGradient id="gradPython" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stop-color="#10B981"/>
+                          <stop offset="100%" stop-color="#059669"/>
+                        </linearGradient>
+                        <linearGradient id="gradC" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stop-color="#3B82F6"/>
+                          <stop offset="100%" stop-color="#1D4ED8"/>
+                        </linearGradient>
+                        <linearGradient id="gradCpp" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stop-color="#8B5CF6"/>
+                          <stop offset="100%" stop-color="#6D28D9"/>
+                        </linearGradient>
+                        <linearGradient id="gradJava" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stop-color="#F59E0B"/>
+                          <stop offset="100%" stop-color="#D97706"/>
+                        </linearGradient>
+                      </defs>
+                    </svg>
+
+                    <!-- Center KPI Metric inside Donut -->
+                    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;">
+                      <div id="pbi-center-pct" style="font-size:24px;font-weight:800;color:#1C0E04;line-height:1;">68.5%</div>
+                      <div id="pbi-center-label" style="font-size:10px;font-weight:700;color:#A07050;text-transform:uppercase;letter-spacing:0.04em;margin-top:4px;">Polytechnic Mastery</div>
+                    </div>
+                  </div>
+
+                  <div style="font-size:11.5px;color:#78350F;margin-top:10px;font-weight:700;text-align:center;">
+                    Overall Polytechnic Systems Readiness
+                  </div>
+                </div>
+
+                <!-- Right: 4 Course Progress Detail Cards -->
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;" class="pbi-course-cards-grid">
+                  
+                  <!-- Python Card -->
+                  <div class="pbi-lang-card" style="background:#FFFDF9;border:1.5px solid rgba(16,185,129,0.3);border-radius:12px;padding:14px 16px;cursor:pointer;transition:transform 0.2s ease;" onclick="window.location.href='/learning-path.html?course=python'">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <span style="font-size:20px;">🐍</span>
+                        <div>
+                          <div style="font-size:13.5px;font-weight:800;color:#1C0E04;">Python Systems</div>
+                          <div style="font-size:11px;color:#059669;font-weight:600;">7 Modules Available</div>
+                        </div>
+                      </div>
+                      <span id="pbi-val-python" style="font-size:14px;font-weight:800;color:#059669;">75%</span>
+                    </div>
+                    <div style="height:6px;background:#E2E8F0;border-radius:3px;overflow:hidden;margin-bottom:8px;">
+                      <div id="pbi-bar-python" style="width:75%;height:100%;background:linear-gradient(90deg,#10B981,#059669);border-radius:3px;"></div>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;font-size:11px;color:#64748B;">
+                      <span>5 Topics Mastered</span>
+                      <span style="font-weight:700;color:#2563EB;">Open Track →</span>
+                    </div>
+                  </div>
+
+                  <!-- C Systems Card -->
+                  <div class="pbi-lang-card" style="background:#FFFDF9;border:1.5px solid rgba(59,130,246,0.3);border-radius:12px;padding:14px 16px;cursor:pointer;transition:transform 0.2s ease;" onclick="window.location.href='/learning-path.html?course=c'">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <span style="font-size:20px;">⚙️</span>
+                        <div>
+                          <div style="font-size:13.5px;font-weight:800;color:#1C0E04;">ANSI C Systems</div>
+                          <div style="font-size:11px;color:#2563EB;font-weight:600;">Pointers & Memory</div>
+                        </div>
+                      </div>
+                      <span id="pbi-val-c" style="font-size:14px;font-weight:800;color:#2563EB;">65%</span>
+                    </div>
+                    <div style="height:6px;background:#E2E8F0;border-radius:3px;overflow:hidden;margin-bottom:8px;">
+                      <div id="pbi-bar-c" style="width:65%;height:100%;background:linear-gradient(90deg,#3B82F6,#1D4ED8);border-radius:3px;"></div>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;font-size:11px;color:#64748B;">
+                      <span>4 Topics Mastered</span>
+                      <span style="font-weight:700;color:#2563EB;">Open Track →</span>
+                    </div>
+                  </div>
+
+                  <!-- Modern C++ Card -->
+                  <div class="pbi-lang-card" style="background:#FFFDF9;border:1.5px solid rgba(139,92,246,0.3);border-radius:12px;padding:14px 16px;cursor:pointer;transition:transform 0.2s ease;" onclick="window.location.href='/learning-path.html?course=cpp'">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <span style="font-size:20px;">⚡</span>
+                        <div>
+                          <div style="font-size:13.5px;font-weight:800;color:#1C0E04;">Modern C++20</div>
+                          <div style="font-size:11px;color:#7C3AED;font-weight:600;">RAII & Concurrency</div>
+                        </div>
+                      </div>
+                      <span id="pbi-val-cpp" style="font-size:14px;font-weight:800;color:#7C3AED;">50%</span>
+                    </div>
+                    <div style="height:6px;background:#E2E8F0;border-radius:3px;overflow:hidden;margin-bottom:8px;">
+                      <div id="pbi-bar-cpp" style="width:50%;height:100%;background:linear-gradient(90deg,#8B5CF6,#6D28D9);border-radius:3px;"></div>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;font-size:11px;color:#64748B;">
+                      <span>3 Topics Mastered</span>
+                      <span style="font-weight:700;color:#2563EB;">Open Track →</span>
+                    </div>
+                  </div>
+
+                  <!-- Enterprise Java Card -->
+                  <div class="pbi-lang-card" style="background:#FFFDF9;border:1.5px solid rgba(245,158,11,0.3);border-radius:12px;padding:14px 16px;cursor:pointer;transition:transform 0.2s ease;" onclick="window.location.href='/learning-path.html?course=java'">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <span style="font-size:20px;">☕</span>
+                        <div>
+                          <div style="font-size:13.5px;font-weight:800;color:#1C0E04;">Enterprise Java</div>
+                          <div style="font-size:11px;color:#D97706;font-weight:600;">JVM & Microservices</div>
+                        </div>
+                      </div>
+                      <span id="pbi-val-java" style="font-size:14px;font-weight:800;color:#D97706;">80%</span>
+                    </div>
+                    <div style="height:6px;background:#E2E8F0;border-radius:3px;overflow:hidden;margin-bottom:8px;">
+                      <div id="pbi-bar-java" style="width:80%;height:100%;background:linear-gradient(90deg,#F59E0B,#D97706);border-radius:3px;"></div>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;font-size:11px;color:#64748B;">
+                      <span>6 Topics Mastered</span>
+                      <span style="font-weight:700;color:#2563EB;">Open Track →</span>
+                    </div>
+                  </div>
+
                 </div>
               </div>
             </div>

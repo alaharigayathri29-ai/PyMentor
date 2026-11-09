@@ -1,9 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException
+from typing import Optional
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models.models import LearningPath, Topic, StudentKnowledge, User
 from app.routers.auth import get_current_user
+from app.curriculum.polyglot_curriculum import POLYGLOT_CURRICULUM
 
 router = APIRouter(prefix="/api/learning-path", tags=["learning-path"])
 
@@ -82,10 +84,22 @@ def set_current_topic(
 
 @router.get("/curriculum")
 def get_curriculum(
+    course: Optional[str] = Query("python", description="Language course: python, c, cpp, java"),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    """Retrieve all 7 curriculum modules, structured topics, and student mastery."""
+    """Retrieve all 7 curriculum modules, structured topics, and student mastery for the specified course."""
+    normalized_course = (course or "python").lower().strip()
+    if normalized_course in ("c", "cpp", "c++", "java"):
+        lang_key = "cpp" if normalized_course in ("cpp", "c++") else normalized_course
+        modules = POLYGLOT_CURRICULUM.get(lang_key, [])
+        return {
+            "course": lang_key,
+            "skill_level": "intermediate",
+            "current_topic_id": modules[0]["topics"][0]["id"] if modules and modules[0].get("topics") else None,
+            "modules": modules,
+        }
+
     lp = db.query(LearningPath).filter(LearningPath.user_id == current_user.id).first()
     if not lp:
         # Auto-initialize baseline beginner path for new student
@@ -132,6 +146,7 @@ def get_curriculum(
         })
 
     return {
+        "course": "python",
         "skill_level": lp.skill_level if lp else "beginner",
         "current_topic_id": lp.current_topic_id if lp else None,
         "modules": sorted(modules_dict.values(), key=lambda m: m["module_number"]),
@@ -141,10 +156,42 @@ def get_curriculum(
 @router.get("/topics/{topic_id}")
 def get_topic_lesson(
     topic_id: int,
+    course: Optional[str] = Query(None),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
     """Retrieve full structured lesson content for a specific topic."""
+    # Check if this topic belongs to the Polyglot Curriculum (C, C++, Java)
+    for lang, modules in POLYGLOT_CURRICULUM.items():
+        for mod in modules:
+            for top in mod.get("topics", []):
+                if top.get("id") == topic_id or str(top.get("id")) == str(topic_id):
+                    return {
+                        "id": top["id"],
+                        "name": top["name"],
+                        "slug": top["slug"],
+                        "course": lang,
+                        "description": top.get("subtopics", ["Systems Engineering"])[0] if top.get("subtopics") else top["name"],
+                        "difficulty": top.get("difficulty", "intermediate"),
+                        "icon": top.get("icon", "💻"),
+                        "module_number": mod["module_number"],
+                        "module_name": mod["module_name"],
+                        "subtopics": top.get("subtopics", []),
+                        "learning_objectives": top.get("learning_objectives", []),
+                        "lesson_content": top.get("lesson_content", {}),
+                        "status": "available",
+                        "mastery_score": 65.0,
+                        "lesson_completed": False,
+                        "practice_problems": [
+                            {
+                                "id": top["id"] * 10 + 1,
+                                "title": f"{top['name']} - Core Lab Exercise",
+                                "difficulty": top.get("difficulty", "medium"),
+                                "description": f"Write an idiomatic {lang.upper()} program solving core systems constraints in {top['name']}.",
+                            }
+                        ],
+                    }
+
     t = db.query(Topic).filter(Topic.id == topic_id).first()
     if not t:
         raise HTTPException(status_code=404, detail="Topic not found")
@@ -177,6 +224,7 @@ def get_topic_lesson(
         "id": t.id,
         "name": t.name,
         "slug": t.slug,
+        "course": "python",
         "description": t.description,
         "difficulty": t.difficulty,
         "icon": t.icon,

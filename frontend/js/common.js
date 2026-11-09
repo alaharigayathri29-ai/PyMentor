@@ -124,10 +124,20 @@ export function initLayout(activePageKey, user) {
   }
 
   // Highlight the active sidebar item
+  const currentSearch = window.location.search;
   document.querySelectorAll('.sidebar-nav a.nav-item').forEach(link => {
     const pageAttr = link.getAttribute('data-page');
     const href = link.getAttribute('href') || '';
-    if (pageAttr === activePageKey || href.includes(activePageKey + '.html')) {
+    
+    let isMatch = false;
+    if (pageAttr && pageAttr.startsWith('course-')) {
+      const courseName = pageAttr.replace('course-', '');
+      isMatch = currentSearch.includes(`course=${courseName}`) || (pageAttr === 'course-python' && !currentSearch.includes('course=') && window.location.pathname.includes('learning-path'));
+    } else {
+      isMatch = pageAttr === activePageKey || (href.includes(activePageKey + '.html') && !href.includes('course='));
+    }
+
+    if (isMatch) {
       link.classList.add('active');
     } else {
       link.classList.remove('active');

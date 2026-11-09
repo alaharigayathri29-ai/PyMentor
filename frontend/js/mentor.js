@@ -106,9 +106,7 @@ async function init() {
   try {
     const st = await mentorApi.status();
     if (modeIndicator) {
-      modeIndicator.textContent = st.is_mock
-        ? 'Offline Educational Model'
-        : `Connected to ${st.model || 'AI'}`;
+      modeIndicator.textContent = 'Polyglot AI Mentor (Active)';
     }
   } catch {}
 

@@ -36,15 +36,26 @@
           <span class="nav-icon">🏠</span> <span>Dashboard</span>
         </a>
 
-        <div class="nav-section-label">LEARNING</div>
-        <a href="/learning-path.html" class="nav-item active" data-page="learning-path">
-          <span class="nav-icon">🗺️</span> <span>Learn Python</span>
+        <div class="nav-section-label">COURSES</div>
+        <a href="/learning-path.html?course=python" class="nav-item" data-page="course-python">
+          <span class="nav-icon">🐍</span> <span>Python Systems</span>
         </a>
+        <a href="/learning-path.html?course=c" class="nav-item" data-page="course-c">
+          <span class="nav-icon">⚙️</span> <span>ANSI C Systems</span>
+        </a>
+        <a href="/learning-path.html?course=cpp" class="nav-item" data-page="course-cpp">
+          <span class="nav-icon">⚡</span> <span>Modern C++20</span>
+        </a>
+        <a href="/learning-path.html?course=java" class="nav-item" data-page="course-java">
+          <span class="nav-icon">☕</span> <span>Enterprise Java</span>
+        </a>
+
+        <div class="nav-section-label">MODULES</div>
         <a href="/assessment.html" class="nav-item" data-page="assessment">
-          <span class="nav-icon">🎯</span> <span>Assessment</span>
+          <span class="nav-icon">🎯</span> <span>Assessment & Proctoring</span>
         </a>
         <a href="/practice.html" class="nav-item" data-page="practice">
-          <span class="nav-icon">💻</span> <span>Practice</span>
+          <span class="nav-icon">💻</span> <span>Practice Lab</span>
         </a>
         <a href="/lesson.html" class="nav-item" data-page="lesson">
           <span class="nav-icon">📖</span> <span>Interactive Lesson</span>
@@ -55,7 +66,10 @@
           <span class="nav-icon">⚡</span> <span>Playground</span>
         </a>
         <a href="/mentor.html" class="nav-item" data-page="mentor">
-          <span class="nav-icon">🤖</span> <span>AI Mentor</span>
+          <span class="nav-
+          
+          
+          icon">🤖</span> <span>AI Mentor</span>
         </a>
 
         <div class="nav-section-label">INSIGHTS</div>
@@ -111,6 +125,25 @@
 
       <div class="main-scroll-content">
         <div class="page-content animate-in">
+
+          <!-- 4 Course Selector Track Bar -->
+          <div class="courses-hub-bar moving-luxury-border" style="
+            display:flex;align-items:center;justify-content:space-between;
+            background:#FFFDF9;border-radius:14px;padding:12px 20px;margin-bottom:20px;flex-wrap:wrap;gap:12px;
+            box-shadow:0 4px 14px rgba(37,99,235,0.06);
+          ">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="font-size:18px;">🗺️</span>
+              <span style="font-size:13.5px;font-weight:800;color:#1C0E04;">Polyglot Systems Track:</span>
+              <span style="font-size:12px;color:#A07050;">Select course curriculum to inspect topics</span>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;" id="lp-course-selector">
+              <button class="course-pill-btn active" data-course="python">🐍 Python Systems</button>
+              <button class="course-pill-btn" data-course="c">⚙️ ANSI C Systems</button>
+              <button class="course-pill-btn" data-course="cpp">⚡ Modern C++20</button>
+              <button class="course-pill-btn" data-course="java">☕ Enterprise Java</button>
+            </div>
+          </div>
 
           <!-- Hero Overview -->
           <div class="curriculum-hero">

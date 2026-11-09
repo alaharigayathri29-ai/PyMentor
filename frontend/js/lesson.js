@@ -16,10 +16,11 @@ async function init() {
 
   initLayout('lesson', user);
 
-  // Extract topic ID from URL search params: /lesson.html?id=2 or /lesson.html?topic_id=2
+  // Extract topic ID and course from URL search params: /lesson.html?id=2 or /lesson.html?topic_id=2&course=c
   const params = new URLSearchParams(window.location.search);
   let topicId = parseInt(params.get('id') || params.get('topic_id') || '1', 10);
   if (isNaN(topicId) || topicId < 1) topicId = 1;
+  const courseParam = (params.get('course') || '').toLowerCase();
 
   const titleEl = document.getElementById('lesson-title');
   const modTag = document.getElementById('lesson-module-tag');
@@ -34,7 +35,7 @@ async function init() {
   const completeBtn = document.getElementById('btn-complete-lesson');
   const practiceBtn = document.getElementById('btn-practice-topic');
 
-  let activeLessonLang = 'python'; // 'python' | 'c' | 'cpp' | 'java'
+  let activeLessonLang = courseParam || 'python'; // 'python' | 'c' | 'cpp' | 'java'
 
   // Helper to generate polyglot code demonstrations across all 4 courses
   function getPolyglotExamples(slug, lang, baseExamples) {
@@ -107,7 +108,8 @@ async function init() {
   }
 
   try {
-    const topic = await learningPathApi.getTopicLesson(topicId);
+    const topic = await learningPathApi.getTopicLesson(topicId, courseParam);
+    if (topic.course) activeLessonLang = topic.course;
     const lesson = topic.lesson_content || {};
     const baseExamples = lesson.examples || lesson.code_examples || [];
 
