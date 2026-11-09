@@ -113,7 +113,7 @@
   max-width: 440px;
   background:
     linear-gradient(#FFFFFF, #FFFFFF) padding-box,
-    linear-gradient(90deg, #10B981, #06B6D4, #3B82F6, #8B5CF6, #EC4899, #F59E0B, #10B981) border-box;
+    linear-gradient(90deg, #2C1A0E, #8A6D3B, #B45309, #D97706, #F59E0B, #FDE68A, #F59E0B, #D97706, #B45309, #8A6D3B, #2C1A0E) border-box;
   background-size: 100% 100%, 300% 300%;
   border: 2px solid transparent;
   border-radius: var(--r-2xl);

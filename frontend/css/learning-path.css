@@ -3,9 +3,24 @@
    Rich Cream Canvas · Espresso Roadmap Hero · Elevated Module Accordions
    ══════════════════════════════════════════════════════════════════════════════ */
 
+@keyframes movingGoldBrownBorder {
+  0% {
+    background-position: 0% 0%, 0% 50%;
+  }
+  50% {
+    background-position: 0% 0%, 100% 50%;
+  }
+  100% {
+    background-position: 0% 0%, 0% 50%;
+  }
+}
+
 .curriculum-hero {
-  background: linear-gradient(135deg, #2C1A0E 0%, #3D2512 60%, #4C2D15 100%);
-  border: 1px solid rgba(245, 158, 11, 0.25);
+  background:
+    linear-gradient(135deg, #2C1A0E 0%, #3D2512 60%, #4C2D15 100%) padding-box,
+    linear-gradient(90deg, #2C1A0E, #8A6D3B, #B45309, #D97706, #F59E0B, #FDE68A, #F59E0B, #D97706, #B45309, #8A6D3B, #2C1A0E) border-box;
+  background-size: 100% 100%, 300% 300%;
+  border: 2px solid transparent;
   border-radius: var(--r-xl);
   padding: 24px 28px;
   display: flex;
@@ -14,6 +29,7 @@
   margin-bottom: 24px;
   box-shadow: 0 10px 32px rgba(44, 26, 14, 0.35);
   color: #FFF8F0;
+  animation: movingGoldBrownBorder 4s linear infinite;
 }
 
 .curriculum-hero h1, .curriculum-hero h2 {
@@ -31,12 +47,16 @@
 
 /* Module Accordion Card */
 .module-card {
-  background-color: #FFFFFF;
-  border: 1px solid rgba(200, 160, 100, 0.22);
+  background:
+    linear-gradient(#FFFFFF, #FFFFFF) padding-box,
+    linear-gradient(90deg, #2C1A0E, #8A6D3B, #B45309, #D97706, #F59E0B, #FDE68A, #F59E0B, #D97706, #B45309, #8A6D3B, #2C1A0E) border-box;
+  background-size: 100% 100%, 300% 300%;
+  border: 1.5px solid transparent;
   border-radius: var(--r-xl);
   overflow: hidden;
   box-shadow: 0 4px 18px rgba(100, 50, 0, 0.07);
   transition: var(--transition);
+  animation: movingGoldBrownBorder 6s linear infinite;
 }
 
 .module-card:hover {

@@ -5,13 +5,29 @@
 
 .hidden { display: none !important; }
 
+@keyframes movingGoldBrownBorder {
+  0% {
+    background-position: 0% 0%, 0% 50%;
+  }
+  50% {
+    background-position: 0% 0%, 100% 50%;
+  }
+  100% {
+    background-position: 0% 0%, 0% 50%;
+  }
+}
+
 .mentor-container {
   display: flex;
   height: calc(100vh - var(--topbar-h) - 40px);
-  background: #FFFDF9;
-  border: 1px solid rgba(200,160,100,0.25);
+  background:
+    linear-gradient(#FFFDF9, #FFFDF9) padding-box,
+    linear-gradient(90deg, #2C1A0E, #8A6D3B, #B45309, #D97706, #F59E0B, #FDE68A, #F59E0B, #D97706, #B45309, #8A6D3B, #2C1A0E) border-box;
+  background-size: 100% 100%, 300% 300%;
+  border: 2px solid transparent;
   border-radius: 16px; overflow: hidden;
   box-shadow: 0 16px 48px rgba(100,50,0,0.12);
+  animation: movingGoldBrownBorder 4s linear infinite;
 }
 
 /* ── Conversations Sidebar ───────────────────────────────────────────────── */
