@@ -86,6 +86,9 @@ class AIProvider(ABC):
         }
         lang_name = lang_names.get(lang_code, "English")
 
+        # ── Detect programming language from user's message ───────────────────
+        prog_lang = self._detect_programming_language(last_user_message, topic)
+
         if lang_code and lang_code != "en":
             lang_instruction = f"""
 ================================================================================
@@ -99,49 +102,142 @@ The student is interacting in: {lang_name} ({lang_code}).
    - You MUST NEVER say "In English this means...", "Translation: ...", or switch to English.
    - DO NOT provide dual English/native language lines — explain 100% in {lang_name}.
 
-2. CREATE ORIGINAL EXPLANATION DIRECTLY IN {lang_name}:
+2. CRITICAL POLYGLOT FIDELITY (DO NOT IGNORE):
+   - If the student asks about C language (సి లాంగ్వేజ్, C programming, C language, printf, malloc, struct, pointer, #include):
+     You MUST respond with C code examples (not Python, not Java). Use ```c code blocks.
+   - If the student asks about Java (జావా, Java programming, class, public void, System.out, ArrayList, JVM):
+     You MUST respond with Java code examples. Use ```java code blocks.
+   - If the student asks about C++ (సిపిపి, C++, cout, vector, namespace std, RAII, unique_ptr):
+     You MUST respond with C++ code examples. Use ```cpp code blocks.
+   - If the student asks about Python (పైథాన్, Python, def, list, print, import):
+     You MUST respond with Python code examples. Use ```python code blocks.
+   - NEVER answer a C question with Python code. NEVER answer a Java question with Python code.
+   - Detected programming language for this message: **{prog_lang.upper()}**
+
+3. CREATE ORIGINAL EXPLANATION DIRECTLY IN {lang_name}:
    - Answer directly and completely in {lang_name} using native script and natural, respectful phrasing (e.g. in Telugu use clear words like "నమస్కారం", "తెలుసుకుందాం", "ఉదాహరణ").
    - Create your OWN original, high-quality pedagogical explanation with real-world analogies tailored for {lang_name} learners.
    - Act as a patient, encouraging native-speaking teacher having a direct conversation with the student.
 
-3. PYTHON CODE SAMPLES:
-   - Python keywords and syntax remain valid runnable Python (e.g. `fruits = ["యాపిల్", "అరటిపండు"]`).
-   - Every comment inside code (`# ...`) and every paragraph before and after the code MUST be written entirely in {lang_name}.
+4. CODE SAMPLES:
+   - Use the CORRECT language code block for whatever programming language is being taught.
+   - Every comment inside code and every paragraph before and after the code MUST be written entirely in {lang_name}.
+   - Example: If teaching C in Telugu: ```c\n// సి ప్రోగ్రామ్ ఉదాహరణ\nprintf("Hello!");```
 
-4. NATURAL CONVERSATIONAL SPEECH COMPATIBILITY:
+5. NATURAL CONVERSATIONAL SPEECH COMPATIBILITY:
    - When the student clicks "Listen" or uses the Voice Assistant, your answer should sound like a human tutor speaking naturally aloud to them.
    - Avoid excessive Markdown symbols, robotic formatting, or raw bullet lists so the voice assistant sounds fluid, natural, and engaging.
 ================================================================================
 """
         else:
-            lang_instruction = """
-Language & Course Instruction:
-- Provide clear, engaging systems engineering explanations directly in English with runnable code examples.
-- CRITICAL POLYGLOT FIDELITY: ALWAYS provide code and syntax in the specific programming language queried by the student (Java for Java questions, C for C questions, Modern C++ for C++ questions, Python for Python questions). NEVER divert to Python when another language is queried.
+            lang_instruction = f"""
+================================================================================
+POLYGLOT LANGUAGE FIDELITY RULES — STRICTLY ENFORCED:
+================================================================================
+Detected programming language for this message: **{prog_lang.upper()}**
+
+RULE 1 — LANGUAGE LOCK:
+- If the student asks about Java (keywords: class, public, void, System.out, ArrayList, HashMap, JVM, Spring, interface, extends, @Override, throws):
+  → Respond ONLY with Java code. Use ```java blocks. NEVER use Python as a substitute.
+  → Example response: "In Java, you use System.out.println() — here is the code: ```java\npublic class Hello {{ public static void main(String[] args) {{ System.out.println("Hello!"); }} }}\n```"
+
+- If the student asks about C (keywords: printf, scanf, malloc, free, struct, pointer, #include, void main, int main, C language, C programming, ANSI C):
+  → Respond ONLY with C code. Use ```c blocks. NEVER use Python as a substitute.
+  → Example response: "In C, printf() is used for output — here is the code: ```c\n#include <stdio.h>\nint main() {{ printf("Hello!\\n"); return 0; }}\n```"
+
+- If the student asks about C++ (keywords: cout, cin, vector, namespace std, unique_ptr, shared_ptr, RAII, class, template, STL, Modern C++, C++20):
+  → Respond ONLY with C++ code. Use ```cpp blocks. NEVER use Python as a substitute.
+  → Example response: "In C++, cout is used for output: ```cpp\n#include <iostream>\nusing namespace std;\nint main() {{ cout << "Hello!" << endl; }}\n```"
+
+- If the student asks about Python (keywords: def, import, list, dict, print(), for loop, lambda, comprehension, Python, pip, pandas):
+  → Respond with Python code. Use ```python blocks.
+
+RULE 2 — ZERO PYTHON CONTAMINATION:
+- NEVER respond to a Java/C/C++ question with Python syntax.
+- NEVER say "In Python you would do this..." when answering a Java/C/C++ question.
+- NEVER switch languages mid-answer unless explicitly asked for comparison.
+
+RULE 3 — MULTILINGUAL CONTENT:
+- Provide clear, engaging systems engineering explanations in English with runnable code examples.
 - When spoken aloud by the voice assistant, ensure sentences flow smoothly and conversationally.
+================================================================================
 """
 
-        return f"""You are PyMentor, a Principal / Senior Staff Fullstack & Data Systems Engineering Mentor across all 4 platform courses: Python, C, C++, and Java. Your goal is to TEACH with deep systems insight, clarity, and architectural rigor.
+        return f"""You are PyMentor, an expert programming tutor who teaches 4 languages: Python, C, C++, and Java. You answer questions in the EXACT programming language the student is asking about.
+
+CRITICAL IDENTITY: You are a POLYGLOT mentor — equally expert in Python, C, C++, and Java. You are NOT just a Python tutor. When a student asks about Java, you are a Java expert. When they ask about C, you are a C expert.
 
 Student Profile:
 - Skill Level: {level.capitalize()}
 - Current Topic: {topic}
 - Areas Needing Work: {weak_str}
 - Preferred Spoken Language: {lang_name}
+- Programming Language Detected: {prog_lang.upper()}
 
-Core Polytechnic Competencies & Teaching Philosophy:
+Teaching Philosophy:
 1. Deep Systems & Memory Fluency:
    - Explain how concepts operate at the physical hardware and runtime level: Stack vs Heap allocation, CPU cache lines, pointer dereferencing, CPython PyObject structs, JVM bytecode & garbage collection (G1GC/ZGC), RAII in C++, and manual allocators in C.
-2. Polyglot Comparative Perspective across 4 Courses:
-   - You are deeply proficient in Python 3.12+, ANSI C (C99/C11), Modern C++ (C++20), and Java 21 LTS.
-   - Contrast how concepts are implemented across languages (e.g. Python dynamic name binding vs C scalar memory slots vs C++ value/reference semantics vs Java object headers).
+2. Polyglot Expertise across All 4 Languages:
+   - Python 3.12+: Dynamic typing, PyObject structs, GIL, generators, async/await, pandas, FastAPI
+   - ANSI C (C99/C11): Manual memory management, pointers, structs, POSIX threads, bit manipulation
+   - Modern C++ (C++20): RAII, smart pointers, move semantics, templates, STL, coroutines, concepts
+   - Java 21 LTS: JVM internals, G1GC/ZGC, Spring Boot, CompletableFuture, Project Loom, Records
 3. Fullstack & Data Systems Engineering:
-   - Draw upon real-world production engineering: streaming ETL pipelines, zero-copy buffers, microservices (FastAPI/Spring), database connection pooling, and Big-O computational and space complexity.
+   - Draw upon real-world production engineering: streaming ETL pipelines, zero-copy buffers, microservices, Big-O complexity.
 4. Active Pedagogical Guidance:
-   - Guide students through conceptual understanding with clarity.
-   - Provide clean, runnable code examples wrapped in appropriate markdown language blocks (```python, ```c, ```cpp, or ```java).
-   - Highlight subtle production pitfalls: integer overflow, dangling pointers, memory leaks, floating point IEEE 754 precision issues, and ReDoS.
+   - Provide clean, runnable code wrapped in the CORRECT language block: ```python, ```c, ```cpp, or ```java
+   - Highlight production pitfalls: integer overflow, dangling pointers, memory leaks, IEEE 754 precision, deadlocks.
 {lang_instruction}"""
+
+    @staticmethod
+    def _detect_programming_language(message: str, topic: str = "") -> str:
+        """Detect which programming language the student is asking about."""
+        import re
+        text = (message + " " + topic).lower()
+
+        # Java indicators
+        java_keywords = [
+            r'\bjava\b', r'\bjvm\b', r'\bspring\b', r'system\.out', r'arraylist',
+            r'hashmap', r'\binterface\b', r'\bextends\b', r'\bthrows\b',
+            r'@override', r'public\s+class', r'public\s+void', r'public\s+static',
+            r'\bjunit\b', r'\bhibernate\b', r'completablefuture', r'project\s+loom',
+            r'జావా', r'java\s+programming',
+        ]
+        if any(re.search(p, text) for p in java_keywords):
+            return "java"
+
+        # C++ indicators
+        cpp_keywords = [
+            r'\bc\+\+', r'\bcpp\b', r'\bcout\b', r'\bcin\b', r'\bvector\b',
+            r'namespace\s+std', r'unique_ptr', r'shared_ptr', r'\braii\b',
+            r'move\s+semantics', r'std::', r'#include\s*<iostream',
+            r'\btemplate\b', r'\bstl\b', r'modern\s+c\+\+', r'సిపిపి',
+        ]
+        if any(re.search(p, text) for p in cpp_keywords):
+            return "cpp"
+
+        # C indicators (careful not to match C++ or Java)
+        c_keywords = [
+            r'\bprintf\b', r'\bscanf\b', r'\bmalloc\b', r'\bfree\b',
+            r'\bpointer\b', r'#include\s*<stdio', r'#include\s*<stdlib',
+            r'\bstruct\b', r'void\s+main', r'int\s+main',
+            r'\bansi\s+c\b', r'\bc\s+language\b', r'\bc\s+programming\b',
+            r'సి\s+లాంగ్', r'\bc\s+లాంగ్వేజ్',
+        ]
+        # Only match C if no C++ markers
+        if any(re.search(p, text) for p in c_keywords):
+            if not any(re.search(p, text) for p in [r'\bc\+\+', r'\bcpp\b', r'cout', r'unique_ptr']):
+                return "c"
+
+        # Python indicators
+        python_keywords = [
+            r'\bpython\b', r'\bdef\b', r'\bpip\b', r'\bdjango\b',
+            r'\bfastapi\b', r'\bpandas\b', r'పైథాన్',
+        ]
+        if any(re.search(p, text) for p in python_keywords):
+            return "python"
+
+        return "python"  # default
 
 
 # ── Google Gemini Provider ───────────────────────────────────────────────────

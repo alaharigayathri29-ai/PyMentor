@@ -142,7 +142,20 @@ export function initLayout(activePageKey, user) {
     } else {
       link.classList.remove('active');
     }
+
+    // Auto-close sidebar on mobile or when switching module/course
+    link.addEventListener('click', () => {
+      const sidebar = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      if (window.innerWidth <= 768 && sidebar) {
+        sidebar.classList.remove('open');
+        if (backdrop) backdrop.classList.remove('active');
+      }
+    });
   });
+
+  // Setup Sidebar Toggle and Responsive Backdrop
+  setupSidebarControls();
 
   // Attach logout handler
   const logoutBtn = document.getElementById('logout-btn');
@@ -189,5 +202,52 @@ export function escapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
+}
+
+/**
+ * Responsive Sidebar Toggle and Backdrop for Mobile & Desktop
+ */
+function setupSidebarControls() {
+  const sidebar = document.getElementById('sidebar');
+  if (!sidebar) return;
+
+  // 1. Create or get backdrop
+  let backdrop = document.getElementById('sidebar-backdrop');
+  if (!backdrop) {
+    backdrop = document.createElement('div');
+    backdrop.id = 'sidebar-backdrop';
+    backdrop.className = 'sidebar-backdrop';
+    document.body.appendChild(backdrop);
+  }
+
+  backdrop.onclick = () => {
+    sidebar.classList.remove('open');
+    sidebar.classList.add('collapsed');
+    backdrop.classList.remove('active');
+  };
+
+  // 2. Inject toggle button in topbar if not already present
+  const topbarLeft = document.querySelector('.topbar-left');
+  if (topbarLeft && !document.getElementById('sidebar-toggle-btn')) {
+    const toggleBtn = document.createElement('button');
+    toggleBtn.id = 'sidebar-toggle-btn';
+    toggleBtn.className = 'topbar-icon-btn';
+    toggleBtn.setAttribute('title', 'Toggle Navigation Menu');
+    toggleBtn.innerHTML = '☰';
+    toggleBtn.style.cssText = `
+      margin-right: 8px; font-size: 16px; font-weight: bold;
+      border-radius: 8px; display: inline-flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.2s;
+    `;
+    toggleBtn.onclick = () => {
+      if (window.innerWidth <= 768) {
+        sidebar.classList.toggle('open');
+        backdrop.classList.toggle('active', sidebar.classList.contains('open'));
+      } else {
+        sidebar.classList.toggle('collapsed');
+      }
+    };
+    topbarLeft.insertBefore(toggleBtn, topbarLeft.firstChild);
+  }
 }
 

@@ -24,6 +24,62 @@
   position: relative;
   overflow: hidden;
   box-shadow: 3px 0 24px rgba(44,26,14,0.4);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s ease, min-width 0.3s ease, opacity 0.2s ease;
+}
+
+/* Collapsed state for desktop when focused on modules */
+.sidebar.collapsed {
+  width: 0 !important;
+  min-width: 0 !important;
+  transform: translateX(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Sidebar Backdrop for mobile/drawer */
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.sidebar-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Mobile responsive drawer */
+@media (max-width: 768px) {
+  .app-shell {
+    position: relative;
+    overflow-x: hidden;
+  }
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1000;
+    width: 270px;
+    min-width: 270px;
+    transform: translateX(-100%);
+    box-shadow: 8px 0 32px rgba(0,0,0,0.4);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .topbar {
+    padding: 0 14px;
+  }
+  .topbar-right .dash-search-box {
+    display: none;
+  }
 }
 
 /* Top accent line — moving brown, gold & blue gradient stripe */

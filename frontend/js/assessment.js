@@ -166,48 +166,214 @@ public class LruCache<K, V> {
   }
 };
 
+// ── Assessment Consent Gate ──────────────────────────────────────────────────
+function showAssessmentConsentGate() {
+  // Hide the main assessment content initially
+  const mainContent = document.getElementById('assessment-main-content');
+  if (mainContent) mainContent.style.display = 'none';
+
+  // Create full-page consent overlay
+  const overlay = document.createElement('div');
+  overlay.id = 'assessment-consent-gate';
+  overlay.style.cssText = `
+    position: fixed; inset: 0; z-index: 9999;
+    background: linear-gradient(135deg, #FFFDF9 0%, #FEF9EF 100%);
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+  `;
+  overlay.innerHTML = `
+    <div style="max-width:600px;width:100%;background:#fff;border-radius:24px;
+      box-shadow:0 24px 80px rgba(44,26,14,0.15);border:1.5px solid rgba(245,158,11,0.2);
+      overflow:hidden;">
+      <!-- Header -->
+      <div style="background:linear-gradient(135deg,#2C1A0E,#4A2C10);padding:28px 32px;text-align:center;">
+        <div style="font-size:48px;margin-bottom:12px;">🎯</div>
+        <div style="font-size:22px;font-weight:800;color:#F5E6D3;letter-spacing:-0.02em;">Skill Certification Center</div>
+        <div style="font-size:13px;color:#A07050;margin-top:6px;">Choose your track and begin when ready</div>
+      </div>
+      <!-- Course Selector -->
+      <div style="padding:28px 32px;border-bottom:1px solid #F3EDE5;">
+        <div style="font-size:13px;font-weight:700;color:#7A5535;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;">
+          🎓 Select Your Assessment Track
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="consent-track-btn active" data-course="python"
+            style="display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:50px;
+              border:2px solid #2563EB;background:#EFF6FF;color:#1D4ED8;font-weight:700;cursor:pointer;
+              font-size:13px;transition:all 0.2s;">
+            🐍 Python Track
+          </button>
+          <button class="consent-track-btn" data-course="c"
+            style="display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:50px;
+              border:2px solid #E2E8F0;background:#F8FAFC;color:#374151;font-weight:600;cursor:pointer;
+              font-size:13px;transition:all 0.2s;">
+            ⚙️ C Track
+          </button>
+          <button class="consent-track-btn" data-course="cpp"
+            style="display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:50px;
+              border:2px solid #E2E8F0;background:#F8FAFC;color:#374151;font-weight:600;cursor:pointer;
+              font-size:13px;transition:all 0.2s;">
+            ⚡ C++ Track
+          </button>
+          <button class="consent-track-btn" data-course="java"
+            style="display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:50px;
+              border:2px solid #E2E8F0;background:#F8FAFC;color:#374151;font-weight:600;cursor:pointer;
+              font-size:13px;transition:all 0.2s;">
+            ☕ Java Track
+          </button>
+        </div>
+      </div>
+      <!-- Proctoring Consent -->
+      <div style="padding:24px 32px;border-bottom:1px solid #F3EDE5;background:#FFFBF5;">
+        <div style="display:flex;gap:14px;align-items:flex-start;">
+          <div style="font-size:28px;flex-shrink:0;">📸</div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#1C0E04;margin-bottom:6px;">
+              AI Proctoring Notice
+            </div>
+            <div style="font-size:13px;color:#5A3015;line-height:1.6;">
+              This assessment uses <strong>webcam monitoring</strong> to ensure a fair environment.
+              Your camera will activate only when you click <em>"Start Assessment"</em>.
+              Tab switches and copy-paste actions are logged for academic integrity.
+            </div>
+            <div style="margin-top:12px;display:flex;align-items:center;gap:8px;">
+              <input type="checkbox" id="consent-checkbox" style="width:16px;height:16px;accent-color:#F59E0B;cursor:pointer;">
+              <label for="consent-checkbox" style="font-size:13px;font-weight:600;color:#2C1A0E;cursor:pointer;">
+                I consent to webcam proctoring and understand the academic integrity rules
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Action Buttons -->
+      <div style="padding:24px 32px;display:flex;gap:12px;justify-content:flex-end;background:#FFFDF9;">
+        <button onclick="window.location.href='/dashboard.html'" 
+          style="padding:12px 24px;border-radius:12px;border:1.5px solid #E2E8F0;
+            background:#F8FAFC;color:#374151;font-weight:600;font-size:14px;cursor:pointer;
+            transition:all 0.2s;">
+          ← Back to Dashboard
+        </button>
+        <button id="consent-start-btn"
+          style="padding:12px 28px;border-radius:12px;border:none;
+            background:linear-gradient(135deg,#F59E0B,#D97706);color:#fff;
+            font-weight:700;font-size:14px;cursor:pointer;
+            box-shadow:0 4px 16px rgba(217,119,6,0.4);
+            transition:all 0.2s;opacity:0.5;pointer-events:none;">
+          🎯 Start Skill Assessment
+        </button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  // Track selection
+  const trackBtns = overlay.querySelectorAll('.consent-track-btn');
+  trackBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      trackBtns.forEach(b => {
+        b.style.borderColor = '#E2E8F0';
+        b.style.background = '#F8FAFC';
+        b.style.color = '#374151';
+        b.style.fontWeight = '600';
+      });
+      btn.style.borderColor = '#2563EB';
+      btn.style.background = '#EFF6FF';
+      btn.style.color = '#1D4ED8';
+      btn.style.fontWeight = '700';
+      currentCourse = btn.getAttribute('data-course');
+    });
+  });
+
+  // Enable start button only after consent
+  const checkbox = overlay.querySelector('#consent-checkbox');
+  const startBtn = overlay.querySelector('#consent-start-btn');
+  checkbox.addEventListener('change', () => {
+    if (checkbox.checked) {
+      startBtn.style.opacity = '1';
+      startBtn.style.pointerEvents = 'auto';
+    } else {
+      startBtn.style.opacity = '0.5';
+      startBtn.style.pointerEvents = 'none';
+    }
+  });
+
+  // Start assessment button
+  startBtn.addEventListener('click', async () => {
+    overlay.remove();
+    if (mainContent) mainContent.style.display = '';
+
+    // Now initialize everything
+    initWebCamProctoring();
+    initAntiCheatMonitors();
+    setupModeToggles();
+
+    // Setup Course Track Selector
+    const courseButtons = document.querySelectorAll('#assess-course-selector button');
+    courseButtons.forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const selected = btn.getAttribute('data-course');
+        if (selected === currentCourse) return;
+        currentCourse = selected;
+        courseButtons.forEach(b => b.classList.toggle('active', b === btn));
+        
+        const titleEl = document.getElementById('topbar-title');
+        if (titleEl) {
+          const titles = {
+            python: 'Python Diagnostic Assessment',
+            c: 'C Systems Diagnostic Assessment',
+            cpp: 'Modern C++ Diagnostic Assessment',
+            java: 'Enterprise Java Diagnostic Assessment',
+          };
+          titleEl.textContent = titles[selected] || 'Skill Assessment';
+        }
+
+        if (currentMode === 'written') {
+          renderWrittenChallenge();
+        } else {
+          await loadQuestions(currentCourse);
+        }
+      });
+    });
+
+    // Set active track in selector
+    courseButtons.forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-course') === currentCourse);
+    });
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const wantsRetake = urlParams.get('retake') === '1';
+
+    if (!wantsRetake) {
+      try {
+        const existing = await assessmentApi.result();
+        if (existing && existing.score !== null && existing.score !== undefined) {
+          renderResults(existing);
+          return;
+        }
+      } catch {}
+    }
+
+    await loadQuestions(currentCourse);
+  });
+
+  // Hover effects for start btn
+  startBtn.addEventListener('mouseenter', () => {
+    if (startBtn.style.pointerEvents !== 'none') {
+      startBtn.style.transform = 'translateY(-2px)';
+      startBtn.style.boxShadow = '0 8px 24px rgba(217,119,6,0.5)';
+    }
+  });
+  startBtn.addEventListener('mouseleave', () => {
+    startBtn.style.transform = '';
+    startBtn.style.boxShadow = '0 4px 16px rgba(217,119,6,0.4)';
+  });
+}
+
 async function init() {
   const user = await requireAuth();
   if (!user) return;
 
   initLayout('assessment', user);
-
-  // Initialize Real WebCam AI Proctoring
-  initWebCamProctoring();
-
-  // Initialize Anti-Cheat Security Monitors
-  initAntiCheatMonitors();
-
-  // Setup Assessment Mode Toggle (Diagnostic vs Written Lab)
-  setupModeToggles();
-
-  // Setup Course Track Selector
-  const courseButtons = document.querySelectorAll('#assess-course-selector button');
-  courseButtons.forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const selected = btn.getAttribute('data-course');
-      if (selected === currentCourse) return;
-      currentCourse = selected;
-      courseButtons.forEach(b => b.classList.toggle('active', b === btn));
-      
-      const titleEl = document.getElementById('topbar-title');
-      if (titleEl) {
-        const titles = {
-          python: 'Python Diagnostic Assessment',
-          c: 'C Systems Diagnostic Assessment',
-          cpp: 'Modern C++ Diagnostic Assessment',
-          java: 'Enterprise Java Diagnostic Assessment',
-        };
-        titleEl.textContent = titles[selected] || 'Skill Assessment';
-      }
-
-      if (currentMode === 'written') {
-        renderWrittenChallenge();
-      } else {
-        await loadQuestions(currentCourse);
-      }
-    });
-  });
 
   const prevBtn = document.getElementById('btn-assess-prev');
   const nextBtn = document.getElementById('btn-assess-next');
@@ -229,22 +395,8 @@ async function init() {
 
   submitBtn?.addEventListener('click', submitAssessment);
 
-  // Check if student already has a previous assessment result
-  const urlParams = new URLSearchParams(window.location.search);
-  const wantsRetake = urlParams.get('retake') === '1';
-
-  if (!wantsRetake) {
-    try {
-      const existing = await assessmentApi.result();
-      if (existing && existing.score !== null && existing.score !== undefined) {
-        renderResults(existing);
-        return;
-      }
-    } catch {}
-  }
-
-  // Load diagnostic questions
-  await loadQuestions(currentCourse);
+  // Show consent gate first — everything else starts only after consent
+  showAssessmentConsentGate();
 }
 
 // ── WebCam AI Proctoring System ─────────────────────────────────────────────

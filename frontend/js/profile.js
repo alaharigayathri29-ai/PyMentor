@@ -148,10 +148,10 @@ function populatePolyglotVisualizer(data, assess) {
   const solved = data?.problems_solved || 0;
 
   // Calibrate 4 languages
-  const pyPct = Math.min(100, Math.max(30, Math.round(assessScore * 0.9 + solved * 5)));
-  const cPct = Math.min(100, Math.max(25, Math.round(assessScore * 0.75 + solved * 3)));
-  const cppPct = Math.min(100, Math.max(20, Math.round(assessScore * 0.70 + solved * 2)));
-  const javaPct = Math.min(100, Math.max(35, Math.round(assessScore * 0.95 + solved * 4)));
+  const pyPct = Math.min(100, Math.max(0, Math.round(assessScore * 0.9 + solved * 5)));
+  const cPct = Math.min(100, Math.max(0, Math.round(assessScore * 0.75 + solved * 3)));
+  const cppPct = Math.min(100, Math.max(0, Math.round(assessScore * 0.70 + solved * 2)));
+  const javaPct = Math.min(100, Math.max(0, Math.round(assessScore * 0.95 + solved * 4)));
 
   const overall = Math.round((pyPct + cPct + cppPct + javaPct) / 4);
 
@@ -197,33 +197,33 @@ function populateInteractiveProblemsChart(data, filterCourse = 'all') {
   // Multi-Course Topic Definitions
   const courseTrackBanks = {
     python: [
-      { bg: '#2563EB', light: '#EFF6FF', border: '#60A5FA', name: 'Variables & Data Types', solved: 2, mastery: 80, attempts: 2, topicId: 1 },
-      { bg: '#F59E0B', light: '#FEF3C7', border: '#FBBF24', name: 'Operators & Expressions', solved: 1, mastery: 80, attempts: 1, topicId: 2 },
-      { bg: '#10B981', light: '#D1FAE5', border: '#34D399', name: 'Conditional Statements', solved: 0, mastery: 40, attempts: 1, topicId: 3 },
-      { bg: '#8B5CF6', light: '#EDE9FE', border: '#A78BFA', name: 'Loops & Iteration', solved: 1, mastery: 75, attempts: 2, topicId: 4 },
-      { bg: '#F43F5E', light: '#FFE4E6', border: '#FB7185', name: 'Lists & Data Structures', solved: 0, mastery: 50, attempts: 0, topicId: 6 },
-      { bg: '#06B6D4', light: '#CFFAFE', border: '#22D3EE', name: 'Functions & Modularity', solved: 0, mastery: 60, attempts: 0, topicId: 5 },
+      { bg: '#2563EB', light: '#EFF6FF', border: '#60A5FA', name: 'Variables & Data Types', solved: 0, mastery: 0, attempts: 0, topicId: 1 },
+      { bg: '#F59E0B', light: '#FEF3C7', border: '#FBBF24', name: 'Operators & Expressions', solved: 0, mastery: 0, attempts: 0, topicId: 2 },
+      { bg: '#10B981', light: '#D1FAE5', border: '#34D399', name: 'Conditional Statements', solved: 0, mastery: 0, attempts: 0, topicId: 3 },
+      { bg: '#8B5CF6', light: '#EDE9FE', border: '#A78BFA', name: 'Loops & Iteration', solved: 0, mastery: 0, attempts: 0, topicId: 4 },
+      { bg: '#F43F5E', light: '#FFE4E6', border: '#FB7185', name: 'Lists & Data Structures', solved: 0, mastery: 0, attempts: 0, topicId: 6 },
+      { bg: '#06B6D4', light: '#CFFAFE', border: '#22D3EE', name: 'Functions & Modularity', solved: 0, mastery: 0, attempts: 0, topicId: 5 },
     ],
     c: [
-      { bg: '#3B82F6', light: '#EFF6FF', border: '#60A5FA', name: 'C Fundamentals & Byte Storage', solved: 1, mastery: 75, attempts: 1, topicId: 1001 },
-      { bg: '#1D4ED8', light: '#DBEAFE', border: '#2563EB', name: 'Pointers & Memory Addressing', solved: 1, mastery: 65, attempts: 2, topicId: 1002 },
-      { bg: '#0284C7', light: '#E0F2FE', border: '#38BDF8', name: 'Dynamic Memory (malloc/free)', solved: 0, mastery: 50, attempts: 0, topicId: 1003 },
-      { bg: '#0F766E', light: '#CCFBF1', border: '#14B8A6', name: 'Structs & Memory Alignment', solved: 0, mastery: 45, attempts: 0, topicId: 1004 },
-      { bg: '#6D28D9', light: '#EDE9FE', border: '#8B5CF6', name: 'POSIX Pthreads Synchronization', solved: 0, mastery: 30, attempts: 0, topicId: 1005 },
+      { bg: '#3B82F6', light: '#EFF6FF', border: '#60A5FA', name: 'C Fundamentals & Byte Storage', solved: 0, mastery: 0, attempts: 0, topicId: 1001 },
+      { bg: '#1D4ED8', light: '#DBEAFE', border: '#2563EB', name: 'Pointers & Memory Addressing', solved: 0, mastery: 0, attempts: 0, topicId: 1002 },
+      { bg: '#0284C7', light: '#E0F2FE', border: '#38BDF8', name: 'Dynamic Memory (malloc/free)', solved: 0, mastery: 0, attempts: 0, topicId: 1003 },
+      { bg: '#0F766E', light: '#CCFBF1', border: '#14B8A6', name: 'Structs & Memory Alignment', solved: 0, mastery: 0, attempts: 0, topicId: 1004 },
+      { bg: '#6D28D9', light: '#EDE9FE', border: '#8B5CF6', name: 'POSIX Pthreads Synchronization', solved: 0, mastery: 0, attempts: 0, topicId: 1005 },
     ],
     cpp: [
-      { bg: '#8B5CF6', light: '#EDE9FE', border: '#A78BFA', name: 'Modern C++ Syntax & Type Deduction', solved: 1, mastery: 80, attempts: 1, topicId: 2001 },
-      { bg: '#7C3AED', light: '#F3E8FF', border: '#9333EA', name: 'RAII & Smart Pointer Semantics', solved: 1, mastery: 70, attempts: 1, topicId: 2002 },
-      { bg: '#6366F1', light: '#EEF2FF', border: '#818CF8', name: 'Virtual Tables & OOP Interfaces', solved: 0, mastery: 60, attempts: 0, topicId: 2003 },
-      { bg: '#4F46E5', light: '#E0E7FF', border: '#6366F1', name: 'STL Containers & Algorithms', solved: 0, mastery: 55, attempts: 0, topicId: 2004 },
-      { bg: '#4338CA', light: '#C7D2FE', border: '#4F46E5', name: 'Lock-Free Atomics & Concurrency', solved: 0, mastery: 40, attempts: 0, topicId: 2006 },
+      { bg: '#8B5CF6', light: '#EDE9FE', border: '#A78BFA', name: 'Modern C++ Syntax & Type Deduction', solved: 0, mastery: 0, attempts: 0, topicId: 2001 },
+      { bg: '#7C3AED', light: '#F3E8FF', border: '#9333EA', name: 'RAII & Smart Pointer Semantics', solved: 0, mastery: 0, attempts: 0, topicId: 2002 },
+      { bg: '#6366F1', light: '#EEF2FF', border: '#818CF8', name: 'Virtual Tables & OOP Interfaces', solved: 0, mastery: 0, attempts: 0, topicId: 2003 },
+      { bg: '#4F46E5', light: '#E0E7FF', border: '#6366F1', name: 'STL Containers & Algorithms', solved: 0, mastery: 0, attempts: 0, topicId: 2004 },
+      { bg: '#4338CA', light: '#C7D2FE', border: '#4F46E5', name: 'Lock-Free Atomics & Concurrency', solved: 0, mastery: 0, attempts: 0, topicId: 2006 },
     ],
     java: [
-      { bg: '#F59E0B', light: '#FEF3C7', border: '#FBBF24', name: 'Java JVM Memory & Bytecode', solved: 2, mastery: 85, attempts: 2, topicId: 3001 },
-      { bg: '#D97706', light: '#FFFBEB', border: '#F59E0B', name: 'OOP Domain Modeling & Interfaces', solved: 1, mastery: 75, attempts: 1, topicId: 3002 },
-      { bg: '#B45309', light: '#FEF3C7', border: '#D97706', name: 'Collections Framework & Generics', solved: 1, mastery: 70, attempts: 2, topicId: 3003 },
-      { bg: '#EA580C', light: '#FFEDD5', border: '#FB923C', name: 'Modern Streams API Pipelines', solved: 0, mastery: 60, attempts: 0, topicId: 3004 },
-      { bg: '#C2410C', light: '#FEE2E2', border: '#F87171', name: 'Project Loom Virtual Threads', solved: 0, mastery: 50, attempts: 0, topicId: 3005 },
+      { bg: '#F59E0B', light: '#FEF3C7', border: '#FBBF24', name: 'Java JVM Memory & Bytecode', solved: 0, mastery: 0, attempts: 0, topicId: 3001 },
+      { bg: '#D97706', light: '#FFFBEB', border: '#F59E0B', name: 'OOP Domain Modeling & Interfaces', solved: 0, mastery: 0, attempts: 0, topicId: 3002 },
+      { bg: '#B45309', light: '#FEF3C7', border: '#D97706', name: 'Collections Framework & Generics', solved: 0, mastery: 0, attempts: 0, topicId: 3003 },
+      { bg: '#EA580C', light: '#FFEDD5', border: '#FB923C', name: 'Modern Streams API Pipelines', solved: 0, mastery: 0, attempts: 0, topicId: 3004 },
+      { bg: '#C2410C', light: '#FEE2E2', border: '#F87171', name: 'Project Loom Virtual Threads', solved: 0, mastery: 0, attempts: 0, topicId: 3005 },
     ]
   };
 

@@ -54,15 +54,15 @@ async function init() {
     
     // Add polyglot track topics if not present
     const polyglotDefaults = [
-      { name: 'C Fundamentals & Memory Storage', course: 'c', icon: '⚙️', mastery_score: 75, status: 'completed' },
-      { name: 'Pointers & Memory Addressing', course: 'c', icon: '🎯', mastery_score: 65, status: 'in_progress' },
-      { name: 'Dynamic Memory & Heap (malloc/free)', course: 'c', icon: '📦', mastery_score: 55, status: 'in_progress' },
-      { name: 'Modern C++ RAII & Move Semantics', course: 'cpp', icon: '⚡', mastery_score: 80, status: 'completed' },
-      { name: 'C++ STL Algorithms & Containers', course: 'cpp', icon: '📚', mastery_score: 70, status: 'completed' },
-      { name: 'C++ Lock-Free Concurrency & Atomics', course: 'cpp', icon: '🔒', mastery_score: 45, status: 'in_progress' },
-      { name: 'Java JVM Architecture & Bytecode', course: 'java', icon: '☕', mastery_score: 85, status: 'completed' },
-      { name: 'Java OOP & Domain Modeling', course: 'java', icon: '🏛️', mastery_score: 75, status: 'completed' },
-      { name: 'Java Streams API & Functional Pipelines', course: 'java', icon: '🌊', mastery_score: 60, status: 'in_progress' }
+      { name: 'C Fundamentals & Memory Storage', course: 'c', icon: '⚙️', mastery_score: 0, status: 'pending' },
+      { name: 'Pointers & Memory Addressing', course: 'c', icon: '🎯', mastery_score: 0, status: 'pending' },
+      { name: 'Dynamic Memory & Heap (malloc/free)', course: 'c', icon: '📦', mastery_score: 0, status: 'pending' },
+      { name: 'Modern C++ RAII & Move Semantics', course: 'cpp', icon: '⚡', mastery_score: 0, status: 'pending' },
+      { name: 'C++ STL Algorithms & Containers', course: 'cpp', icon: '📚', mastery_score: 0, status: 'pending' },
+      { name: 'C++ Lock-Free Concurrency & Atomics', course: 'cpp', icon: '🔒', mastery_score: 0, status: 'pending' },
+      { name: 'Java JVM Architecture & Bytecode', course: 'java', icon: '☕', mastery_score: 0, status: 'pending' },
+      { name: 'Java OOP & Domain Modeling', course: 'java', icon: '🏛️', mastery_score: 0, status: 'pending' },
+      { name: 'Java Streams API & Functional Pipelines', course: 'java', icon: '🌊', mastery_score: 0, status: 'pending' }
     ];
 
     function renderMasteryCards(filterTrack = 'all') {

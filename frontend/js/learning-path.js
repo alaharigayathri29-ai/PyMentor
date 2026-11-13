@@ -134,25 +134,22 @@ async function loadCurriculum(course = 'python') {
                     </div>
                     <div style="min-width:0;flex:1;">
                       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-                        <h4 style="font-size:14.5px;font-weight:700;color:var(--text-primary);margin:0;">${t.name}</h4>
+                        <h4 style="font-size:15px;font-weight:700;color:var(--text-primary);margin:0;">${t.name}</h4>
                         ${starsHtml ? `<span style="font-size:11px;">${starsHtml}</span>` : ''}
                         ${isCurrent ? '<span class="badge badge-purple" style="font-size:9px;">ACTIVE</span>' : ''}
                         ${isDone ? '<span class="badge badge-green" style="font-size:9px;">LESSON DONE</span>' : ''}
-                      </div>
-                      <div style="font-size:12px;color:var(--text-secondary);margin-top:3px;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;">
-                        ${(t.subtopics || []).slice(0, 3).join(' • ') || t.description}
                       </div>
                     </div>
                   </div>
 
                   <div style="display:flex;align-items:center;gap:14px;flex-shrink:0;">
                     ${!isLocked ? `
-                      <div style="text-align:right;min-width:70px;">
-                        <div style="font-size:12px;font-weight:700;color:${t.mastery_score >= 70 ? 'var(--success)' : 'var(--primary)'};">${t.mastery_score || 40}%</div>
+                      <div style="text-align:right;min-width:60px;">
+                        <div style="font-size:12px;font-weight:700;color:${(t.mastery_score || 0) >= 70 ? 'var(--success)' : 'var(--primary)'};">${t.mastery_score || 0}%</div>
                         <div style="font-size:10px;color:var(--text-muted);">Mastery</div>
                       </div>
                       <a href="/lesson.html?id=${t.id}&course=${course}" class="btn ${isCurrent ? 'btn-primary' : 'btn-secondary'} btn-sm" style="text-decoration:none;">
-                        <span>${isDone ? 'Review Lesson' : (isCurrent ? '⚡ Study Lesson' : 'Open Lesson')}</span>
+                        <span>${isDone ? 'Review' : (isCurrent ? '⚡ Study' : 'Open')}</span>
                       </a>
                     ` : `
                       <button class="btn btn-ghost btn-sm" disabled style="opacity:0.4;">
