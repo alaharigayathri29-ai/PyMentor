@@ -29,10 +29,15 @@ EXCEPTION
 END $$;
 
 DO $$ BEGIN
-    CREATE TYPE difficulty_level AS ENUM ('beginner', 'intermediate', 'advanced');
+    CREATE TYPE difficulty_level AS ENUM ('beginner', 'intermediate', 'advanced', 'easy', 'medium', 'hard');
 EXCEPTION
     WHEN duplicate_object THEN null;
 END $$;
+
+-- If type already existed from previous run, ensure all labels are present
+ALTER TYPE difficulty_level ADD VALUE IF NOT EXISTS 'easy';
+ALTER TYPE difficulty_level ADD VALUE IF NOT EXISTS 'medium';
+ALTER TYPE difficulty_level ADD VALUE IF NOT EXISTS 'hard';
 
 -- 3. Core Users Table
 CREATE TABLE IF NOT EXISTS users (
