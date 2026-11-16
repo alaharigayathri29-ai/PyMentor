@@ -257,15 +257,23 @@ class GeminiProvider(AIProvider):
         import asyncio
         last_user_prompt = (messages[-1].get("content", "") if messages else "Hello").strip() or "Hello"
 
-        # Check instant polyglot curriculum match first for 0-latency systems accuracy
-        try:
-            from app.curriculum.polyglot_mentor_knowledge import detect_polyglot_response
-            cur_top = student_context.get("current_topic", "")
-            poly_resp = detect_polyglot_response(last_user_prompt, cur_top, student_context.get("skill_level", "intermediate"))
-            if poly_resp:
-                return poly_resp
-        except Exception:
-            pass
+        # Determine language first
+        lang = student_context.get("language")
+        detected = self.detect_script_language(last_user_prompt)
+        if detected:
+            lang = detected
+            student_context["language"] = detected
+
+        # For English queries, check instant polyglot curriculum match first for 0-latency systems accuracy
+        if not lang or lang == "en":
+            try:
+                from app.curriculum.polyglot_mentor_knowledge import detect_polyglot_response
+                cur_top = student_context.get("current_topic", "")
+                poly_resp = detect_polyglot_response(last_user_prompt, cur_top, student_context.get("skill_level", "intermediate"))
+                if poly_resp:
+                    return poly_resp
+            except Exception:
+                pass
 
         system_prompt = self.build_system_prompt(student_context, last_user_prompt)
 
