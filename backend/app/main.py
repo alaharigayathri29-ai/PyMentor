@@ -110,5 +110,8 @@ ROOT_PROJECT_DIR = Path(__file__).resolve().parent.parent.parent
 FRONTEND_DIR = ROOT_PROJECT_DIR / "frontend"
 if not FRONTEND_DIR.exists() or not (FRONTEND_DIR / "index.html").exists():
     FRONTEND_DIR = ROOT_PROJECT_DIR
-if FRONTEND_DIR.exists() and (FRONTEND_DIR / "index.html").exists():
-    app.mount("/", NoCacheStaticFiles(directory=str(FRONTEND_DIR), html=True), name="frontend")
+try:
+    if FRONTEND_DIR.exists() and (FRONTEND_DIR / "index.html").exists():
+        app.mount("/", NoCacheStaticFiles(directory=str(FRONTEND_DIR), html=True), name="frontend")
+except Exception as e:
+    print(f"[STATIC] Mount notice: {e}")
