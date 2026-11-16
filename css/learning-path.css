@@ -1,0 +1,160 @@
+/* ══════════════════════════════════════════════════════════════════════════════
+   LEARNING PATH / CURRICULUM — WARM CHAMPAGNE LUXURY
+   Rich Cream Canvas · Espresso Roadmap Hero · Elevated Module Accordions
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+@keyframes movingGoldBrownBorder {
+  0% {
+    background-position: 0% 0%, 0% 50%;
+  }
+  50% {
+    background-position: 0% 0%, 100% 50%;
+  }
+  100% {
+    background-position: 0% 0%, 0% 50%;
+  }
+}
+
+.curriculum-hero {
+  background:
+    linear-gradient(135deg, #2C1A0E 0%, #3D2512 60%, #4C2D15 100%) padding-box,
+    linear-gradient(90deg, #2C1A0E, #8A6D3B, #B45309, #D97706, #F59E0B, #FDE68A, #F59E0B, #D97706, #B45309, #8A6D3B, #2C1A0E) border-box;
+  background-size: 100% 100%, 300% 300%;
+  border: 2px solid transparent;
+  border-radius: var(--r-xl);
+  padding: 24px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  box-shadow: 0 10px 32px rgba(44, 26, 14, 0.35);
+  color: #FFF8F0;
+  animation: movingGoldBrownBorder 4s linear infinite;
+}
+
+.curriculum-hero h1, .curriculum-hero h2 {
+  color: #FFF8F0 !important;
+}
+.curriculum-hero p {
+  color: #E8D0B8 !important;
+}
+
+.curriculum-modules-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Module Accordion Card */
+.module-card {
+  background:
+    linear-gradient(#FFFFFF, #FFFFFF) padding-box,
+    linear-gradient(90deg, #2C1A0E, #8A6D3B, #B45309, #D97706, #F59E0B, #FDE68A, #F59E0B, #D97706, #B45309, #8A6D3B, #2C1A0E) border-box;
+  background-size: 100% 100%, 300% 300%;
+  border: 1.5px solid transparent;
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(100, 50, 0, 0.07);
+  transition: var(--transition);
+  animation: movingGoldBrownBorder 6s linear infinite;
+}
+
+.module-card:hover {
+  border-color: rgba(200, 160, 100, 0.4);
+  box-shadow: 0 8px 26px rgba(100, 50, 0, 0.12);
+}
+
+.module-header {
+  padding: 18px 24px;
+  background-color: #FFFDF9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  border-bottom: 1px solid transparent;
+  transition: var(--transition);
+}
+
+.module-header:hover {
+  background-color: #FFF8F0;
+}
+
+.module-card.expanded .module-header {
+  border-bottom-color: rgba(200, 160, 100, 0.18);
+}
+
+.module-num-tag {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #B45309;
+  background-color: #FEF3C7;
+  padding: 3px 8px;
+  border-radius: var(--r-sm);
+  display: inline-block;
+  margin-bottom: 4px;
+}
+
+.module-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1C0E04;
+}
+
+.module-body {
+  display: flex;
+  flex-direction: column;
+  background-color: #FFFFFF;
+}
+
+/* Topic Node Row */
+.topic-node-row {
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(200, 160, 100, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  transition: var(--transition);
+}
+
+.topic-node-row:last-child {
+  border-bottom: none;
+}
+
+.topic-node-row:hover {
+  background-color: rgba(217, 119, 6, 0.04);
+}
+
+.topic-node-row.current-active {
+  background-color: #FFF3E0;
+  border-left: 4px solid #F59E0B;
+}
+
+.topic-icon-bubble {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--r-md);
+  background-color: #FFF8F0;
+  color: #A07050;
+  border: 1px solid #E8D5B8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.topic-icon-bubble.completed {
+  background-color: #ECFDF5;
+  color: #047857;
+  border-color: rgba(5, 150, 105, 0.25);
+}
+
+.topic-icon-bubble.active {
+  background-color: #FFF3E0;
+  color: #D97706;
+  border-color: #F59E0B;
+}

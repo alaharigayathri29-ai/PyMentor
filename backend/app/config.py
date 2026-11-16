@@ -4,7 +4,10 @@ from pathlib import Path
 import os
 
 BACKEND_DIR = Path(__file__).resolve().parent.parent
-DEFAULT_SQLITE_PATH = (BACKEND_DIR / "ai_mentor.db").as_posix()
+if os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
+    DEFAULT_SQLITE_PATH = "/tmp/ai_mentor.db"
+else:
+    DEFAULT_SQLITE_PATH = (BACKEND_DIR / "ai_mentor.db").as_posix()
 
 
 class Settings(BaseSettings):

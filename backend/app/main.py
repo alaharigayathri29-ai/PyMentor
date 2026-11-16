@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -6,8 +7,11 @@ from app.models.models import Base
 from app.routers import auth, assessment, learning_path, mentor, practice, progress, admin, workspace
 from app.seed_data import seed
 
-# Create all DB tables
-Base.metadata.create_all(bind=engine)
+# Create all DB tables safely
+try:
+    Base.metadata.create_all(bind=engine)
+except Exception as e:
+    print(f"[STARTUP] Table creation notice: {e}")
 
 # Auto-migrate columns on startup
 try:
@@ -19,9 +23,10 @@ try:
 except Exception as e:
     print(f"[STARTUP] Migration warning: {e}")
 
-# Auto-seed on first run (safe to call multiple times)
+# Auto-seed on first run (skip in serverless cold starts to guarantee fast sub-second boot)
 try:
-    seed()
+    if not os.environ.get("VERCEL") and not os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
+        seed()
 except Exception as e:
     print(f"[STARTUP] Seed warning: {e}")
 
@@ -101,6 +106,9 @@ class NoCacheStaticFiles(StaticFiles):
         return response
 
 
-FRONTEND_DIR = Path(__file__).resolve().parent.parent.parent / "frontend"
-if FRONTEND_DIR.exists():
+ROOT_PROJECT_DIR = Path(__file__).resolve().parent.parent.parent
+FRONTEND_DIR = ROOT_PROJECT_DIR / "frontend"
+if not FRONTEND_DIR.exists() or not (FRONTEND_DIR / "index.html").exists():
+    FRONTEND_DIR = ROOT_PROJECT_DIR
+if FRONTEND_DIR.exists() and (FRONTEND_DIR / "index.html").exists():
     app.mount("/", NoCacheStaticFiles(directory=str(FRONTEND_DIR), html=True), name="frontend")

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account — PyMentor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/global.css?v=20261108_v19">
+  <link rel="stylesheet" href="/css/auth.css?v=20261108_v19">
+</head>
+<body>
+
+  <div class="auth-page">
+    
+    <!-- Left Hero Pane -->
+    <div class="auth-brand">
+      <div class="brand-content">
+        <div class="brand-logo-big">🚀</div>
+        <h1 class="brand-title">Start Your Python <span>Journey Today</span></h1>
+        <p class="brand-desc">Join our structured learning environment with automated coding test runners, interactive lessons, and AI mentorship.</p>
+        
+        <div class="feature-pill-list">
+          <div class="feature-pill">
+            <div class="feature-pill-icon">✨</div>
+            <span>Immediate diagnostic assessment & skill calibration</span>
+          </div>
+          <div class="feature-pill">
+            <div class="feature-pill-icon">🧠</div>
+            <span>Targeted practice problems for your exact skill tier</span>
+          </div>
+          <div class="feature-pill">
+            <div class="feature-pill-icon">🔒</div>
+            <span>Private student profile with zero data leaks</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Registration Form Pane -->
+    <div class="auth-form-wrap">
+      <div class="auth-card animate-in">
+        <div class="auth-header">
+          <h2 class="auth-title">Create Student Account</h2>
+          <p class="auth-sub">Begin learning Python with your personalized dashboard</p>
+        </div>
+
+        <div id="auth-alert" style="margin-bottom:16px;"></div>
+
+        <form id="register-form">
+          <div class="form-group">
+            <label class="form-label" for="reg-username">Username</label>
+            <input id="reg-username" class="form-input" type="text" placeholder="Choose a username" autocomplete="username" required autofocus>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-email">Email Address</label>
+            <input id="reg-email" class="form-input" type="email" placeholder="name@domain.com" autocomplete="email" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-password">Password</label>
+            <input id="reg-password" class="form-input" type="password" placeholder="At least 6 characters" autocomplete="new-password" required minlength="6">
+          </div>
+
+          <button id="reg-submit-btn" class="btn btn-primary btn-full btn-lg" type="submit" style="margin-top:8px;">
+            <span>Create Account →</span>
+          </button>
+        </form>
+
+        <div class="auth-footer">
+          Already registered? <a href="/login.html">Sign In Here</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script type="module" src="/js/auth.js?v=20261108_v17"></script>
+</body>
+</html>
