@@ -201,7 +201,7 @@ Teaching Philosophy:
             r'hashmap', r'\binterface\b', r'\bextends\b', r'\bthrows\b',
             r'@override', r'public\s+class', r'public\s+void', r'public\s+static',
             r'\bjunit\b', r'\bhibernate\b', r'completablefuture', r'project\s+loom',
-            r'జావా', r'java\s+programming',
+            r'జావా', r'जावा', r'java\s+programming',
         ]
         if any(re.search(p, text) for p in java_keywords):
             return "java"
@@ -211,7 +211,7 @@ Teaching Philosophy:
             r'\bc\+\+', r'\bcpp\b', r'\bcout\b', r'\bcin\b', r'\bvector\b',
             r'namespace\s+std', r'unique_ptr', r'shared_ptr', r'\braii\b',
             r'move\s+semantics', r'std::', r'#include\s*<iostream',
-            r'\btemplate\b', r'\bstl\b', r'modern\s+c\+\+', r'సిపిపి',
+            r'\btemplate\b', r'\bstl\b', r'modern\s+c\+\+', r'సిపిపి', r'సి\+\+', r'सी\+\+',
         ]
         if any(re.search(p, text) for p in cpp_keywords):
             return "cpp"
@@ -222,7 +222,8 @@ Teaching Philosophy:
             r'\bpointer\b', r'#include\s*<stdio', r'#include\s*<stdlib',
             r'\bstruct\b', r'void\s+main', r'int\s+main',
             r'\bansi\s+c\b', r'\bc\s+language\b', r'\bc\s+programming\b',
-            r'సి\s+లాంగ్', r'\bc\s+లాంగ్వేజ్',
+            r'[సిసీ]\s*లాంగ్', r'[సిసీ]\s*లాంగ్వేజ్', r'[సిసీ]\s*భాష', r'[సిసీ]\s*ప్రోగ్రామింగ్',
+            r'పాయింటర్', r'सी\s*भाषा', r'सी\s*प्रोग्रामिंग', r'\bc\s+లాంగ్వేజ్',
         ]
         # Only match C if no C++ markers
         if any(re.search(p, text) for p in c_keywords):
@@ -303,7 +304,7 @@ class GeminiProvider(AIProvider):
                 res = model.generate_content(contents)
                 return res.text if res and res.text else None
 
-            result_text = await asyncio.wait_for(asyncio.to_thread(_call_gemini), timeout=5.0)
+            result_text = await asyncio.wait_for(asyncio.to_thread(_call_gemini), timeout=15.0)
             if result_text and result_text.strip():
                 return result_text.strip()
             raise ValueError("Empty response received from Gemini model")
@@ -1314,6 +1315,176 @@ Also, which topic does this relate to? I can tailor my explanation to your curre
 
     def _get_telugu_explanation(self, msg: str, current_topic: str, action: str = None) -> str:
         lower = msg.lower() + " " + current_topic.lower()
+
+        # 1. C Language in Telugu
+        is_c = any(k in lower or k in msg for k in [
+            "సీ లాంగ్వేజ్", "సి లాంగ్వేజ్", "సి భాష", "సీ భాష", "సి ప్రోగ్రామింగ్", "సీ ప్రోగ్రామింగ్",
+            "c language", "c programming", "ansi c", "printf", "scanf", "malloc", "free",
+            "pointer", "పాయింటర్", "పాయింటర్లు", "struct", "stdio"
+        ])
+        if is_c:
+            if any(k in lower or k in msg for k in ["pointer", "పాయింటర్", "పాయింటర్లు", "address", "అడ్రస్"]):
+                return """నమస్కారం! C లాంగ్వేజ్ లో **Pointers (పాయింటర్లు)** గురించి స్పష్టంగా మరియు సరళంగా తెలుసుకుందాం. 🎯
+
+C ప్రోగ్రామింగ్‌లో ఒక వేరియబుల్ యొక్క మెమరీ అడ్రస్‌ను (Memory Address) భద్రపరిచే ప్రత్యేక వేరియబుల్‌నే **Pointer** అంటారు.
+
+**ముఖ్యమైన రెండు ఆపరేటర్లు:**
+1. `&` (Address-of Operator) — వేరియబుల్ మెమరీ అడ్రస్ తెలుసుకోవడానికి.
+2. `*` (Dereference Operator) — ఆ అడ్రస్‌లోని అసలు విలువను పొందడానికి లేదా మార్చడానికి.
+
+```c
+#include <stdio.h>
+
+int main() {
+    int score = 95;      // సాధారణ వేరియబుల్
+    int *ptr = &score;   // score యొక్క మెమరీ అడ్రస్ ను ptr లో భద్రపరిచాం
+
+    printf("స్కోర్ విలువ: %d\\n", score);
+    printf("మెమరీ అడ్రస్ (&score): %p\\n", (void*)&score);
+    printf("పాయింటర్ ద్వారా విలువ (*ptr): %d\\n", *ptr);
+
+    // పాయింటర్ ద్వారా విలువను మార్చడం
+    *ptr = 100;
+    printf("కొత్త స్కోర్ విలువ: %d\\n", score);
+
+    return 0;
+}
+```
+
+**గుర్తుంచుకోవలసిన విషయాలు:**
+- పాయింటర్స్ నేరుగా కంప్యూటర్ RAM మెమరీతో పని చేస్తాయి, అందుకే C లాంగ్వేజ్ చాలా వేగవంతమైనది.
+- డైనమిక్ మెమరీ అలొకేషన్ (`malloc`, `free`) మరియు డేటా స్ట్రక్చర్లలో (Linked List, Trees) పాయింటర్లు ఎంతో అవసరం!
+
+మీరు పాయింటర్లలో ఏదైనా నిర్దిష్ట కోడ్ లేదా లోపం గురించి అడగాలనుకుంటున్నారా? ⚙️"""
+
+            elif any(k in lower or k in msg for k in ["malloc", "free", "dynamic", "మెమరీ"]):
+                return """నమస్కారం! C లాంగ్వేజ్ లో **Dynamic Memory Allocation (`malloc` & `free`)** గురించి తెలుసుకుందాం. 📦
+
+కంప్యూటర్ రన్ టైమ్ లో (Program రన్ అవుతున్నప్పుడు) మనకు అవసరమైనంత సైజులో Heap మెమరీ కేటాయించుకోవడానికి `malloc()` ఉపయోగిస్తాం. పని పూర్తయ్యాక మెమరీ లీక్ కాకుండా `free()` తో క్లీన్ చేయాలి.
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int n = 3;
+    // 3 పూర్ణాంకాల (integers) కోసం డైనమిక్ మెమరీ కేటాయింపు
+    int *arr = (int*) malloc(n * sizeof(int));
+
+    if (arr == NULL) {
+        printf("మెమరీ కేటాయింపు విఫలమైంది!\\n");
+        return 1;
+    }
+
+    // విలువల కేటాయింపు
+    arr[0] = 10;
+    arr[1] = 20;
+    arr[2] = 30;
+
+    for (int i = 0; i < n; i++) {
+        printf("అంశం %d: %d\\n", i, arr[i]);
+    }
+
+    // తప్పనిసరిగా మెమరీ క్లీన్ చేయాలి!
+    free(arr);
+    arr = NULL;
+
+    printf("మెమరీ విజయవంతంగా విడుదల చేయబడింది.\\n");
+    return 0;
+}
+```
+
+C మెమరీ మేనేజ్మెంట్ పై మీ సందేహాలను అడగండి! 🚀"""
+
+            return """నమస్కారం! **ANSI C Systems Programming** కి స్వాగతం! ⚙️
+
+C లాంగ్వేజ్ అనేది మోడ్రన్ సాఫ్ట్‌వేర్ ప్రపంచానికి పునాది. ఆపరేటింగ్ సిస్టమ్స్ (Linux, Windows కెర్నల్స్), ఎంబెడెడ్ సిస్టమ్స్ మరియు హై-పెర్ఫార్మెన్స్ ఇంజన్లు C తోనే నిర్మించబడ్డాయి.
+
+```c
+#include <stdio.h>
+
+// సాధారణ C ప్రోగ్రామ్
+int main() {
+    printf("నమస్కారం! C లాంగ్వేజ్ లోకి స్వాగతం.\\n");
+    return 0;
+}
+```
+
+**C లో మీరు నేర్చుకోగల అంశాలు:**
+- 🎯 **Pointers & Memory Layout**: అడ్రస్సింగ్, డీరిఫరెన్సింగ్, పాయింటర్ అరిథ్‌మెటిక్.
+- 📦 **Dynamic Allocation**: `malloc()`, `calloc()`, `free()`.
+- 🏗️ **Structures & Unions**: స్ట్రక్చర్స్, బిట్‌ఫీల్డ్స్, మెమరీ ప్యాడింగ్.
+- 🧵 **POSIX Pthreads**: మల్టీథ్రెడింగ్ మరియు సింక్రొనైజేషన్.
+
+మీరు C లో ఏ కాన్సెప్ట్ గురించి తెలుసుకోవాలనుకుంటున్నారు? 💡"""
+
+        # 2. C++ Language in Telugu
+        is_cpp = any(k in lower or k in msg for k in [
+            "సి++", "సిపిపి", "c++", "cpp", "cout", "cin", "vector", "namespace std",
+            "raii", "unique_ptr", "shared_ptr", "modern c++"
+        ])
+        if is_cpp:
+            return """నమస్కారం! **Modern C++ (C++20)** కి స్వాగతం! ⚡
+
+C++ అనేది C లాంగ్వేజ్ యొక్క సామర్థ్యానికి Object-Oriented Programming (OOP), RAII మరియు ఆధునిక STL లైబ్రరీలను జోడిస్తుంది.
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <memory>
+
+using namespace std;
+
+int main() {
+    // మోడ్రన్ C++ వెక్టర్ (Dynamic Array)
+    vector<string> tracks = {"Python", "ANSI C", "Modern C++", "Enterprise Java"};
+
+    cout << "PyMentor లోని ఇంజనీరింగ్ కోర్సులు:\\n";
+    for (const auto& track : tracks) {
+        cout << " -> " << track << endl;
+    }
+
+    return 0;
+}
+```
+
+**Modern C++ ముఖ్య లక్షణాలు:**
+- ⚡ **RAII (Resource Acquisition Is Initialization)**: మెమరీ లీక్‌లు లేకుండా వనరుల నిర్వహణ.
+- 🛡️ **Smart Pointers**: `std::unique_ptr` మరియు `std::shared_ptr`.
+- 🏛️ **OOP Architecture**: Classes, Inheritance, Polymorphism, VTables.
+
+C++ లో ఏ అంశంపై వివరణ కావాలి? అడగండి! 🚀"""
+
+        # 3. Java Language in Telugu
+        is_java = any(k in lower or k in msg for k in [
+            "జావా", "java", "jvm", "jdk", "public class", "system.out", "spring", "oop in java", "arraylist"
+        ])
+        if is_java:
+            return """నమస్కారం! **Enterprise Java 21** కి స్వాగతం! ☕
+
+జావా అనేది అత్యంత ప్రజాదరణ పొందిన ప్లాట్‌ఫారమ్-ఇండిపెండెంట్ ప్రోగ్రామింగ్ లాంగ్వేజ్ ("Write Once, Run Anywhere"). దీనికి గల JVM (Java Virtual Machine) మరియు బలమైన సెక్యూరిటీ వల్ల బ్యాంకింగ్, ఎంటర్‌ప్రైజ్ క్లౌడ్ అప్లికేషన్లలో విస్తృతంగా వాడుతున్నారు.
+
+```java
+public class WelcomeJava {
+    public static void main(String[] args) {
+        // కన్సోల్ లో అవుట్‌పుట్ ప్రింట్ చేయడం
+        System.out.println("నమస్కారం! Enterprise Java ఇంజనీరింగ్ కి స్వాగతం! ☕");
+
+        String studentName = "విద్యార్థి";
+        int completedLessons = 5;
+        System.out.println("విద్యార్థి: " + studentName + " | పూర్తి చేసిన పాఠాలు: " + completedLessons);
+    }
+}
+```
+
+**Java ముఖ్య కాన్సెప్ట్స్:**
+- ☕ **JVM Internals**: బైట్‌కోడ్ ఎగ్జిక్యూషన్, హీప్ మెమరీ, గార్బేజ్ కలెక్షన్ (GC).
+- 🏛️ **OOP Architecture**: Encapsulation, Inheritance, Interfaces, Records.
+- 🧵 **Concurrency & Virtual Threads**: Project Loom వర్చువల్ థ్రెడ్స్ తో హై-స్కేలబిలిటీ.
+
+జావా లో మీకు ఏ పాఠం గురించి సహాయం కావాలి? 💡"""
+
+        # 4. Python in Telugu
         if "list" in lower or "లిస్ట్" in msg:
             return """నమస్కారం! పైథాన్ లో **List (లిస్ట్)** అంటే ఏమిటో చాలా సులభంగా తెలుసుకుందాం. 🧺
 
@@ -1390,20 +1561,91 @@ print(message)
 
 ఫంక్షన్‌ను తయారు చేయడానికి `def` కీవర్డ్‌ను ఉపయోగిస్తాం. 🎯"""
 
-        return """నమస్కారం! నేను మీ **PyMentor** ని — మీ వ్యక్తిగత పైథాన్ గురువుని! 🎓
+        return """నమస్కారం! నేను మీ **PyMentor** ని — Python, C, C++, మరియు Java లో మీ వ్యక్తిగత AI ఇంజనీరింగ్ గురువుని! 🎓
 
-మీరు ఏ పైథాన్ ప్రశ్న అయినా అడగవచ్చు, లేదా మైక్రోఫోన్ ద్వారా మాట్లాడవచ్చు. నేను మీకు వివరంగా తెలుగులో సొంత వివరణతో నేర్పిస్తాను!
+మీరు ఏ ప్రోగ్రామింగ్ లాంగ్వేజ్ లోనైనా సందేహాలు అడగవచ్చు:
+- 🐍 **Python**: లిస్ట్స్, లూప్స్, ఆబ్జెక్ట్ ఓరియెంటెడ్ ప్రోగ్రామింగ్, అసింక్.
+- ⚙️ **ANSI C**: పాయింటర్లు, మెమరీ మేనేజ్‌మెంట్ (`malloc`), స్ట్రక్చర్స్.
+- ⚡ **Modern C++**: RAII, స్మార్ట్ పాయింటర్లు, `std::vector`, OOP.
+- ☕ **Enterprise Java**: JVM ఆర్కిటెక్చర్, గార్బేజ్ కలెక్షన్, క్లాసెస్, మల్టీథ్రెడింగ్.
 
-**మీరు వీటిని అడగవచ్చు:**
-- "పైథాన్ లో లిస్ట్ అంటే ఏమిటి?"
-- "ఫర్ లూప్ ఎలా పనిచేస్తుంది?"
-- "ఫంక్షన్స్ అంటే ఏమిటి?"
-- "నా కోడ్ లో వచ్చిన లోపాన్ని (Error) ఎలా సరిచేయాలి?"
-
-ఈ రోజు మీరు ఏమి నేర్చుకోవాలనుకుంటున్నారు? 🐍"""
+ఈ రోజు మీరు ఏ కోర్సు ప్రాక్టీస్ చేయాలనుకుంటున్నారు? 🚀"""
 
     def _get_hindi_explanation(self, msg: str, current_topic: str, action: str = None) -> str:
         lower = msg.lower() + " " + current_topic.lower()
+
+        # 1. C Language in Hindi
+        is_c = any(k in lower or k in msg for k in [
+            "सी भाषा", "सी प्रोग्रामिंग", "c language", "c programming", "ansi c",
+            "printf", "scanf", "malloc", "free", "pointer", "पॉइंटर", "struct", "stdio"
+        ])
+        if is_c:
+            return """नमस्ते! C प्रोग्रामिंग (ANSI C) में **Pointers (पॉइंटर्स)** और मेमोरी आर्किटेक्चर को समझते हैं। ⚙️
+
+C में पॉइंटर एक ऐसा विशेष वेरिएबल है जो किसी अन्य वेरिएबल का मेमोरी एड्रेस (RAM address) स्टोर करता है।
+
+```c
+#include <stdio.h>
+
+int main() {
+    int score = 95;
+    int *ptr = &score; // score का मेमोरी एड्रेस ptr में स्टोर हुआ
+
+    printf("वेरिएबल मान: %d\\n", score);
+    printf("मेमोरी एड्रेस: %p\\n", (void*)&score);
+    printf("पॉइंटर द्वारा मान (*ptr): %d\\n", *ptr);
+
+    return 0;
+}
+```
+
+C सिस्टम प्रोग्रामिंग, ओएस कर्नल और एम्बेडेड डिवाइसेज की रीढ़ है। क्या आप C में कोई विशेष कोड समझना चाहते हैं? 💡"""
+
+        # 2. C++ Language in Hindi
+        is_cpp = any(k in lower or k in msg for k in [
+            "सी++", "cpp", "c++", "cout", "cin", "vector", "raii", "unique_ptr", "modern c++"
+        ])
+        if is_cpp:
+            return """नमस्ते! **Modern C++ (C++20)** में आपका स्वागत है! ⚡
+
+C++ उच्च-प्रदर्शन प्रणालियों, गेम इंजन और फाइनेंस इंफ्रास्ट्रक्चर के लिए डिज़ाइन किया गया है। इसमें RAII और Smart Pointers की मदद से मेमोरी लीक्स को पूरी तरह रोका जा सकता है।
+
+```cpp
+#include <iostream>
+#include <vector>
+
+int main() {
+    std::vector<std::string> tracks = {"Python", "C Systems", "Modern C++", "Enterprise Java"};
+    std::cout << "PyMentor कोर्सेज:\\n";
+    for (const auto& track : tracks) {
+        std::cout << " - " << track << std::endl;
+    }
+    return 0;
+}
+```
+
+Modern C++ के किस विषय पर आप चर्चा करना चाहते हैं? 🚀"""
+
+        # 3. Java Language in Hindi
+        is_java = any(k in lower or k in msg for k in [
+            "जावा", "java", "jvm", "jdk", "public class", "system.out", "spring"
+        ])
+        if is_java:
+            return """नमस्ते! **Enterprise Java 21** में आपका स्वागत है! ☕
+
+जावा प्लेटफॉर्म-इंडिपेंडेंट ("Write Once, Run Anywhere") भाषा है, जो JVM (Java Virtual Machine) पर आधारित है।
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("नमस्ते! Java 21 एंटरप्राइज सिस्टम में आपका स्वागत है! ☕");
+    }
+}
+```
+
+जावा OOP, मेमोरी मैनेजमेंट (Garbage Collection), और वर्चुअल थ्रेड्स के बारे में कोई भी प्रश्न पूछें! 💡"""
+
+        # 4. Python in Hindi
         if "list" in lower or "लिस्ट" in msg:
             return """नमस्ते! पायथन में **List (लिस्ट)** को बहुत आसानी से समझते हैं। 🧺
 
@@ -1427,11 +1669,16 @@ print(fruits)
 3. लिस्ट के आइटम्स को कभी भी बदला जा सकता है।
 
 आप भी अपनी पसंद के 3 आइटम्स की लिस्ट बनाकर मुझे दिखाइए! 🚀"""
-        return """नमस्ते! मैं हूँ आपका **PyMentor** — आपका निजी पायथन मेंटर! 🎓
 
-आप मुझसे पायथन का कोई भी सवाल पूछ सकते हैं या बोलकर सवाल कर सकते हैं। मैं आपको पूरी तरह से हिंदी में समझाऊँगा!
+        return """नमस्ते! मैं हूँ आपका **PyMentor** — Python, C, C++, और Java में आपका पर्सनल AI इंजीनियरिंग मेंटर! 🎓
 
-आप क्या सीखना चाहते हैं? 🐍"""
+आप मुझसे चारों प्रोग्रामिंग भाषाओं में से किसी का भी प्रश्न पूछ सकते हैं:
+- 🐍 **Python**: Lists, Loops, Functions, OOP
+- ⚙️ **ANSI C**: Pointers, Memory (`malloc`), Structs
+- ⚡ **Modern C++**: RAII, Smart Pointers, STL
+- ☕ **Enterprise Java**: JVM, Classes, Collections
+
+आज आप क्या सीखना चाहते हैं? 🚀"""
 
     def _detect_topic(self, text: str) -> str:
         topic_keywords = {

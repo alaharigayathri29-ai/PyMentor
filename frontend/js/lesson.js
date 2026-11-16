@@ -16,6 +16,12 @@ async function init() {
 
   initLayout('lesson', user);
 
+  // Auto-collapse sidebar in lesson view for focused reading mode
+  const sidebar = document.getElementById('sidebar');
+  if (sidebar && window.innerWidth > 768) {
+    sidebar.classList.add('collapsed');
+  }
+
   // Extract topic ID and course from URL search params: /lesson.html?id=2 or /lesson.html?topic_id=2&course=c
   const params = new URLSearchParams(window.location.search);
   let topicId = parseInt(params.get('id') || params.get('topic_id') || '1', 10);

@@ -490,7 +490,7 @@ def detect_polyglot_response(text: str, current_topic: str = "", level: str = "b
     is_java = any(k in clean_text for k in [
         "java", "jvm", "jdk", "spring", "bytebuffer", "system.out",
         "public static void main", "garbage collect", "g1gc", "zgc",
-        "hashmap in java", "records in java"
+        "hashmap in java", "records in java", "జావా", "जावा"
     ])
     if is_java:
         if any(k in clean_text for k in ["loop", "for loop", "while", "iteration", "for-each", "foreach"]):
@@ -518,7 +518,9 @@ What specific Java topic or code problem would you like to explore? 🚀"""
     # 2. Check for C Queries
     is_c = any(k in clean_text for k in [
         "c language", "in c ", "in c?", "pointers in c", "pointer in c", "malloc", "free(",
-        "pthreads", "sizeof", "printf", "stdio.h", "bitfield", "struct in c", "segmentation fault"
+        "pthreads", "sizeof", "printf", "stdio.h", "bitfield", "struct in c", "segmentation fault",
+        "సీ లాంగ్వేజ్", "సి లాంగ్వేజ్", "సి భాష", "సీ భాష", "సి ప్రోగ్రామింగ్", "సీ ప్రోగ్రామింగ్",
+        "పాయింటర్", "పాయింటర్లు", "सी भाषा", "सी प्रोग्रामिंग"
     ])
     if is_c:
         if any(k in clean_text for k in ["pointer", "memory", "address", "dereference", "malloc", "free"]):
@@ -544,7 +546,8 @@ What C concept or code challenge would you like to examine? ⚙️"""
     # 3. Check for C++ Queries
     is_cpp = any(k in clean_text for k in [
         "c++", "cpp", "modern c++", "raii", "unique_ptr", "shared_ptr", "std::",
-        "cout", "vector<", "template<", "virtual destructor", "vtable", "rule of 5", "rule of five"
+        "cout", "vector<", "template<", "virtual destructor", "vtable", "rule of 5", "rule of five",
+        "సి++", "సిపిపి", "सी++"
     ])
     if is_cpp:
         if any(k in clean_text for k in ["raii", "smart pointer", "unique_ptr", "shared_ptr", "memory"]):

@@ -130,9 +130,8 @@ export function initLayout(activePageKey, user) {
     const href = link.getAttribute('href') || '';
     
     let isMatch = false;
-    if (pageAttr && pageAttr.startsWith('course-')) {
-      const courseName = pageAttr.replace('course-', '');
-      isMatch = currentSearch.includes(`course=${courseName}`) || (pageAttr === 'course-python' && !currentSearch.includes('course=') && window.location.pathname.includes('learning-path'));
+    if (pageAttr === 'courses') {
+      isMatch = activePageKey === 'learning-path' || window.location.pathname.includes('learning-path');
     } else {
       isMatch = pageAttr === activePageKey || (href.includes(activePageKey + '.html') && !href.includes('course='));
     }
@@ -143,13 +142,15 @@ export function initLayout(activePageKey, user) {
       link.classList.remove('active');
     }
 
-    // Auto-close sidebar on mobile or when switching module/course
+    // Auto-close sidebar on mobile or when entering a module so screen is focused
     link.addEventListener('click', () => {
       const sidebar = document.getElementById('sidebar');
       const backdrop = document.getElementById('sidebar-backdrop');
-      if (window.innerWidth <= 768 && sidebar) {
-        sidebar.classList.remove('open');
-        if (backdrop) backdrop.classList.remove('active');
+      if (sidebar) {
+        if (window.innerWidth <= 768) {
+          sidebar.classList.remove('open');
+          if (backdrop) backdrop.classList.remove('active');
+        }
       }
     });
   });

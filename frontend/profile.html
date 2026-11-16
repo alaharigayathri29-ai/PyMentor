@@ -516,35 +516,24 @@
         </div>
       </a>
 
-      <nav class="sidebar-nav">
+            <nav class="sidebar-nav">
         <div class="nav-section-label">HOME</div>
         <a href="/dashboard.html" class="nav-item" data-page="dashboard">
           <span class="nav-icon">🏠</span> <span>Dashboard</span>
         </a>
 
-        <div class="nav-section-label">COURSES</div>
-        <a href="/learning-path.html?course=python" class="nav-item" data-page="course-python">
-          <span class="nav-icon">🐍</span> <span>Python Systems</span>
+        <div class="nav-section-label">LEARNING</div>
+        <a href="/learning-path.html" class="nav-item" data-page="courses">
+          <span class="nav-icon">📚</span> <span>Courses</span>
         </a>
-        <a href="/learning-path.html?course=c" class="nav-item" data-page="course-c">
-          <span class="nav-icon">⚙️</span> <span>ANSI C Systems</span>
-        </a>
-        <a href="/learning-path.html?course=cpp" class="nav-item" data-page="course-cpp">
-          <span class="nav-icon">⚡</span> <span>Modern C++20</span>
-        </a>
-        <a href="/learning-path.html?course=java" class="nav-item" data-page="course-java">
-          <span class="nav-icon">☕</span> <span>Enterprise Java</span>
-        </a>
-
-        <div class="nav-section-label">MODULES</div>
         <a href="/assessment.html" class="nav-item" data-page="assessment">
-          <span class="nav-icon">🎯</span> <span>?? Skill Certification</span>
+          <span class="nav-icon">🎯</span> <span>Skill Certification</span>
         </a>
         <a href="/practice.html" class="nav-item" data-page="practice">
-          <span class="nav-icon">💻</span> <span>?? Code Arena</span>
+          <span class="nav-icon">💻</span> <span>Code Arena</span>
         </a>
         <a href="/lesson.html" class="nav-item" data-page="lesson">
-          <span class="nav-icon">📖</span> <span>?? Deep Dive Lessons</span>
+          <span class="nav-icon">📖</span> <span>Deep Dive Lessons</span>
         </a>
 
         <div class="nav-section-label">TOOLS</div>
@@ -556,12 +545,23 @@
         </a>
 
         <div class="nav-section-label">INSIGHTS</div>
-        <a href="/profile.html" class="nav-item active" data-page="profile">
+        <a href="/profile.html" class="nav-item" data-page="profile">
           <span class="nav-icon">👤</span> <span>Student Profile</span>
         </a>
         <a href="/progress.html" class="nav-item" data-page="progress">
           <span class="nav-icon">📊</span> <span>My Progress</span>
         </a>
+
+        <div id="nav-admin-section" class="hidden">
+          <div class="nav-section-label">ADMIN</div>
+          <a href="/admin/dashboard.html" class="nav-item" data-page="admin-dashboard">
+            <span class="nav-icon">🛡️</span> <span>Admin Overview</span>
+            <span class="nav-badge">Admin</span>
+          </a>
+          <a href="/admin/students.html" class="nav-item" data-page="admin-students">
+            <span class="nav-icon">👥</span> <span>Students</span>
+          </a>
+        </div>
       </nav>
 
       <div class="sidebar-footer">
@@ -645,7 +645,7 @@
             ">
               <div style="display:flex;align-items:center;gap:8px;">
                 <span style="font-size:18px;">🌐</span>
-                <span style="font-size:13.5px;font-weight:800;color:#1C0E04;">Polytechnic Track Progress:</span>
+                <span style="font-size:13.5px;font-weight:800;color:#1C0E04;">Course Track Progress:</span>
                 <span style="font-size:12px;color:#A07050;">Active Competency Across 4 Languages</span>
               </div>
               <div style="display:flex;gap:8px;flex-wrap:wrap;" id="profile-course-selector">
@@ -775,12 +775,12 @@
                     <!-- Center KPI Metric inside Donut -->
                     <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;">
                       <div id="pbi-center-pct" style="font-size:24px;font-weight:800;color:#1C0E04;line-height:1;">68.5%</div>
-                      <div id="pbi-center-label" style="font-size:10px;font-weight:700;color:#A07050;text-transform:uppercase;letter-spacing:0.04em;margin-top:4px;">Polytechnic Mastery</div>
+                      <div id="pbi-center-label" style="font-size:10px;font-weight:700;color:#A07050;text-transform:uppercase;letter-spacing:0.04em;margin-top:4px;">Engineering Mastery</div>
                     </div>
                   </div>
 
                   <div style="font-size:11.5px;color:#78350F;margin-top:10px;font-weight:700;text-align:center;">
-                    Overall Polytechnic Systems Readiness
+                    Overall 4-Language Systems Readiness
                   </div>
                 </div>
 
